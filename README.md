@@ -102,12 +102,16 @@ force-quitting can't fix since the staleness lives one layer below the app.
    so they won't resurface as "new" here again. Ends with a downloadable
    `.txt` report of what you mastered, formatted for pasting into
    `new_words.txt` in a future tutoring session.
+5. **Browse list** — not a quiz. Just lists every word matching the
+   current Word set + Category filters, grouped by category, with reading
+   and a ✓ for anything already marked learned. Useful for sanity-checking
+   what's actually in a filter before starting a session with it.
 
 ## Word set
 
 Filters which words are eligible before starting a flash card / multiple
-choice / text entry session: **Learned only** (default), **Not yet
-learned**, **Weak words** (missed before, tracked locally), or **All
+choice / text entry / browse session: **Learned only** (default), **Not
+yet learned**, **Weak words** (missed before, tracked locally), or **All
 words**. Doesn't apply to New Vocab mode, which always pulls from
 not-yet-learned words regardless of this setting.
 
