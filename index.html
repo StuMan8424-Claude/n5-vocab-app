@@ -71,8 +71,8 @@
   .stat-strip b{color:var(--ink);}
   .progress-bar{height:6px; background:var(--line); border-radius:4px; overflow:hidden; margin-bottom:14px;}
   .progress-fill{height:100%; background:var(--accent); transition:width .25s ease;}
-  .mode-tabs{display:flex; gap:6px; margin-bottom:14px;}
-  .mode-tab{flex:1; text-align:center; padding:10px 6px; border-radius:10px; background:var(--chip); color:var(--muted); font-size:0.85rem; cursor:pointer; border:1px solid var(--line);}
+  .mode-tabs{display:flex; gap:6px; margin-bottom:14px; flex-wrap:wrap;}
+  .mode-tab{flex:1 1 auto; min-width:100px; text-align:center; padding:10px 6px; border-radius:10px; background:var(--chip); color:var(--muted); font-size:0.85rem; cursor:pointer; border:1px solid var(--line);}
   .mode-tab.on{background:var(--chip-on); color:var(--chip-on-ink); border-color:var(--chip-on); font-weight:600;}
 
   /* Card */
@@ -151,7 +151,7 @@
       </div>
     </div>
 
-    <div class="panel">
+    <div class="panel" id="entry-mode-panel">
       <div class="section-title">Entry mode</div>
       <div class="chips" id="entry-mode-chips">
         <div class="chip on" data-val="en">English <span style="opacity:.65;">(see Japanese, answer in English)</span></div>
@@ -188,6 +188,7 @@
         <div class="mode-tab" data-val="mc">Multiple choice</div>
         <div class="mode-tab" data-val="text">Text entry</div>
         <div class="mode-tab" data-val="newvocab">New vocab</div>
+        <div class="mode-tab" data-val="browse">Browse list</div>
       </div>
     </div>
 
@@ -282,6 +283,15 @@
     </div>
     <button class="btn-primary" id="summary-again-btn">Practice again</button>
     <button class="btn-secondary" id="summary-settings-btn" style="margin-top:10px; width:100%;">Back to settings</button>
+  </div>
+
+  <!-- BROWSE SCREEN -->
+  <div id="screen-browse" class="hidden">
+    <div class="row" style="justify-content:space-between; margin-bottom:10px;">
+      <button class="btn-ghost btn-small" id="browse-exit-btn">← Settings</button>
+    </div>
+    <div class="sub" id="browse-count-line" style="margin-bottom:14px;"></div>
+    <div id="browse-list"></div>
   </div>
 
 </div>
@@ -441,6 +451,35 @@ function updateCountLine(){
   document.getElementById('start-btn').disabled = n === 0;
 }
 
+/* ---------- Browse mode: just list the current filter set, no quiz ---------- */
+function renderBrowseScreen(){
+  const pool = filteredPool();
+  const n = pool.length;
+  document.getElementById('browse-count-line').textContent =
+    `${n} word${n===1?'':'s'} match your filters`;
+
+  const listEl = document.getElementById('browse-list');
+  if(n === 0){
+    listEl.innerHTML = `<div class="panel center sub" style="margin-bottom:0;">No words match your current filters.</div>`;
+    return;
+  }
+
+  const grouped = {};
+  pool.forEach(w => { (grouped[w.cat] = grouped[w.cat] || []).push(w); });
+
+  const html = Object.keys(grouped).sort().map(cat => {
+    const words = grouped[cat].slice().sort((a,b) => (a.k||a.h).localeCompare(b.k||b.h, 'ja'));
+    const rows = words.map(w => {
+      const reading = (w.h && w.h !== w.k) ? `${w.h} · ${w.r}` : w.r;
+      const mark = w.learned ? ' <span style="color:var(--good);">✓</span>' : '';
+      return `<div class="summary-row"><span>${escapeHtml(w.k||w.h)} <span style="color:var(--muted);">(${escapeHtml(reading)})</span></span><b>${escapeHtml(w.e)}${mark}</b></div>`;
+    }).join('');
+    return `<div class="panel"><div class="section-title">${escapeHtml(cat)} (${words.length})</div>${rows}</div>`;
+  }).join('');
+
+  listEl.innerHTML = html;
+}
+
 document.getElementById('cat-all-btn').addEventListener('click', ()=>{
   settings.categories = new Set(categories);
   renderCategoryChips();
@@ -598,7 +637,7 @@ function advanceCard(){
 
 /* ---------- Screen switching ---------- */
 function showScreen(name){
-  ['settings','session','summary'].forEach(s=>{
+  ['settings','session','summary','browse'].forEach(s=>{
     document.getElementById('screen-'+s).classList.toggle('hidden', s!==name);
   });
 }
@@ -611,6 +650,11 @@ function syncChipGroup(containerId, value){
 
 document.getElementById('start-btn').addEventListener('click', ()=>{
   saveSettings();
+  if(settings.mode === 'browse'){
+    renderBrowseScreen();
+    showScreen('browse');
+    return;
+  }
   syncChipGroup('session-entry-mode-chips', settings.entryMode);
   if(settings.mode === 'newvocab'){
     session = buildNewVocabSession();
@@ -626,6 +670,11 @@ document.getElementById('start-btn').addEventListener('click', ()=>{
     setMode(settings.mode);
     nextCard();
   }
+});
+
+document.getElementById('browse-exit-btn').addEventListener('click', ()=>{
+  showScreen('settings');
+  updateCountLine();
 });
 
 document.getElementById('exit-btn').addEventListener('click', ()=>{
@@ -1097,9 +1146,12 @@ document.addEventListener('keydown', (e)=>{
 
 function updateStartPanelsForMode(){
   const isNew = settings.mode === 'newvocab';
+  const isBrowse = settings.mode === 'browse';
   document.getElementById('word-set-panel').classList.toggle('hidden', isNew);
-  document.getElementById('session-length-panel').classList.toggle('hidden', isNew);
+  document.getElementById('entry-mode-panel').classList.toggle('hidden', isBrowse);
+  document.getElementById('session-length-panel').classList.toggle('hidden', isNew || isBrowse);
   document.getElementById('newvocab-target-panel').classList.toggle('hidden', !isNew);
+  document.getElementById('start-btn').textContent = isBrowse ? 'Show list' : 'Start practice';
 }
 
 /* ---------- Init ---------- */
