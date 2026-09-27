@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>N5 単語 Practice</title>
+
+<!-- PWA / iOS Add-to-Home-Screen support -->
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#b23b3b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="N5 単語">
+<meta name="mobile-web-app-capable" content="yes">
+
+<style>
+  :root{
+    --bg:#faf8f5; --panel:#ffffff; --ink:#2b2620; --muted:#8a8378;
+    --accent:#b23b3b; --accent-ink:#ffffff; --good:#3a7d44; --bad:#b23b3b;
+    --line:#e8e2d8; --chip:#f1ece3; --chip-on:#2b2620; --chip-on-ink:#faf8f5;
+    --shadow:0 2px 10px rgba(43,38,32,0.08);
+    --radius:16px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#1c1a17; --panel:#252220; --ink:#f1ece3; --muted:#a89e8f;
+      --accent:#e0685f; --accent-ink:#1c1a17; --good:#6fbf73; --bad:#e0685f;
+      --line:#3a352e; --chip:#332f29; --chip-on:#f1ece3; --chip-on-ink:#1c1a17;
+      --shadow:0 2px 10px rgba(0,0,0,0.4);
+    }
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;height:100%;}
+  body{padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",sans-serif;
+    display:flex; flex-direction:column; min-height:100vh;
+    overscroll-behavior:none;
+  }
+  .wrap{max-width:640px; margin:0 auto; width:100%; padding:16px; flex:1; display:flex; flex-direction:column;}
+  h1{font-size:1.3rem; margin:4px 0 2px; display:flex; align-items:center; gap:8px;}
+  h1 .jp{font-weight:600;}
+  .sub{color:var(--muted); font-size:0.85rem; margin-bottom:16px;}
+  .panel{background:var(--panel); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px; margin-bottom:14px;}
+  .section-title{font-size:0.75rem; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:0 0 10px; font-weight:600;}
+  .chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{
+    padding:8px 14px; border-radius:999px; background:var(--chip); color:var(--ink);
+    font-size:0.88rem; border:1px solid var(--line); cursor:pointer; user-select:none;
+  }
+  .chip.on{background:var(--chip-on); color:var(--chip-on-ink); border-color:var(--chip-on);}
+  .row{display:flex; gap:8px; align-items:center; flex-wrap:wrap;}
+  .row + .row{margin-top:10px;}
+  button{
+    font-family:inherit; font-size:1rem; border:none; border-radius:12px; padding:12px 18px;
+    cursor:pointer; -webkit-appearance:none;
+  }
+  .btn-primary{background:var(--accent); color:var(--accent-ink); font-weight:600; width:100%; padding:15px; font-size:1.05rem;}
+  .btn-primary:disabled{opacity:0.4;}
+  .btn-secondary{background:var(--chip); color:var(--ink); border:1px solid var(--line);}
+  .btn-ghost{background:transparent; color:var(--muted); border:1px solid var(--line);}
+  .btn-small{padding:8px 12px; font-size:0.85rem; border-radius:10px;}
+  select{
+    font-family:inherit; font-size:0.95rem; padding:10px 12px; border-radius:10px;
+    border:1px solid var(--line); background:var(--panel); color:var(--ink); flex:1;
+  }
+  .stat-strip{display:flex; gap:10px; font-size:0.85rem; color:var(--muted); margin-bottom:10px; flex-wrap:wrap;}
+  .stat-strip b{color:var(--ink);}
+  .progress-bar{height:6px; background:var(--line); border-radius:4px; overflow:hidden; margin-bottom:14px;}
+  .progress-fill{height:100%; background:var(--accent); transition:width .25s ease;}
+  .mode-tabs{display:flex; gap:6px; margin-bottom:14px;}
+  .mode-tab{flex:1; text-align:center; padding:10px 6px; border-radius:10px; background:var(--chip); color:var(--muted); font-size:0.85rem; cursor:pointer; border:1px solid var(--line);}
+  .mode-tab.on{background:var(--chip-on); color:var(--chip-on-ink); border-color:var(--chip-on); font-weight:600;}
+
+  /* Card */
+  .card{
+    background:var(--panel); border-radius:20px; box-shadow:var(--shadow);
+    min-height:220px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:28px 18px; cursor:pointer; position:relative; margin-bottom:16px;
+  }
+  .card .tag{position:absolute; top:14px; left:16px; font-size:0.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:.05em;}
+  .card .prompt{font-size:2.1rem; font-weight:600; line-height:1.3; word-break:break-word;}
+  .card .prompt.small{font-size:1.4rem;}
+  .card .sub-prompt{font-size:0.95rem; color:var(--muted); margin-top:8px;}
+  .card .answer{font-size:1.6rem; font-weight:600; margin-top:18px; padding-top:18px; border-top:1px dashed var(--line); width:100%;}
+  .card .answer .romaji{font-size:1rem; color:var(--muted); font-weight:400; margin-top:4px;}
+  .card .hint{font-size:0.8rem; color:var(--muted); margin-top:14px;}
+
+  .flash-actions{display:flex; gap:10px;}
+  .btn-fail{flex:1; background:var(--bad); color:#fff; font-weight:600;}
+  .btn-pass{flex:1; background:var(--good); color:#fff; font-weight:600;}
+
+  .choices{display:flex; flex-direction:column; gap:10px;}
+  .choice{
+    background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 16px;
+    text-align:left; font-size:1.05rem; box-shadow:var(--shadow);
+  }
+  .choice.correct{background:var(--good); color:#fff; border-color:var(--good);}
+  .choice.incorrect{background:var(--bad); color:#fff; border-color:var(--bad);}
+  .choice.dim{opacity:0.5;}
+
+  .text-entry-input{
+    width:100%; font-size:1.2rem; padding:14px; border-radius:12px; border:1px solid var(--line);
+    background:var(--panel); color:var(--ink); margin-bottom:10px;
+  }
+  .feedback{padding:12px 14px; border-radius:12px; margin-bottom:10px; font-size:0.95rem;}
+  .feedback.good{background:rgba(58,125,68,0.15); color:var(--good);}
+  .feedback.bad{background:rgba(178,59,59,0.15); color:var(--bad);}
+
+  .footer-note{color:var(--muted); font-size:0.75rem; text-align:center; margin-top:auto; padding-top:24px;}
+  .hidden{display:none !important;}
+  .link-btn{background:none; border:none; color:var(--accent); text-decoration:underline; font-size:0.85rem; padding:4px;}
+  .summary-row{display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--line); font-size:0.95rem;}
+  .summary-row:last-child{border-bottom:none;}
+  .big-num{font-size:2rem; font-weight:700;}
+  .center{text-align:center;}
+  .speak-btn{position:absolute; top:14px; right:16px; background:var(--chip); border:1px solid var(--line); border-radius:999px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; font-size:1rem;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- SETTINGS SCREEN -->
+  <div id="screen-settings">
+    <h1><span class="jp">単語</span> Practice</h1>
+    <div class="sub" id="total-count-line">Loading vocabulary…</div>
+
+    <div class="panel" id="word-set-panel">
+      <div class="section-title">Word set</div>
+      <div class="chips" id="learned-filter-chips">
+        <div class="chip on" data-val="all">All words</div>
+        <div class="chip" data-val="learned">Learned only</div>
+        <div class="chip" data-val="unlearned">Not yet learned</div>
+        <div class="chip" data-val="weak">Weak words (missed before)</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="section-title">Categories</div>
+      <div class="chips" id="category-chips"></div>
+      <div class="row" style="margin-top:10px;">
+        <button class="btn-small btn-ghost" id="cat-all-btn">Select all</button>
+        <button class="btn-small btn-ghost" id="cat-none-btn">Clear</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="section-title">Entry mode</div>
+      <div class="chips" id="entry-mode-chips">
+        <div class="chip on" data-val="en">English <span style="opacity:.65;">(see Japanese, answer in English)</span></div>
+        <div class="chip" data-val="jp">Japanese <span style="opacity:.65;">(answer in Japanese)</span></div>
+      </div>
+      <div class="sub" style="margin:10px 0 0;">Sets which language you're answering in — flash cards, multiple choice, and text entry all quiz this way. In Japanese mode, questions mix English→Japanese translation with kanji↔kana reading practice (for words that have a kanji form).</div>
+    </div>
+
+    <div class="panel" id="session-length-panel">
+      <div class="section-title">Session length</div>
+      <div class="chips" id="length-chips">
+        <div class="chip" data-val="20">20 words</div>
+        <div class="chip on" data-val="50">50 words</div>
+        <div class="chip" data-val="100">100 words</div>
+        <div class="chip" data-val="0">Until word set is done</div>
+      </div>
+    </div>
+
+    <div class="panel hidden" id="newvocab-target-panel">
+      <div class="section-title">New words to master</div>
+      <div class="chips" id="newvocab-target-chips">
+        <div class="chip" data-val="5">5 words</div>
+        <div class="chip on" data-val="10">10 words</div>
+        <div class="chip" data-val="20">20 words</div>
+        <div class="chip" data-val="0">Until the set runs out</div>
+      </div>
+      <div class="sub" style="margin:10px 0 0;">Drills 5 words at a time from your "not yet learned" words (per the spreadsheet's Learned column). A word is mastered once you answer it correctly in flash cards, multiple choice, and text entry — all three, back to back, with no miss in between. A miss on any of the three resets that word's streak.</div>
+    </div>
+
+    <div class="panel">
+      <div class="section-title">Mode</div>
+      <div class="mode-tabs" id="start-mode-tabs">
+        <div class="mode-tab on" data-val="flash">Flash cards</div>
+        <div class="mode-tab" data-val="mc">Multiple choice</div>
+        <div class="mode-tab" data-val="text">Text entry</div>
+        <div class="mode-tab" data-val="newvocab">New vocab</div>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="start-btn">Start practice</button>
+    <div class="footer-note" id="build-note"></div>
+  </div>
+
+  <!-- SESSION SCREEN -->
+  <div id="screen-session" class="hidden">
+    <div class="row" style="justify-content:space-between; margin-bottom:6px;">
+      <button class="btn-ghost btn-small" id="exit-btn">← Settings</button>
+      <div class="chips" id="session-entry-mode-chips" style="gap:6px;">
+        <div class="chip" data-val="en" style="padding:6px 12px; font-size:0.8rem;">EN</div>
+        <div class="chip" data-val="jp" style="padding:6px 12px; font-size:0.8rem;">JP</div>
+      </div>
+    </div>
+    <div class="row" style="justify-content:flex-end; margin-bottom:6px;">
+      <div class="stat-strip" style="margin:0;"><b id="stat-correct">0</b>&nbsp;correct&nbsp;·&nbsp;<b id="stat-wrong">0</b>&nbsp;missed</div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div id="newvocab-status" class="hidden" style="margin-bottom:14px;">
+      <div class="sub" style="margin-bottom:8px;"><b id="nv-mastered-count" style="color:var(--ink);">0</b> mastered this session · testing via <b id="nv-current-mode" style="color:var(--ink);">flash cards</b></div>
+      <div class="chips" id="nv-batch-chips" style="gap:6px;"></div>
+    </div>
+    <div class="mode-tabs" id="mode-tabs">
+      <div class="mode-tab" data-val="flash">Flash cards</div>
+      <div class="mode-tab" data-val="mc">Multiple choice</div>
+      <div class="mode-tab" data-val="text">Text entry</div>
+    </div>
+
+    <!-- Flash card mode -->
+    <div id="mode-flash" class="hidden">
+      <div class="card" id="flash-card">
+        <div class="tag" id="flash-tag">JAPANESE</div>
+        <button class="speak-btn hidden" id="flash-speak">🔊</button>
+        <div class="prompt" id="flash-prompt">…</div>
+        <div class="sub-prompt" id="flash-subprompt"></div>
+        <div class="answer hidden" id="flash-answer"></div>
+        <div class="hint" id="flash-hint">Tap card to reveal answer</div>
+      </div>
+      <div class="flash-actions hidden" id="flash-actions">
+        <button class="btn-fail" id="flash-fail">✕ Missed it</button>
+        <button class="btn-pass" id="flash-pass">✓ Got it</button>
+      </div>
+    </div>
+
+    <!-- Multiple choice mode -->
+    <div id="mode-mc" class="hidden">
+      <div class="card" id="mc-card" style="cursor:default; min-height:140px;">
+        <div class="tag" id="mc-tag">JAPANESE</div>
+        <button class="speak-btn hidden" id="mc-speak">🔊</button>
+        <div class="prompt small" id="mc-prompt">…</div>
+        <div class="sub-prompt" id="mc-subprompt"></div>
+      </div>
+      <div class="choices" id="mc-choices"></div>
+      <button class="btn-primary hidden" id="mc-next" style="margin-top:12px;">Next →</button>
+    </div>
+
+    <!-- Text entry mode -->
+    <div id="mode-text" class="hidden">
+      <div class="card" id="text-card" style="cursor:default; min-height:140px;">
+        <div class="tag" id="text-tag">JAPANESE</div>
+        <button class="speak-btn hidden" id="text-speak">🔊</button>
+        <div class="prompt small" id="text-prompt">…</div>
+        <div class="sub-prompt" id="text-subprompt"></div>
+      </div>
+      <input type="text" class="text-entry-input" id="text-input" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Type your answer…">
+      <div class="sub" id="text-hint" style="margin:-4px 0 10px;"></div>
+      <div id="text-feedback"></div>
+      <button class="btn-primary" id="text-check">Check</button>
+      <button class="btn-primary hidden" id="text-next">Next →</button>
+    </div>
+  </div>
+
+  <!-- SUMMARY SCREEN -->
+  <div id="screen-summary" class="hidden">
+    <h1>Session complete</h1>
+    <div class="panel center">
+      <div class="big-num" id="summary-accuracy">–</div>
+      <div class="sub" style="margin-bottom:0;">accuracy this session</div>
+    </div>
+    <div class="panel">
+      <div class="summary-row"><span>Words seen</span><b id="summary-seen">0</b></div>
+      <div class="summary-row"><span>Correct</span><b id="summary-correct">0</b></div>
+      <div class="summary-row"><span>Missed</span><b id="summary-missed">0</b></div>
+      <div class="summary-row"><span>Distinct words missed</span><b id="summary-distinct-missed">0</b></div>
+    </div>
+    <div class="panel hidden" id="summary-newvocab-panel">
+      <div class="section-title">New words mastered this session</div>
+      <div id="summary-newvocab-list"></div>
+      <button class="btn-secondary" id="summary-download-report" style="margin-top:12px; width:100%;">Download report (.txt)</button>
+    </div>
+    <button class="btn-primary" id="summary-again-btn">Practice again</button>
+    <button class="btn-secondary" id="summary-settings-btn" style="margin-top:10px; width:100%;">Back to settings</button>
+  </div>
+
+</div>
+
+<script>
+/* ---------- Data ---------- */
+const VOCAB_DATA = /*__VOCAB_JSON__*/[]/*__END_VOCAB_JSON__*/;
+const BUILD_INFO = /*__BUILD_INFO__*/{"builtAt":"unknown","count":0}/*__END_BUILD_INFO__*/;
+
+const STORAGE_STATS = 'n5vocab_stats_v1';
+const STORAGE_SETTINGS = 'n5vocab_settings_v1';
+const STORAGE_LOCAL_MASTERED = 'n5vocab_local_mastered_v1';
+
+/* ---------- State ---------- */
+let stats = loadStats();
+let localMastered = loadLocalMastered();
+let settings = { learnedFilter:'all', categories:new Set(VOCAB_DATA.map(w=>w.cat)), entryMode:'en', length:50, mode:'flash', newVocabTarget:10 };
+let session = null; // built on start
+
+/* ---------- Storage helpers ---------- */
+function loadStats(){
+  try{
+    const raw = localStorage.getItem(STORAGE_STATS);
+    return raw ? JSON.parse(raw) : {};
+  }catch(e){ return {}; }
+}
+function saveStats(){
+  try{ localStorage.setItem(STORAGE_STATS, JSON.stringify(stats)); }catch(e){}
+}
+function wordStat(id){
+  if(!stats[id]) stats[id] = {seen:0, correct:0, incorrect:0};
+  return stats[id];
+}
+function loadLocalMastered(){
+  try{
+    const raw = localStorage.getItem(STORAGE_LOCAL_MASTERED);
+    return raw ? JSON.parse(raw) : {};
+  }catch(e){ return {}; }
+}
+function saveLocalMastered(){
+  try{ localStorage.setItem(STORAGE_LOCAL_MASTERED, JSON.stringify(localMastered)); }catch(e){}
+}
+function markLocallyMastered(id){
+  localMastered[id] = true;
+  saveLocalMastered();
+}
+function saveSettings(){
+  try{
+    localStorage.setItem(STORAGE_SETTINGS, JSON.stringify({
+      learnedFilter:settings.learnedFilter,
+      categories:[...settings.categories],
+      entryMode:settings.entryMode,
+      length:settings.length,
+      mode:settings.mode,
+      newVocabTarget:settings.newVocabTarget
+    }));
+  }catch(e){}
+}
+const VALID_ENTRY_MODES = ['en','jp'];
+function loadSettings(){
+  try{
+    const raw = localStorage.getItem(STORAGE_SETTINGS);
+    if(!raw) return;
+    const s = JSON.parse(raw);
+    if(s.learnedFilter) settings.learnedFilter = s.learnedFilter;
+    if(s.categories && s.categories.length) settings.categories = new Set(s.categories);
+    if(s.entryMode && VALID_ENTRY_MODES.includes(s.entryMode)) settings.entryMode = s.entryMode;
+    if(s.length !== undefined) settings.length = s.length;
+    if(s.mode) settings.mode = s.mode;
+    if(s.newVocabTarget !== undefined) settings.newVocabTarget = s.newVocabTarget;
+  }catch(e){}
+}
+
+/* ---------- Utility ---------- */
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+function englishVariants(e){
+  return e.split('/').map(s=>s.trim().toLowerCase()).filter(Boolean);
+}
+function normalize(s){ return (s||'').trim().toLowerCase(); }
+
+/* ---------- Settings screen wiring ---------- */
+const categories = [...new Set(VOCAB_DATA.map(w=>w.cat))].sort();
+function renderCategoryChips(){
+  const el = document.getElementById('category-chips');
+  el.innerHTML = '';
+  categories.forEach(cat=>{
+    const chip = document.createElement('div');
+    chip.className = 'chip' + (settings.categories.has(cat) ? ' on' : '');
+    chip.textContent = cat;
+    chip.dataset.val = cat;
+    chip.addEventListener('click', ()=>{
+      if(settings.categories.has(cat)) settings.categories.delete(cat);
+      else settings.categories.add(cat);
+      chip.classList.toggle('on');
+      updateCountLine();
+    });
+    el.appendChild(chip);
+  });
+}
+
+function setupChipGroup(containerId, onChange, initial){
+  const el = document.getElementById(containerId);
+  [...el.children].forEach(chip=>{
+    if(chip.dataset.val === String(initial)) chip.classList.add('on'); else chip.classList.remove('on');
+    chip.addEventListener('click', ()=>{
+      [...el.children].forEach(c=>c.classList.remove('on'));
+      chip.classList.add('on');
+      onChange(chip.dataset.val);
+      updateCountLine();
+    });
+  });
+}
+
+function hasDistinctKanji(w){
+  return !!(w.k && w.h && w.k !== w.h);
+}
+
+function filteredPool(){
+  return VOCAB_DATA.filter(w=>{
+    if(!settings.categories.has(w.cat)) return false;
+    if(settings.learnedFilter === 'learned' && !w.learned) return false;
+    if(settings.learnedFilter === 'unlearned' && w.learned) return false;
+    if(settings.learnedFilter === 'weak'){
+      const st = stats[w.id];
+      if(!st || st.incorrect === 0) return false;
+    }
+    return true;
+  });
+}
+
+function newVocabPool(){
+  // Category filter still applies; ignores the Word set filter above (New
+  // Vocab is always "not yet learned" — per the spreadsheet's Learned column
+  // and anything already mastered locally in a previous session on this device).
+  return VOCAB_DATA.filter(w => settings.categories.has(w.cat) && !w.learned && !localMastered[w.id]);
+}
+
+function updateCountLine(){
+  if(settings.mode === 'newvocab'){
+    const n = newVocabPool().length;
+    document.getElementById('total-count-line').textContent =
+      `${n} not-yet-learned word${n===1?'':'s'} available in your selected categories`;
+    document.getElementById('start-btn').disabled = n === 0;
+    return;
+  }
+  const n = filteredPool().length;
+  document.getElementById('total-count-line').textContent =
+    `${n} word${n===1?'':'s'} match your filters (${VOCAB_DATA.length} total in the set)`;
+  document.getElementById('start-btn').disabled = n === 0;
+}
+
+document.getElementById('cat-all-btn').addEventListener('click', ()=>{
+  settings.categories = new Set(categories);
+  renderCategoryChips();
+  updateCountLine();
+});
+document.getElementById('cat-none-btn').addEventListener('click', ()=>{
+  settings.categories = new Set();
+  renderCategoryChips();
+  updateCountLine();
+});
+
+/* ---------- Session building ----------
+   'jp-en' : see kanji/kana, answer in English
+   'en-jp' : see English, answer in Japanese — translation
+   'k2h'   : see kanji only, answer with the kana reading
+   'h2k'   : see kana only, answer with the kanji
+
+   Entry mode (English/Japanese) only matters for TEXT ENTRY, since that's
+   the only mode where the script you're typing actually matters (keyboard
+   switching). Flash cards and multiple choice involve no typing, so they
+   always mix freely across every question type regardless of Entry mode.
+   Direction is therefore computed fresh at render time from whichever mode
+   is currently on screen (see directionFor / renderCurrent) rather than
+   being fixed once per card — so switching mode-tabs, or the Entry mode
+   toggle, always reflects the mode you're actually looking at.
+------------------------------------------------------------------------------- */
+function assignDirection(word){
+  // Entry-mode aware — used only for text entry.
+  if(settings.entryMode === 'en') return 'jp-en';
+  // Entry mode 'jp': mix translation with reading practice for words that have kanji.
+  if(hasDistinctKanji(word)){
+    const options = ['en-jp', 'k2h', 'h2k'];
+    return options[Math.floor(Math.random()*options.length)];
+  }
+  return 'en-jp';
+}
+function mixedDirection(word){
+  // Flash cards / multiple choice — no typing, so Entry mode is ignored
+  // and every question type is in play.
+  if(hasDistinctKanji(word)){
+    const options = ['jp-en', 'en-jp', 'k2h', 'h2k'];
+    return options[Math.floor(Math.random()*options.length)];
+  }
+  return Math.random() < 0.5 ? 'jp-en' : 'en-jp';
+}
+function directionFor(word, mode){
+  return mode === 'text' ? assignDirection(word) : mixedDirection(word);
+}
+
+function buildSession(){
+  const pool = shuffle(filteredPool());
+  const limit = settings.length > 0 ? Math.min(settings.length, pool.length) : pool.length;
+  const initial = pool.slice(0, limit).map(w=>({word:w}));
+  return {
+    queue: initial,
+    pos: 0,
+    seenCount: 0,
+    correctCount: 0,
+    wrongCount: 0,
+    missedIds: new Set(),
+    mode: settings.mode,
+    current: null
+  };
+}
+
+function recycleMiss(item){
+  // Requeue for a near-term rep and a further-out reinforcement rep.
+  // The question subtype is recomputed fresh whenever the recycled copy
+  // actually renders, so it isn't always tested the same way it was missed.
+  const nearOffset = randInt(8, 14);
+  const farOffset = randInt(24, 38);
+  const nearCopy = {word:item.word, recycled:true};
+  const farCopy = {word:item.word, recycled:true};
+  const insertAt1 = Math.min(session.queue.length, session.pos + nearOffset);
+  session.queue.splice(insertAt1, 0, nearCopy);
+  const insertAt2 = Math.min(session.queue.length, session.pos + farOffset + 1);
+  session.queue.splice(insertAt2, 0, farCopy);
+}
+
+/* ---------- New Vocab mode ----------
+   Drills up to 5 "not yet learned" words at once. Each word needs a
+   correct answer in flash cards, multiple choice, AND text entry — back
+   to back, in any order — to be marked mastered; a miss on any of the
+   three resets that word's streak to zero. Mastered words are tracked
+   locally (separately from the spreadsheet's Learned column) so they
+   don't come up again as "new" in a future session on this device.
+------------------------------------------------------------------------ */
+const NEWVOCAB_BATCH_SIZE = 5;
+const NEWVOCAB_MODES = ['flash','mc','text'];
+
+function refillNewVocabBatch(sess){
+  while(sess.batch.length < NEWVOCAB_BATCH_SIZE && sess.poolPtr < sess.pool.length){
+    sess.batch.push({word: sess.pool[sess.poolPtr++], passed: new Set()});
+  }
+}
+
+function buildNewVocabSession(){
+  const pool = shuffle(newVocabPool());
+  const targetSetting = settings.newVocabTarget;
+  const sess = {
+    isNewVocab: true,
+    pool,
+    poolPtr: 0,
+    batch: [],
+    learnedList: [],
+    target: targetSetting > 0 ? targetSetting : Infinity,
+    correctCount: 0,
+    wrongCount: 0,
+    seenCount: 0,
+    missedIds: new Set(),
+    mode: 'flash', // overwritten per-card to whichever of the 3 is being tested
+    current: null
+  };
+  refillNewVocabBatch(sess);
+  return sess;
+}
+
+function newVocabNextCard(){
+  if(session.batch.length === 0 || session.learnedList.length >= session.target){
+    finishSession();
+    return;
+  }
+  const entry = session.batch[Math.floor(Math.random()*session.batch.length)];
+  const availableModes = NEWVOCAB_MODES.filter(m=>!entry.passed.has(m));
+  const presentMode = availableModes[Math.floor(Math.random()*availableModes.length)];
+  session.current = {word: entry.word, batchEntry: entry};
+  session.mode = presentMode;
+  session.seenCount += 1;
+  showModeDiv(presentMode);
+  updateProgressUI();
+  renderNewVocabStatus();
+  renderCurrent();
+}
+
+const MODE_LABELS = {flash:'flash cards', mc:'multiple choice', text:'text entry'};
+function renderNewVocabStatus(){
+  document.getElementById('nv-mastered-count').textContent = session.learnedList.length;
+  document.getElementById('nv-current-mode').textContent = MODE_LABELS[session.mode] || session.mode;
+  const el = document.getElementById('nv-batch-chips');
+  el.innerHTML = '';
+  session.batch.forEach(entry=>{
+    const dots = NEWVOCAB_MODES.map(m => entry.passed.has(m) ? '●' : '○').join('');
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.style.cursor = 'default';
+    chip.textContent = `${entry.word.k || entry.word.h} ${dots}`;
+    el.appendChild(chip);
+  });
+}
+
+function advanceCard(){
+  if(session.isNewVocab) newVocabNextCard();
+  else nextCard();
+}
+
+/* ---------- Screen switching ---------- */
+function showScreen(name){
+  ['settings','session','summary'].forEach(s=>{
+    document.getElementById('screen-'+s).classList.toggle('hidden', s!==name);
+  });
+}
+
+function syncChipGroup(containerId, value){
+  const el = document.getElementById(containerId);
+  if(!el) return;
+  [...el.children].forEach(c=> c.classList.toggle('on', c.dataset.val === String(value)));
+}
+
+document.getElementById('start-btn').addEventListener('click', ()=>{
+  saveSettings();
+  syncChipGroup('session-entry-mode-chips', settings.entryMode);
+  if(settings.mode === 'newvocab'){
+    session = buildNewVocabSession();
+    showScreen('session');
+    document.getElementById('mode-tabs').classList.add('hidden');
+    document.getElementById('newvocab-status').classList.remove('hidden');
+    newVocabNextCard();
+  }else{
+    session = buildSession();
+    showScreen('session');
+    document.getElementById('mode-tabs').classList.remove('hidden');
+    document.getElementById('newvocab-status').classList.add('hidden');
+    setMode(settings.mode);
+    nextCard();
+  }
+});
+
+document.getElementById('exit-btn').addEventListener('click', ()=>{
+  saveStats();
+  if(session && session.isNewVocab && session.seenCount > 0){
+    finishSession();
+  }else{
+    showScreen('settings');
+    updateCountLine();
+    syncChipGroup('entry-mode-chips', settings.entryMode);
+  }
+});
+
+document.getElementById('summary-again-btn').addEventListener('click', ()=>{
+  syncChipGroup('session-entry-mode-chips', settings.entryMode);
+  if(settings.mode === 'newvocab'){
+    session = buildNewVocabSession();
+    showScreen('session');
+    document.getElementById('mode-tabs').classList.add('hidden');
+    document.getElementById('newvocab-status').classList.remove('hidden');
+    newVocabNextCard();
+  }else{
+    session = buildSession();
+    showScreen('session');
+    document.getElementById('mode-tabs').classList.remove('hidden');
+    document.getElementById('newvocab-status').classList.add('hidden');
+    setMode(settings.mode);
+    nextCard();
+  }
+});
+document.getElementById('summary-settings-btn').addEventListener('click', ()=>{
+  showScreen('settings');
+  updateCountLine();
+  syncChipGroup('entry-mode-chips', settings.entryMode);
+});
+
+/* ---------- Entry mode switch, mid-session ----------
+   Direction is computed fresh at render time (see directionFor), so
+   changing Entry mode just needs a re-render to take effect. It only
+   actually changes anything if the card on screen is in text entry —
+   flash cards and multiple choice ignore Entry mode entirely, since
+   there's no typing (and so no keyboard) to worry about there.
+------------------------------------------------------------------------ */
+function applyEntryModeChange(newMode){
+  settings.entryMode = newMode;
+  saveSettings();
+  if(!session) return;
+  renderCurrent();
+}
+[...document.getElementById('session-entry-mode-chips').children].forEach(chip=>{
+  chip.addEventListener('click', ()=>{
+    const val = chip.dataset.val;
+    if(val === settings.entryMode) return;
+    syncChipGroup('session-entry-mode-chips', val);
+    applyEntryModeChange(val);
+  });
+});
+
+/* ---------- Mode tabs (in-session) ---------- */
+function showModeDiv(mode){
+  ['flash','mc','text'].forEach(m=>{
+    document.getElementById('mode-'+m).classList.toggle('hidden', m!==mode);
+  });
+}
+function setMode(mode){
+  session.mode = mode;
+  showModeDiv(mode);
+  [...document.getElementById('mode-tabs').children].forEach(t=>{
+    t.classList.toggle('on', t.dataset.val === mode);
+  });
+  renderCurrent();
+}
+[...document.getElementById('mode-tabs').children].forEach(tab=>{
+  tab.addEventListener('click', ()=> setMode(tab.dataset.val));
+});
+
+/* ---------- Progress UI ---------- */
+function updateProgressUI(){
+  document.getElementById('stat-correct').textContent = session.correctCount;
+  document.getElementById('stat-wrong').textContent = session.wrongCount;
+  if(session.isNewVocab){
+    const total = isFinite(session.target)
+      ? session.target
+      : (session.learnedList.length + session.batch.length + (session.pool.length - session.poolPtr));
+    const pct = total>0 ? Math.min(100, Math.round((session.learnedList.length/total)*100)) : 0;
+    document.getElementById('progress-fill').style.width = pct+'%';
+    return;
+  }
+  const total = Math.max(session.seenCount + session.queue.length - session.pos, session.seenCount + 1);
+  const pct = total>0 ? Math.min(100, Math.round((session.seenCount/total)*100)) : 0;
+  document.getElementById('progress-fill').style.width = pct+'%';
+}
+
+/* ---------- Speech ---------- */
+let jpVoice = null;
+if('speechSynthesis' in window){
+  function pickVoice(){
+    const voices = speechSynthesis.getVoices();
+    jpVoice = voices.find(v=>v.lang && v.lang.startsWith('ja')) || null;
+  }
+  pickVoice();
+  speechSynthesis.onvoiceschanged = pickVoice;
+}
+function speak(text){
+  if(!('speechSynthesis' in window)) return;
+  try{
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'ja-JP';
+    if(jpVoice) u.voice = jpVoice;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+
+/* ---------- Direction helpers (shared across all three modes) -----------
+   'jp-en' : see kanji/kana, recall English meaning
+   'en-jp' : see English, recall kanji/kana (or romaji)
+   'k2h'   : see kanji only, recall the kana reading
+   'h2k'   : see kana only, recall the kanji
+------------------------------------------------------------------------ */
+function promptFor(word, dir){
+  switch(dir){
+    case 'jp-en': return {tag:'JAPANESE', text: word.k || word.h, sub: (word.k && word.h !== word.k) ? word.h : ''};
+    case 'en-jp': return {tag:'ENGLISH', text: word.e, sub: ''};
+    case 'k2h':   return {tag:'KANJI', text: word.k, sub: ''};
+    case 'h2k':   return {tag:'KANA', text: word.h, sub: ''};
+  }
+}
+function isJapanesePrompt(dir){ return dir === 'jp-en' || dir === 'k2h' || dir === 'h2k'; }
+function optionLabel(word, dir){
+  switch(dir){
+    case 'jp-en': return word.e;
+    case 'en-jp': return word.k || word.h;
+    case 'k2h':   return word.h;
+    case 'h2k':   return word.k;
+  }
+}
+
+/* ---------- Flash-card-specific answer reveal -----------
+   Flash cards don't show the reading in the prompt (unlike promptFor's
+   sub-line, which MC and text entry still use) — a kanji prompt should
+   actually test recall, not hand you the reading up front. To make up
+   for that, the flip side shows everything about the word that the
+   prompt didn't already give away: meaning, reading, romaji, kanji —
+   whichever of those wasn't the prompt itself.
+------------------------------------------------------------------------ */
+function flashAnswerFor(word, dir){
+  const kanaLine = (word.h && word.h !== word.k) ? `${word.h} · ${word.r}` : word.r;
+  switch(dir){
+    case 'jp-en': return { text: word.e, sub: kanaLine };
+    case 'en-jp': return { text: word.k || word.h, sub: kanaLine };
+    case 'k2h':   return { text: word.h, sub: `${word.r} — ${word.e}` };
+    case 'h2k':   return { text: word.k, sub: `${word.r} — ${word.e}` };
+  }
+}
+
+/* ---------- Card flow ---------- */
+function nextCard(){
+  if(session.pos >= session.queue.length){
+    finishSession();
+    return;
+  }
+  session.current = session.queue[session.pos];
+  session.pos += 1;
+  session.seenCount += 1;
+  updateProgressUI();
+  renderCurrent();
+}
+
+function finishSession(){
+  saveStats();
+  const seen = session.seenCount;
+  const correct = session.correctCount;
+  const wrong = session.wrongCount;
+  document.getElementById('summary-accuracy').textContent = seen>0 ? Math.round((correct/(correct+wrong || 1))*100)+'%' : '–';
+  document.getElementById('summary-seen').textContent = seen;
+  document.getElementById('summary-correct').textContent = correct;
+  document.getElementById('summary-missed').textContent = wrong;
+  document.getElementById('summary-distinct-missed').textContent = session.missedIds.size;
+
+  const nvPanel = document.getElementById('summary-newvocab-panel');
+  if(session.isNewVocab && session.learnedList.length > 0){
+    nvPanel.classList.remove('hidden');
+    const listEl = document.getElementById('summary-newvocab-list');
+    listEl.innerHTML = '';
+    session.learnedList.forEach(w=>{
+      const row = document.createElement('div');
+      row.className = 'summary-row';
+      const reading = (w.h && w.h !== w.k) ? ` (${w.h}, ${w.r})` : ` (${w.r})`;
+      row.innerHTML = `<span>${escapeHtml((w.k||w.h))}${escapeHtml(reading)}</span><b>${escapeHtml(w.e)}</b>`;
+      listEl.appendChild(row);
+    });
+    document.getElementById('summary-download-report').onclick = ()=>{
+      downloadNewVocabReport(session.learnedList);
+    };
+  }else{
+    nvPanel.classList.add('hidden');
+  }
+  showScreen('summary');
+}
+
+function downloadNewVocabReport(list){
+  const dateStr = new Date().toISOString().slice(0,10);
+  const lines = list.map(w=>{
+    const reading = (w.h && w.h !== w.k) ? `${w.h}, ${w.r}` : w.r;
+    return `- ${w.k||w.h} (${reading}) — ${w.e}`;
+  });
+  const text = `New words learned — ${dateStr}\n${lines.join('\n')}\n`;
+  try{
+    const blob = new Blob([text], {type:'text/plain'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `new-words-${dateStr}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(url), 2000);
+  }catch(e){}
+}
+
+function recordResult(item, correct){
+  const st = wordStat(item.word.id);
+  st.seen += 1;
+  if(session.isNewVocab){
+    if(correct){
+      st.correct += 1;
+      session.correctCount += 1;
+      item.batchEntry.passed.add(session.mode);
+      if(item.batchEntry.passed.size >= NEWVOCAB_MODES.length){
+        session.batch = session.batch.filter(e => e !== item.batchEntry);
+        session.learnedList.push(item.word);
+        markLocallyMastered(item.word.id);
+        refillNewVocabBatch(session);
+      }
+    }else{
+      st.incorrect += 1;
+      session.wrongCount += 1;
+      session.missedIds.add(item.word.id);
+      item.batchEntry.passed.clear();
+    }
+    saveStats();
+    updateProgressUI();
+    renderNewVocabStatus();
+    return;
+  }
+  if(correct){ st.correct += 1; session.correctCount += 1; }
+  else{
+    st.incorrect += 1;
+    session.wrongCount += 1;
+    session.missedIds.add(item.word.id);
+    recycleMiss(item);
+  }
+  saveStats();
+  updateProgressUI();
+}
+
+function renderCurrent(){
+  if(!session || !session.current) return;
+  session.current.dir = directionFor(session.current.word, session.mode);
+  if(session.mode === 'flash') renderFlash();
+  else if(session.mode === 'mc') renderMC();
+  else if(session.mode === 'text') renderText();
+}
+
+/* ----- Flash card mode ----- */
+let flashRevealed = false;
+function renderFlash(){
+  flashRevealed = false;
+  const {word, dir} = session.current;
+  const p = promptFor(word, dir);
+  document.getElementById('flash-tag').textContent = p.tag;
+  document.getElementById('flash-prompt').textContent = p.text;
+  // Flash cards never show the reading hint in the prompt (unlike MC/text,
+  // which still use promptFor's sub-line) — kanji should test recall, not
+  // hand you the reading before you've tried.
+  document.getElementById('flash-subprompt').textContent = '';
+  document.getElementById('flash-answer').classList.add('hidden');
+  document.getElementById('flash-actions').classList.add('hidden');
+  document.getElementById('flash-hint').classList.remove('hidden');
+  document.getElementById('flash-hint').textContent = 'Tap card to reveal answer';
+  const speakBtn = document.getElementById('flash-speak');
+  if(isJapanesePrompt(dir)){ speakBtn.classList.remove('hidden'); speakBtn.onclick = (e)=>{e.stopPropagation(); speak(word.k||word.h);}; }
+  else speakBtn.classList.add('hidden');
+}
+document.getElementById('flash-card').addEventListener('click', ()=>{
+  if(flashRevealed) return;
+  flashRevealed = true;
+  const {word, dir} = session.current;
+  const a = flashAnswerFor(word, dir);
+  const ans = document.getElementById('flash-answer');
+  ans.innerHTML = escapeHtml(a.text) + (a.sub ? `<div class="romaji">${escapeHtml(a.sub)}</div>` : '');
+  ans.classList.remove('hidden');
+  document.getElementById('flash-hint').classList.add('hidden');
+  document.getElementById('flash-actions').classList.remove('hidden');
+  const speakBtn = document.getElementById('flash-speak');
+  if(!isJapanesePrompt(dir)){
+    // Answer side is Japanese even though the prompt wasn't — offer audio now.
+    speakBtn.classList.remove('hidden');
+    speakBtn.onclick = (e)=>{e.stopPropagation(); speak(word.k||word.h);};
+  }
+});
+document.getElementById('flash-pass').addEventListener('click', (e)=>{
+  e.stopPropagation();
+  recordResult(session.current, true);
+  advanceCard();
+});
+document.getElementById('flash-fail').addEventListener('click', (e)=>{
+  e.stopPropagation();
+  recordResult(session.current, false);
+  advanceCard();
+});
+
+/* ----- Multiple choice mode ----- */
+function renderMC(){
+  const {word, dir} = session.current;
+  const p = promptFor(word, dir);
+  document.getElementById('mc-tag').textContent = p.tag;
+  document.getElementById('mc-prompt').textContent = p.text;
+  document.getElementById('mc-subprompt').textContent = p.sub;
+  const speakBtn = document.getElementById('mc-speak');
+  if(isJapanesePrompt(dir)){ speakBtn.classList.remove('hidden'); speakBtn.onclick=()=>speak(word.k||word.h); }
+  else speakBtn.classList.add('hidden');
+
+  let pool = filteredPool().filter(w=>w.id !== word.id);
+  if(dir === 'k2h' || dir === 'h2k') pool = pool.filter(hasDistinctKanji);
+  const distractors = shuffle(pool).slice(0,3);
+  const options = shuffle([word, ...distractors]);
+  const correctLabel = optionLabel(word, dir);
+  const choicesEl = document.getElementById('mc-choices');
+  choicesEl.innerHTML = '';
+  document.getElementById('mc-next').classList.add('hidden');
+  options.forEach(opt=>{
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = optionLabel(opt, dir);
+    btn.addEventListener('click', ()=>{
+      const correct = opt.id === word.id;
+      [...choicesEl.children].forEach(c=>c.classList.add('dim'));
+      btn.classList.remove('dim');
+      btn.classList.add(correct ? 'correct' : 'incorrect');
+      if(!correct){
+        [...choicesEl.children].forEach(c=>{
+          if(c.textContent === correctLabel){ c.classList.remove('dim'); c.classList.add('correct'); }
+        });
+      }
+      [...choicesEl.children].forEach(c=>c.onclick=null);
+      document.getElementById('mc-next').classList.remove('hidden');
+      recordResult(session.current, correct);
+    });
+    choicesEl.appendChild(btn);
+  });
+}
+document.getElementById('mc-next').addEventListener('click', advanceCard);
+
+/* ----- Text entry mode ----- */
+let textChecked = false;
+function renderText(){
+  textChecked = false;
+  const {word, dir} = session.current;
+  const p = promptFor(word, dir);
+  document.getElementById('text-tag').textContent = p.tag;
+  document.getElementById('text-prompt').textContent = p.text;
+  document.getElementById('text-subprompt').textContent = p.sub;
+  const speakBtn = document.getElementById('text-speak');
+  if(isJapanesePrompt(dir)){ speakBtn.classList.remove('hidden'); speakBtn.onclick=()=>speak(word.k||word.h); }
+  else speakBtn.classList.add('hidden');
+  const input = document.getElementById('text-input');
+  input.value = '';
+  const hintEl = document.getElementById('text-hint');
+  const placeholders = {
+    'jp-en': 'Type the English meaning…',
+    'en-jp': 'Type in romaji or kana…',
+    'k2h': 'Type the reading (hiragana or romaji)…',
+    'h2k': 'Type the kanji…'
+  };
+  input.placeholder = placeholders[dir];
+  hintEl.textContent = dir === 'h2k'
+    ? 'Needs a Japanese keyboard/IME to type kanji — flash cards or multiple choice work without one.'
+    : '';
+  document.getElementById('text-feedback').innerHTML = '';
+  document.getElementById('text-check').classList.remove('hidden');
+  document.getElementById('text-next').classList.add('hidden');
+  setTimeout(()=>input.focus(), 50);
+}
+function checkTextAnswer(){
+  if(textChecked) return;
+  textChecked = true;
+  const {word, dir} = session.current;
+  const raw = document.getElementById('text-input').value;
+  const given = normalize(raw);
+  let correct = false;
+  let correctAnswerDisplay = '';
+  if(dir === 'jp-en'){
+    const variants = englishVariants(word.e);
+    correct = variants.includes(given);
+    correctAnswerDisplay = word.e;
+  }else if(dir === 'en-jp'){
+    const acceptable = [normalize(word.r), normalize(word.h), normalize(word.k)].filter(Boolean);
+    correct = given.length > 0 && acceptable.includes(given);
+    correctAnswerDisplay = `${word.k||word.h}${word.h && word.h!==word.k ? ' ('+word.h+')' : ''} — ${word.r}`;
+  }else if(dir === 'k2h'){
+    const acceptable = [normalize(word.h), normalize(word.r)].filter(Boolean);
+    correct = given.length > 0 && acceptable.includes(given);
+    correctAnswerDisplay = `${word.h} — ${word.r}`;
+  }else if(dir === 'h2k'){
+    // Kanji only — typing back the kana that was never shown doesn't count.
+    correct = given.length > 0 && normalize(word.k) === given;
+    correctAnswerDisplay = `${word.k} (${word.h} — ${word.r})`;
+  }
+  const fb = document.getElementById('text-feedback');
+  if(correct){
+    fb.innerHTML = `<div class="feedback good">✓ Correct!</div>`;
+  }else{
+    fb.innerHTML = `<div class="feedback bad">✕ Answer: ${escapeHtml(correctAnswerDisplay)}</div>`;
+  }
+  document.getElementById('text-check').classList.add('hidden');
+  document.getElementById('text-next').classList.remove('hidden');
+  recordResult(session.current, correct);
+}
+document.getElementById('text-check').addEventListener('click', checkTextAnswer);
+document.getElementById('text-next').addEventListener('click', advanceCard);
+document.getElementById('text-input').addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter'){
+    e.preventDefault();
+    if(!textChecked) checkTextAnswer();
+    else advanceCard();
+  }
+});
+
+/* ---------- Misc ---------- */
+function escapeHtml(s){
+  return (s===undefined||s===null?'':String(s)).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ---------- Keyboard shortcuts for flashcards / MC ---------- */
+document.addEventListener('keydown', (e)=>{
+  if(document.getElementById('screen-session').classList.contains('hidden')) return;
+  if(document.activeElement && document.activeElement.tagName === 'INPUT') return;
+  if(session.mode === 'flash'){
+    if(e.code === 'Space'){ e.preventDefault(); document.getElementById('flash-card').click(); }
+    if(e.key === '1' && flashRevealed) document.getElementById('flash-fail').click();
+    if(e.key === '2' && flashRevealed) document.getElementById('flash-pass').click();
+  }
+});
+
+function updateStartPanelsForMode(){
+  const isNew = settings.mode === 'newvocab';
+  document.getElementById('word-set-panel').classList.toggle('hidden', isNew);
+  document.getElementById('session-length-panel').classList.toggle('hidden', isNew);
+  document.getElementById('newvocab-target-panel').classList.toggle('hidden', !isNew);
+}
+
+/* ---------- Init ---------- */
+loadSettings();
+renderCategoryChips();
+setupChipGroup('learned-filter-chips', v=>settings.learnedFilter=v, settings.learnedFilter);
+setupChipGroup('entry-mode-chips', v=>settings.entryMode=v, settings.entryMode);
+setupChipGroup('length-chips', v=>settings.length=parseInt(v,10), String(settings.length));
+setupChipGroup('newvocab-target-chips', v=>settings.newVocabTarget=parseInt(v,10), String(settings.newVocabTarget));
+setupChipGroup('start-mode-tabs', v=>{ settings.mode=v; updateStartPanelsForMode(); }, settings.mode);
+updateStartPanelsForMode();
+updateCountLine();
+document.getElementById('build-note').textContent =
+  `${BUILD_INFO.count} words · built ${BUILD_INFO.builtAt} · works fully offline`;
+
+/* ---------- PWA: offline caching for Home Screen use ----------
+   Registers the service worker so the app can be installed via
+   "Add to Home Screen" and keeps working with no connection (airplane
+   mode) after the first successful load. No-op if unsupported, and
+   harmless if this file is ever opened without a service-worker.js
+   alongside it (e.g. a bare local copy).
+------------------------------------------------------------------------ */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>
