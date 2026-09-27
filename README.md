@@ -36,28 +36,65 @@ session history.
 
 ## Updating the vocab list
 
-When the vocabulary spreadsheet in the private tutoring repo changes,
-rebuild and re-push here:
+Full workflow — pull the current spreadsheet from the private tutoring
+repo, rebuild, then push here:
 
 ```bash
+# 1. Pull the current spreadsheet from the private japanese-n5-tutor repo
+#    (token is in that repo's github_access.md)
+curl -s -H "Authorization: token <GITHUB_TOKEN>" \
+  -H "Accept: application/vnd.github.raw" \
+  -o japanese_n5_vocabulary_updated.xlsx \
+  https://api.github.com/repos/StuMan8424-Claude/japanese-n5-tutor/contents/japanese_n5_vocabulary_updated.xlsx
+
+# 2. Rebuild index.html (and refresh the JSON export) from it
 pip install openpyxl --break-system-packages   # first time only
 python3 build.py --xlsx japanese_n5_vocabulary_updated.xlsx --save-json
+
+# 3. Commit and push index.html, vocab_data.json, and the .xlsx snapshot to this repo
 ```
 
-This regenerates `index.html` from `template.html` + the spreadsheet. Then
-commit and push `index.html` (and `vocab_data.json` / the `.xlsx` snapshot
-if you want them to stay in sync here too). GitHub Pages redeploys
-automatically on push — the next time your phone has a connection and
-opens the app, it'll pull the update; if you're offline, you'll keep using
-whatever was cached at last connection.
+GitHub Pages redeploys automatically on push — the next time your phone has
+a connection and opens the app, it'll pull the update; if you're offline,
+you'll keep using whatever was cached at last connection.
+
+## Troubleshooting: app looks out of date
+
+The service worker fetches fresh content whenever it can reach the network
+and only falls back to the cached copy when offline — so an out-of-date
+app almost always means it hasn't had a chance to refresh yet, not that
+something's broken.
+
+1. Make sure you actually have a connection (not airplane mode) when you
+   open it.
+2. Force-quit and reopen: swipe up to the App Switcher, swipe the app's
+   card off the top, then relaunch from its Home Screen icon. This mostly
+   matters because iOS can otherwise resume a backgrounded page instead of
+   loading it fresh.
+3. If it's still stale, the guaranteed manual reset (this clears saved
+   progress/stats too, since they share the same storage as the cache):
+   - **Settings app → Safari → Advanced → Website Data**, find the site,
+     swipe to **Delete**
+   - Delete the Home Screen icon (long-press → Remove App)
+   - Revisit the URL fresh in Safari, confirm it looks current, then
+     **Share → Add to Home Screen** again
+
+If none of that works, check that the service worker's fetch handler is
+actually bypassing the HTTP cache (`{ cache: 'no-store' }` on the `fetch()`
+call in `service-worker.js`) — without it, "network-first" can silently
+serve a stale cached response instead of really checking the server, which
+force-quitting can't fix since the staleness lives one layer below the app.
 
 ## Modes
 
 1. **Flash cards** — tap to reveal, mark ✓ Got it / ✕ Missed it. The prompt
    never shows the reading — the flip reveals everything the prompt didn't
    already give away.
-2. **Multiple choice** — pick from 4 options.
-3. **Text entry** — type the answer and check it.
+2. **Multiple choice** — pick from 4 options. If a reading hint is
+   available for the prompt, it's hidden behind a "Tap to show reading"
+   line rather than shown outright.
+3. **Text entry** — type the answer and check it. Same tap-to-reveal
+   reading hint as multiple choice.
 4. **New vocab** — drills up to 5 "not yet learned" words at once. A word
    is mastered once you pass it in flash cards, multiple choice, AND text
    entry — back to back, any miss resets that word's streak. Mastered
@@ -65,6 +102,14 @@ whatever was cached at last connection.
    so they won't resurface as "new" here again. Ends with a downloadable
    `.txt` report of what you mastered, formatted for pasting into
    `new_words.txt` in a future tutoring session.
+
+## Word set
+
+Filters which words are eligible before starting a flash card / multiple
+choice / text entry session: **Learned only** (default), **Not yet
+learned**, **Weak words** (missed before, tracked locally), or **All
+words**. Doesn't apply to New Vocab mode, which always pulls from
+not-yet-learned words regardless of this setting.
 
 ## Entry mode
 
