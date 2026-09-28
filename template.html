@@ -69,38 +69,42 @@
   }
   .stat-strip{display:flex; gap:10px; font-size:0.85rem; color:var(--muted); margin-bottom:10px; flex-wrap:wrap;}
   .stat-strip b{color:var(--ink);}
-  .progress-bar{height:6px; background:var(--line); border-radius:4px; overflow:hidden; margin-bottom:14px;}
+  .progress-bar{height:6px; background:var(--line); border-radius:4px; overflow:hidden; margin-bottom:10px;}
   .progress-fill{height:100%; background:var(--accent); transition:width .25s ease;}
-  .mode-tabs{display:flex; gap:6px; margin-bottom:14px; flex-wrap:wrap;}
+  .mode-tabs{display:flex; gap:6px; margin-bottom:10px; flex-wrap:wrap;}
   .mode-tab{flex:1 1 auto; min-width:100px; text-align:center; padding:10px 6px; border-radius:10px; background:var(--chip); color:var(--muted); font-size:0.85rem; cursor:pointer; border:1px solid var(--line);}
   .mode-tab.on{background:var(--chip-on); color:var(--chip-on-ink); border-color:var(--chip-on); font-weight:600;}
 
   /* Card */
   .card{
     background:var(--panel); border-radius:20px; box-shadow:var(--shadow);
-    min-height:220px; display:flex; flex-direction:column; align-items:center; justify-content:center;
-    text-align:center; padding:28px 18px; cursor:pointer; position:relative; margin-bottom:16px;
+    min-height:300px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:32px 20px; cursor:pointer; position:relative; margin-bottom:16px;
   }
-  .card .tag{position:absolute; top:14px; left:16px; font-size:0.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:.05em;}
-  .card .prompt{font-size:2.1rem; font-weight:600; line-height:1.3; word-break:break-word;}
-  .card .prompt.small{font-size:1.4rem;}
-  .card .sub-prompt{font-size:0.95rem; color:var(--muted); margin-top:8px;}
+  .card .tag{position:absolute; top:14px; left:16px; font-size:0.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:.05em;}
+  .card .prompt{font-size:3.2rem; font-weight:600; line-height:1.25; word-break:break-word;}
+  .card .prompt.small{font-size:2.4rem;}
+  .card .prompt.compact{font-size:1.6rem; line-height:1.35;}
+  .card .prompt.small.compact{font-size:1.35rem;}
+  .card .answer.compact{font-size:1.4rem;}
+  .card .sub-prompt{font-size:1.1rem; color:var(--muted); margin-top:10px;}
   .card .sub-prompt.revealable{
     cursor:pointer; text-decoration:underline; text-decoration-style:dotted;
     text-underline-offset:3px;
   }
-  .card .answer{font-size:1.6rem; font-weight:600; margin-top:18px; padding-top:18px; border-top:1px dashed var(--line); width:100%;}
-  .card .answer .romaji{font-size:1rem; color:var(--muted); font-weight:400; margin-top:4px;}
-  .card .hint{font-size:0.8rem; color:var(--muted); margin-top:14px;}
+  .card .answer{font-size:2.2rem; font-weight:600; margin-top:20px; padding-top:20px; border-top:1px dashed var(--line); width:100%;}
+  .card .answer .romaji{font-size:1.2rem; color:var(--muted); font-weight:400; margin-top:6px;}
+  .card .hint{font-size:0.85rem; color:var(--muted); margin-top:16px;}
 
   .flash-actions{display:flex; gap:10px;}
+  .flash-actions button{font-size:1.1rem; padding:16px;}
   .btn-fail{flex:1; background:var(--bad); color:#fff; font-weight:600;}
   .btn-pass{flex:1; background:var(--good); color:#fff; font-weight:600;}
 
   .choices{display:flex; flex-direction:column; gap:10px;}
   .choice{
-    background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 16px;
-    text-align:left; font-size:1.05rem; box-shadow:var(--shadow);
+    background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:18px 20px;
+    text-align:left; font-size:1.35rem; box-shadow:var(--shadow);
   }
   .choice.correct{background:var(--good); color:#fff; border-color:var(--good);}
   .choice.incorrect{background:var(--bad); color:#fff; border-color:var(--bad);}
@@ -121,7 +125,7 @@
   .summary-row:last-child{border-bottom:none;}
   .big-num{font-size:2rem; font-weight:700;}
   .center{text-align:center;}
-  .speak-btn{position:absolute; top:14px; right:16px; background:var(--chip); border:1px solid var(--line); border-radius:999px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; font-size:1rem;}
+  .speak-btn{position:absolute; top:14px; right:16px; background:var(--chip); border:1px solid var(--line); border-radius:999px; width:40px; height:40px; display:flex; align-items:center; justify-content:center; font-size:1.15rem;}
 </style>
 </head>
 <body>
@@ -237,7 +241,7 @@
 
     <!-- Multiple choice mode -->
     <div id="mode-mc" class="hidden">
-      <div class="card" id="mc-card" style="cursor:default; min-height:140px;">
+      <div class="card" id="mc-card" style="cursor:default; min-height:220px;">
         <div class="tag" id="mc-tag">JAPANESE</div>
         <button class="speak-btn hidden" id="mc-speak">🔊</button>
         <div class="prompt small" id="mc-prompt">…</div>
@@ -249,7 +253,7 @@
 
     <!-- Text entry mode -->
     <div id="mode-text" class="hidden">
-      <div class="card" id="text-card" style="cursor:default; min-height:140px;">
+      <div class="card" id="text-card" style="cursor:default; min-height:220px;">
         <div class="tag" id="text-tag">JAPANESE</div>
         <button class="speak-btn hidden" id="text-speak">🔊</button>
         <div class="prompt small" id="text-prompt">…</div>
@@ -982,6 +986,17 @@ function renderCurrent(){
   else if(session.mode === 'text') renderText();
 }
 
+/* ---------- Long-text sizing ----------
+   Kanji/kana get the big, easy-to-read treatment; long English phrases
+   (a handful of vocab entries are full clauses, e.g. counter explanations)
+   would look absurd at the same size, so anything past a length threshold
+   drops to a smaller "compact" size instead of overflowing awkwardly.
+------------------------------------------------------------------------ */
+function setPromptText(el, text){
+  el.textContent = text;
+  el.classList.toggle('compact', (text||'').length > 20);
+}
+
 /* ----- Flash card mode ----- */
 let flashRevealed = false;
 function renderFlash(){
@@ -989,7 +1004,7 @@ function renderFlash(){
   const {word, dir} = session.current;
   const p = promptFor(word, dir);
   document.getElementById('flash-tag').textContent = p.tag;
-  document.getElementById('flash-prompt').textContent = p.text;
+  setPromptText(document.getElementById('flash-prompt'), p.text);
   // Flash cards never show the reading hint in the prompt (unlike MC/text,
   // which still use promptFor's sub-line) — kanji should test recall, not
   // hand you the reading before you've tried.
@@ -1009,6 +1024,7 @@ document.getElementById('flash-card').addEventListener('click', ()=>{
   const a = flashAnswerFor(word, dir);
   const ans = document.getElementById('flash-answer');
   ans.innerHTML = escapeHtml(a.text) + (a.sub ? `<div class="romaji">${escapeHtml(a.sub)}</div>` : '');
+  ans.classList.toggle('compact', (a.text||'').length > 20);
   ans.classList.remove('hidden');
   document.getElementById('flash-hint').classList.add('hidden');
   document.getElementById('flash-actions').classList.remove('hidden');
@@ -1035,7 +1051,7 @@ function renderMC(){
   const {word, dir} = session.current;
   const p = promptFor(word, dir);
   document.getElementById('mc-tag').textContent = p.tag;
-  document.getElementById('mc-prompt').textContent = p.text;
+  setPromptText(document.getElementById('mc-prompt'), p.text);
   setupRevealableSub('mc-subprompt', p.sub);
   const speakBtn = document.getElementById('mc-speak');
   if(isJapanesePrompt(dir)){ speakBtn.classList.remove('hidden'); speakBtn.onclick=()=>speak(word.k||word.h); }
@@ -1079,7 +1095,7 @@ function renderText(){
   const {word, dir} = session.current;
   const p = promptFor(word, dir);
   document.getElementById('text-tag').textContent = p.tag;
-  document.getElementById('text-prompt').textContent = p.text;
+  setPromptText(document.getElementById('text-prompt'), p.text);
   setupRevealableSub('text-subprompt', p.sub);
   const speakBtn = document.getElementById('text-speak');
   if(isJapanesePrompt(dir)){ speakBtn.classList.remove('hidden'); speakBtn.onclick=()=>speak(word.k||word.h); }
