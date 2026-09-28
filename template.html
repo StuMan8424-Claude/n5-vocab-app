@@ -304,6 +304,7 @@ const BUILD_INFO = /*__BUILD_INFO__*/{"builtAt":"unknown","count":0}/*__END_BUIL
 const STORAGE_STATS = 'n5vocab_stats_v1';
 const STORAGE_SETTINGS = 'n5vocab_settings_v1';
 const STORAGE_LOCAL_MASTERED = 'n5vocab_local_mastered_v1';
+const STORAGE_MIGRATED_DEFAULT_FILTER = 'n5vocab_migrated_default_filter_v1';
 
 /* ---------- State ---------- */
 let stats = loadStats();
@@ -362,6 +363,24 @@ function loadSettings(){
     if(s.length !== undefined) settings.length = s.length;
     if(s.mode) settings.mode = s.mode;
     if(s.newVocabTarget !== undefined) settings.newVocabTarget = s.newVocabTarget;
+  }catch(e){}
+}
+
+/* ---------- One-time migration: Word set default changed to "Learned only" ----------
+   A saved "all" from before this change shipped was just the old default
+   carrying over, not necessarily a deliberate choice — flip it once so
+   devices that already have this app installed actually see the new
+   default, rather than only new installs getting it. Runs once per
+   device; if the person picks "All words" again afterward, it sticks.
+------------------------------------------------------------------------ */
+function migrateDefaultWordSetFilter(){
+  try{
+    if(localStorage.getItem(STORAGE_MIGRATED_DEFAULT_FILTER)) return;
+    localStorage.setItem(STORAGE_MIGRATED_DEFAULT_FILTER, '1');
+    if(settings.learnedFilter === 'all'){
+      settings.learnedFilter = 'learned';
+      saveSettings();
+    }
   }catch(e){}
 }
 
@@ -1156,6 +1175,7 @@ function updateStartPanelsForMode(){
 
 /* ---------- Init ---------- */
 loadSettings();
+migrateDefaultWordSetFilter();
 renderCategoryChips();
 setupChipGroup('learned-filter-chips', v=>settings.learnedFilter=v, settings.learnedFilter);
 setupChipGroup('entry-mode-chips', v=>settings.entryMode=v, settings.entryMode);
