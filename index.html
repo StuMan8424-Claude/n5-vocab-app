@@ -209,6 +209,15 @@
     </div>
 
     <button class="btn-primary" id="start-btn">Start practice</button>
+
+    <div class="panel" id="mastered-panel" style="margin-top:16px;">
+      <div class="section-title">New vocab to pass back to the sheet</div>
+      <div class="sub" id="mastered-count-line" style="margin-bottom:10px;"></div>
+      <div class="row">
+        <button class="btn-secondary" id="mastered-copy-btn" style="flex:1;">Copy list</button>
+        <button class="btn-secondary" id="mastered-download-btn" style="flex:1;">Download .txt</button>
+      </div>
+    </div>
     <div class="footer-note" id="build-note"></div>
   </div>
 
@@ -276,6 +285,11 @@
       <div id="text-feedback"></div>
       <button class="btn-primary" id="text-check">Check</button>
       <button class="btn-primary hidden" id="text-next">Next →</button>
+      <button class="btn-secondary hidden" id="text-reveal" style="width:100%;">Show answer</button>
+      <div class="flash-actions hidden" id="text-grade-actions">
+        <button class="btn-fail" id="text-grade-fail">✕ Missed it</button>
+        <button class="btn-pass" id="text-grade-pass">✓ Got it</button>
+      </div>
     </div>
   </div>
 
@@ -495,6 +509,13 @@ function englishVariants(e){
   add(e);
   e.split(/[\/;]/).forEach(part=>{ add(part); add(part.replace(/\s*\([^)]*\)/g,'')); });
   return [...out];
+}
+// An English meaning is "typeable" if at least one accepted form is short
+// and free of list/explanation punctuation. Entries like "Small animals
+// counter: cats, dogs, fish, rabbits" have none, so exact-match typing would
+// mark a correct recall wrong — those get a self-graded text card instead.
+function isTypeableEnglish(word){
+  return englishVariants(word.e).some(v => v.split(' ').length <= 3 && !/[:,]/.test(v));
 }
 function normalize(s){ return (s||'').trim().toLowerCase(); }
 
@@ -888,6 +909,7 @@ function startKatakanaRound(){
 
 /* ---------- Screen switching ---------- */
 function showScreen(name){
+  if(name === 'settings') updateMasteredPanel();
   ['settings','session','summary','browse','katakana'].forEach(s=>{
     document.getElementById('screen-'+s).classList.toggle('hidden', s!==name);
   });
@@ -932,6 +954,12 @@ document.getElementById('browse-exit-btn').addEventListener('click', ()=>{
   updateCountLine();
 });
 
+document.getElementById('mastered-copy-btn').addEventListener('click', (e)=>{
+  copyText(reportTextFor(masteredPendingWords(), 'New words mastered in the practice app (not yet marked learned in the sheet)'), e.currentTarget);
+});
+document.getElementById('mastered-download-btn').addEventListener('click', ()=>{
+  downloadNewVocabReport(masteredPendingWords(), 'New words mastered in the practice app (not yet marked learned in the sheet)');
+});
 document.getElementById('kk-next').addEventListener('click', ()=> kkNext());
 document.getElementById('kk-exit-btn').addEventListener('click', ()=>{
   saveKatakanaStats();
@@ -1166,13 +1194,45 @@ function finishSession(){
   showScreen('summary');
 }
 
-function downloadNewVocabReport(list){
+function reportTextFor(list, heading){
   const dateStr = new Date().toISOString().slice(0,10);
   const lines = list.map(w=>{
     const reading = (w.h && w.h !== w.k) ? `${w.h}, ${w.r}` : w.r;
     return `- ${w.k||w.h} (${reading}) — ${w.e}`;
   });
-  const text = `New words learned — ${dateStr}\n${lines.join('\n')}\n`;
+  return `${heading} — ${dateStr}\n${lines.join('\n')}\n`;
+}
+// Everything mastered via New vocab on this device that the spreadsheet
+// (as of the last rebuild) still shows as not learned. Self-cleaning: once
+// the sheet is updated and the app rebuilt, those words drop off this list.
+function masteredPendingWords(){
+  return VOCAB_DATA.filter(w => localMastered[w.id] && !w.learned);
+}
+function updateMasteredPanel(){
+  const n = masteredPendingWords().length;
+  document.getElementById('mastered-count-line').textContent = n
+    ? `${n} word${n===1?'':'s'} mastered in New vocab, not yet marked learned in the sheet.`
+    : 'Nothing waiting — no New vocab words mastered since the sheet was last updated.';
+  document.getElementById('mastered-copy-btn').disabled = n === 0;
+  document.getElementById('mastered-download-btn').disabled = n === 0;
+}
+function copyText(text, btn){
+  const done = ()=>{ const o = btn.textContent; btn.textContent = 'Copied ✓'; setTimeout(()=>{ btn.textContent = o; }, 1800); };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(()=>fallbackCopy(text, done));
+  }else fallbackCopy(text, done);
+}
+function fallbackCopy(text, done){
+  try{
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta); done();
+  }catch(e){}
+}
+function downloadNewVocabReport(list, heading){
+  const dateStr = new Date().toISOString().slice(0,10);
+  const text = reportTextFor(list, heading || 'New words learned');
   try{
     const blob = new Blob([text], {type:'text/plain'});
     const url = URL.createObjectURL(blob);
@@ -1187,16 +1247,14 @@ function downloadNewVocabReport(list){
 }
 
 /* ---------- Response-time tracking (confidence signal) ----------
-   Tracked silently — no visible stopwatch during the card itself, since
-   a ticking timer undermines the point and app-switching made a manual
-   one unreliable before. The moment measured is the actual "answering"
-   action for each mode (flash: the reveal tap, since that's the recall
-   attempt; MC: the choice tap; text: the Check tap) — not whatever
-   button gets pressed afterward to move on, which just measures reading
-   the result. Anything past DISTRACTION_CAP_MS is treated as "stepped
-   away and came back", not a slow answer, and is discarded rather than
-   counted. Only correct answers are timed — an incorrect answer doesn't
-   need a timer to tell you it wasn't confident.
+   Multiple choice only, and silent — no visible stopwatch, since a ticking
+   timer undermines the point. The moment measured is the choice tap. Flash
+   cards aren't timed (time-to-reveal can't tell "knew it" from "stared at
+   it"), and text entry isn't tracked at all (exact-match typing is too
+   noisy). Anything past DISTRACTION_CAP_MS is treated as "stepped away and
+   came back", not a slow answer, and is discarded. Only correct answers
+   are timed — an incorrect answer doesn't need a timer to tell you it
+   wasn't confident.
 ------------------------------------------------------------------------ */
 const DISTRACTION_CAP_MS = 20000;
 const TIMES_PER_WORD_CAP = 6; // short rolling window so one bad day doesn't haunt a word forever
@@ -1318,7 +1376,6 @@ function renderFlash(){
 document.getElementById('flash-card').addEventListener('click', ()=>{
   if(flashRevealed) return;
   flashRevealed = true;
-  markAnswerMoment(); // the reveal tap is the recall attempt — this is what's timed, not Got it/Missed it
   const {word, dir} = session.current;
   const a = flashAnswerFor(word, dir);
   const ans = document.getElementById('flash-answer');
@@ -1416,8 +1473,36 @@ function renderText(){
   document.getElementById('text-feedback').innerHTML = '';
   document.getElementById('text-check').classList.remove('hidden');
   document.getElementById('text-next').classList.add('hidden');
+  document.getElementById('text-reveal').classList.add('hidden');
+  document.getElementById('text-grade-actions').classList.add('hidden');
+  input.classList.remove('hidden');
+
+  // Self-graded variant: the answer is a phrase that can't fairly be typed.
+  const selfGrade = dir === 'jp-en' && !isTypeableEnglish(word);
+  session.current.selfGrade = selfGrade;
+  if(selfGrade){
+    input.classList.add('hidden');
+    hintEl.textContent = 'Too wordy to type exactly — recall it, then check yourself.';
+    document.getElementById('text-check').classList.add('hidden');
+    document.getElementById('text-reveal').classList.remove('hidden');
+    textChecked = true; // keep the Enter-key path from trying to grade a hidden input
+    return;
+  }
   setTimeout(()=>input.focus(), 50);
 }
+document.getElementById('text-reveal').addEventListener('click', ()=>{
+  const {word} = session.current;
+  document.getElementById('text-feedback').innerHTML =
+    `<div class="feedback">Answer: ${escapeHtml(word.e)}</div>`;
+  document.getElementById('text-reveal').classList.add('hidden');
+  document.getElementById('text-grade-actions').classList.remove('hidden');
+});
+document.getElementById('text-grade-pass').addEventListener('click', ()=>{
+  recordResult(session.current, true); advanceCard();
+});
+document.getElementById('text-grade-fail').addEventListener('click', ()=>{
+  recordResult(session.current, false); advanceCard();
+});
 function checkTextAnswer(){
   if(textChecked) return;
   textChecked = true;
@@ -1459,6 +1544,7 @@ document.getElementById('text-next').addEventListener('click', advanceCard);
 document.getElementById('text-input').addEventListener('keydown', (e)=>{
   if(e.key === 'Enter'){
     e.preventDefault();
+    if(session.current && session.current.selfGrade) return;
     if(!textChecked) checkTextAnswer();
     else advanceCard();
   }
@@ -1505,6 +1591,7 @@ setupChipGroup('katakana-items-chips', v=>settings.katakanaItems=parseInt(v,10),
 setupChipGroup('start-mode-tabs', v=>{ settings.mode=v; updateStartPanelsForMode(); }, settings.mode);
 updateStartPanelsForMode();
 updateCountLine();
+updateMasteredPanel();
 document.getElementById('build-note').textContent =
   `${BUILD_INFO.count} words · built ${BUILD_INFO.builtAt} · works fully offline`;
 
