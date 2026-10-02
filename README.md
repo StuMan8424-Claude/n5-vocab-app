@@ -128,6 +128,33 @@ yet learned**, **Weak words** (missed before, or answered slowly — see
 below), or **All words**. Doesn't apply to New Vocab mode, which always pulls from
 not-yet-learned words regardless of this setting.
 
+## Favor weak & newer words
+
+For flash cards, multiple choice and text entry sessions (not New vocab,
+Browse or Katakana), a **Favor weak & newer words** setting — **On** by
+default — biases which words get picked and the order they come in. It's a
+soft bias, not a filter: everything in your Word set / Category filters can
+still appear, and **Off (even draw)** restores a plain shuffle.
+
+Each word gets a weight starting at 1 (capped at 7):
+
+- up to +4.5 for being missed more than answered right (fades as you get it
+  right)
+- +1.5 if it's slower than your own average on multiple choice
+- +2.25 / +1.5 / +0.75 if it's never been seen / seen once / seen twice
+- +0.5 if the sheet doesn't mark it learned
+
+Selection is weighted without replacement and the order is kept, so weak
+words also tend to come earlier — which means the setting still matters when
+a session covers the whole filter. On a realistic history, a word missed
+several times was about 4× as likely to land in a 50-card session as a solid
+word, and slow or barely-seen words about 2×.
+
+Evidence comes only from flash cards and multiple choice (text entry never
+writes to the per-word record), so a device with no history treats every
+word as new and the bias is mild. Constants live in `wordWeight()` in
+`template.html`.
+
 ## Response-time tracking
 
 Only **multiple choice** (and its leg of New vocab) is timed, as a
