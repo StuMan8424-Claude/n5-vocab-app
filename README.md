@@ -130,14 +130,20 @@ not-yet-learned words regardless of this setting.
 
 ## Response-time tracking
 
-Every word mode (flash cards, multiple choice, text entry, and the
-flash/MC/text legs of New vocab) records how long you took to answer, as a
+Flash cards and multiple choice (and their legs of New vocab) record how long you took to answer, as a
 confidence signal. It runs silently — nothing ticks on screen.
 
 - The timed moment is the actual answer: the reveal tap on a flash card
   (the recall attempt — not the Got it / Missed it tap afterward), the
   choice tap in multiple choice, the Check tap in text entry.
 - Only **correct** answers are timed.
+- **Text entry is not tracked at all** — no correctness, no timing in the
+  persistent per-word record. Exact-match typing is too noisy to trust
+  (phrase-style meanings, romaji spelling variants, keyboard autocorrect).
+  It still gives on-screen feedback and drives the current session. The
+  English matcher accepts the full string, each `/` or `;` alternative, and
+  each with a parenthetical dropped ("Old (objects)" → "old"); about 25
+  counter/phrase entries still have no sensible typeable form.
 - Anything over **20 seconds** is discarded as "stepped away and came
   back" rather than counted as slow (`DISTRACTION_CAP_MS` in `template.html`).
 - Each word keeps a rolling window of its last 6 times
