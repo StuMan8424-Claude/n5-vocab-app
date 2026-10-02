@@ -488,7 +488,13 @@ function shuffle(arr){
 }
 function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
 function englishVariants(e){
-  return e.split('/').map(s=>s.trim().toLowerCase()).filter(Boolean);
+  // Accept the whole string, each "/" or ";" alternative, and each of those
+  // with a parenthetical qualifier dropped ("Old (objects)" -> "old").
+  const out = new Set();
+  const add = s => { s = s.trim().toLowerCase().replace(/\s+/g,' '); if(s) out.add(s); };
+  add(e);
+  e.split(/[\/;]/).forEach(part=>{ add(part); add(part.replace(/\s*\([^)]*\)/g,'')); });
+  return [...out];
 }
 function normalize(s){ return (s||'').trim().toLowerCase(); }
 
@@ -1225,7 +1231,14 @@ function isSlowWord(w){
 }
 
 function recordResult(item, correct){
-  const st = wordStat(item.word.id);
+  // Text entry never writes to the persistent per-word record (seen / correct /
+  // missed / times): exact-match typing is too noisy to trust — phrase-style
+  // meanings, romaji spelling variants, keyboard autocorrect. It still drives
+  // the on-screen feedback and the current session; the scratch object below
+  // just absorbs the updates so nothing leaks into Weak words or the ⏱ marks.
+  const st = session.mode === 'text'
+    ? {seen:0, correct:0, incorrect:0, times:[]}
+    : wordStat(item.word.id);
   st.seen += 1;
   if(session.isNewVocab){
     if(correct){
