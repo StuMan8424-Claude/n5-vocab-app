@@ -141,18 +141,29 @@
       <div class="chips" id="learned-filter-chips">
         <div class="chip on" data-val="learned">Learned only</div>
         <div class="chip" data-val="unlearned">Not yet learned</div>
-        <div class="chip" data-val="weak">Weak words (missed before)</div>
+        <div class="chip" data-val="weak">Weak words (missed, or answered slowly)</div>
         <div class="chip" data-val="all">All words</div>
       </div>
     </div>
 
-    <div class="panel">
+    <div class="panel" id="category-panel">
       <div class="section-title">Categories</div>
       <div class="chips" id="category-chips"></div>
       <div class="row" style="margin-top:10px;">
         <button class="btn-small btn-ghost" id="cat-all-btn">Select all</button>
         <button class="btn-small btn-ghost" id="cat-none-btn">Clear</button>
       </div>
+    </div>
+
+    <div class="panel hidden" id="katakana-items-panel">
+      <div class="section-title">Items this round</div>
+      <div class="chips" id="katakana-items-chips">
+        <div class="chip" data-val="10">10</div>
+        <div class="chip on" data-val="20">20</div>
+        <div class="chip" data-val="30">30</div>
+        <div class="chip" data-val="46">All 46</div>
+      </div>
+      <div class="sub" style="margin:10px 0 0;">Multiple choice. Distractors favor commonly confused katakana (シ/ツ/ソ/ン and similar look-alike groups), and characters you've missed before come up more often. First answer stands — grow the round size over time as your own pace indicator.</div>
     </div>
 
     <div class="panel" id="entry-mode-panel">
@@ -193,6 +204,7 @@
         <div class="mode-tab" data-val="text">Text entry</div>
         <div class="mode-tab" data-val="newvocab">New vocab</div>
         <div class="mode-tab" data-val="browse">Browse list</div>
+        <div class="mode-tab" data-val="katakana">Katakana</div>
       </div>
     </div>
 
@@ -298,6 +310,34 @@
     <div id="browse-list"></div>
   </div>
 
+  <!-- KATAKANA SCREEN -->
+  <div id="screen-katakana" class="hidden">
+    <div class="row" style="justify-content:space-between; margin-bottom:6px;">
+      <button class="btn-ghost btn-small" id="kk-exit-btn">← Settings</button>
+      <div class="stat-strip" style="margin:0;"><b id="kk-stat-correct">0</b>&nbsp;correct&nbsp;·&nbsp;<b id="kk-stat-wrong">0</b>&nbsp;missed</div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="kk-progress-fill" style="width:0%"></div></div>
+
+    <div id="kk-quiz">
+      <div class="card" id="kk-card" style="cursor:default;">
+        <div class="tag">KATAKANA</div>
+        <div class="prompt" id="kk-prompt">…</div>
+      </div>
+      <div class="choices" id="kk-choices"></div>
+      <button class="btn-primary hidden" id="kk-next" style="margin-top:12px;">Next →</button>
+    </div>
+
+    <div id="kk-done" class="hidden">
+      <h1>Drill complete</h1>
+      <div class="panel center">
+        <div class="big-num" id="kk-done-accuracy">–</div>
+        <div class="sub" style="margin-bottom:0;">accuracy this round</div>
+      </div>
+      <button class="btn-primary" id="kk-again-btn">Drill again</button>
+      <button class="btn-secondary" id="kk-done-settings-btn" style="margin-top:10px; width:100%;">Back to settings</button>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -309,11 +349,44 @@ const STORAGE_STATS = 'n5vocab_stats_v1';
 const STORAGE_SETTINGS = 'n5vocab_settings_v1';
 const STORAGE_LOCAL_MASTERED = 'n5vocab_local_mastered_v1';
 const STORAGE_MIGRATED_DEFAULT_FILTER = 'n5vocab_migrated_default_filter_v1';
+const STORAGE_KATAKANA_STATS = 'n5vocab_katakana_stats_v1';
+
+/* All 46 base katakana. Separate from VOCAB_DATA — this is a fixed character
+   set, not vocabulary, so it isn't sourced from the spreadsheet. */
+const KATAKANA = [
+  {k:'ア',r:'a'},{k:'イ',r:'i'},{k:'ウ',r:'u'},{k:'エ',r:'e'},{k:'オ',r:'o'},
+  {k:'カ',r:'ka'},{k:'キ',r:'ki'},{k:'ク',r:'ku'},{k:'ケ',r:'ke'},{k:'コ',r:'ko'},
+  {k:'サ',r:'sa'},{k:'シ',r:'shi'},{k:'ス',r:'su'},{k:'セ',r:'se'},{k:'ソ',r:'so'},
+  {k:'タ',r:'ta'},{k:'チ',r:'chi'},{k:'ツ',r:'tsu'},{k:'テ',r:'te'},{k:'ト',r:'to'},
+  {k:'ナ',r:'na'},{k:'ニ',r:'ni'},{k:'ヌ',r:'nu'},{k:'ネ',r:'ne'},{k:'ノ',r:'no'},
+  {k:'ハ',r:'ha'},{k:'ヒ',r:'hi'},{k:'フ',r:'fu'},{k:'ヘ',r:'he'},{k:'ホ',r:'ho'},
+  {k:'マ',r:'ma'},{k:'ミ',r:'mi'},{k:'ム',r:'mu'},{k:'メ',r:'me'},{k:'モ',r:'mo'},
+  {k:'ヤ',r:'ya'},{k:'ユ',r:'yu'},{k:'ヨ',r:'yo'},
+  {k:'ラ',r:'ra'},{k:'リ',r:'ri'},{k:'ル',r:'ru'},{k:'レ',r:'re'},{k:'ロ',r:'ro'},
+  {k:'ワ',r:'wa'},{k:'ヲ',r:'wo'},{k:'ン',r:'n'}
+];
+// Standard look-alike clusters — a character can appear in more than one.
+// シ/ツ/ソ/ン is the single most notorious group for English speakers.
+const KATAKANA_CONFUSE_GROUPS = [
+  ['シ','ツ','ソ','ン'],
+  ['ノ','メ','ヌ'],
+  ['ウ','ワ','フ'],
+  ['ク','ケ'],
+  ['コ','ユ','ヨ'],
+  ['サ','セ'],
+  ['チ','テ'],
+  ['ニ','ハ','ヒ'],
+  ['ホ','ネ'],
+  ['マ','ム'],
+  ['ル','レ','ロ'],
+  ['リ','ル']
+];
 
 /* ---------- State ---------- */
 let stats = loadStats();
 let localMastered = loadLocalMastered();
-let settings = { learnedFilter:'learned', categories:new Set(VOCAB_DATA.map(w=>w.cat)), entryMode:'en', length:50, mode:'flash', newVocabTarget:10 };
+let katakanaStats = loadKatakanaStats();
+let settings = { learnedFilter:'learned', categories:new Set(VOCAB_DATA.map(w=>w.cat)), entryMode:'en', length:50, mode:'flash', newVocabTarget:10, katakanaItems:20 };
 let session = null; // built on start
 
 /* ---------- Storage helpers ---------- */
@@ -327,7 +400,8 @@ function saveStats(){
   try{ localStorage.setItem(STORAGE_STATS, JSON.stringify(stats)); }catch(e){}
 }
 function wordStat(id){
-  if(!stats[id]) stats[id] = {seen:0, correct:0, incorrect:0};
+  if(!stats[id]) stats[id] = {seen:0, correct:0, incorrect:0, times:[]};
+  if(!stats[id].times) stats[id].times = []; // upgrade older saved entries
   return stats[id];
 }
 function loadLocalMastered(){
@@ -343,6 +417,19 @@ function markLocallyMastered(id){
   localMastered[id] = true;
   saveLocalMastered();
 }
+function loadKatakanaStats(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KATAKANA_STATS);
+    return raw ? JSON.parse(raw) : {};
+  }catch(e){ return {}; }
+}
+function saveKatakanaStats(){
+  try{ localStorage.setItem(STORAGE_KATAKANA_STATS, JSON.stringify(katakanaStats)); }catch(e){}
+}
+function katakanaStat(ch){
+  if(!katakanaStats[ch]) katakanaStats[ch] = {correct:0, incorrect:0};
+  return katakanaStats[ch];
+}
 function saveSettings(){
   try{
     localStorage.setItem(STORAGE_SETTINGS, JSON.stringify({
@@ -351,7 +438,8 @@ function saveSettings(){
       entryMode:settings.entryMode,
       length:settings.length,
       mode:settings.mode,
-      newVocabTarget:settings.newVocabTarget
+      newVocabTarget:settings.newVocabTarget,
+      katakanaItems:settings.katakanaItems
     }));
   }catch(e){}
 }
@@ -367,6 +455,7 @@ function loadSettings(){
     if(s.length !== undefined) settings.length = s.length;
     if(s.mode) settings.mode = s.mode;
     if(s.newVocabTarget !== undefined) settings.newVocabTarget = s.newVocabTarget;
+    if(s.katakanaItems !== undefined) settings.katakanaItems = s.katakanaItems;
   }catch(e){}
 }
 
@@ -447,7 +536,8 @@ function filteredPool(){
     if(settings.learnedFilter === 'unlearned' && w.learned) return false;
     if(settings.learnedFilter === 'weak'){
       const st = stats[w.id];
-      if(!st || st.incorrect === 0) return false;
+      const everMissed = st && st.incorrect > 0;
+      if(!everMissed && !isSlowWord(w)) return false;
     }
     return true;
   });
@@ -461,6 +551,12 @@ function newVocabPool(){
 }
 
 function updateCountLine(){
+  if(settings.mode === 'katakana'){
+    document.getElementById('total-count-line').textContent =
+      `${KATAKANA.length} base katakana — independent of the vocabulary filters`;
+    document.getElementById('start-btn').disabled = false;
+    return;
+  }
   if(settings.mode === 'newvocab'){
     const n = newVocabPool().length;
     document.getElementById('total-count-line').textContent =
@@ -495,7 +591,8 @@ function renderBrowseScreen(){
     const rows = words.map(w => {
       const reading = (w.h && w.h !== w.k) ? `${w.h} · ${w.r}` : w.r;
       const mark = w.learned ? ' <span style="color:var(--good);">✓</span>' : '';
-      return `<div class="summary-row"><span>${escapeHtml(w.k||w.h)} <span style="color:var(--muted);">(${escapeHtml(reading)})</span></span><b>${escapeHtml(w.e)}${mark}</b></div>`;
+      const slow = isSlowWord(w) ? ' <span style="color:var(--bad); font-size:0.85em;">⏱</span>' : '';
+      return `<div class="summary-row"><span>${escapeHtml(w.k||w.h)} <span style="color:var(--muted);">(${escapeHtml(reading)})</span>${slow}</span><b>${escapeHtml(w.e)}${mark}</b></div>`;
     }).join('');
     return `<div class="panel"><div class="section-title">${escapeHtml(cat)} (${words.length})</div>${rows}</div>`;
   }).join('');
@@ -658,9 +755,134 @@ function advanceCard(){
   else nextCard();
 }
 
+/* ---------- Katakana drill ----------
+   Multiple choice: see a katakana character, pick its reading. Two kinds of
+   weighting, both aimed at personal mix-ups: (1) which characters get asked
+   leans toward ones previously missed, and (2) distractors come from the
+   character's look-alike groups first (シ/ツ/ソ/ン etc.), random only to
+   fill the gaps. No mnemonics or hints — contrast drilling only. First
+   answer stands. Timing (correct answers only, same distraction cap as the
+   word modes) is recorded silently; nothing is shown ticking.
+------------------------------------------------------------------------ */
+let kk = null;
+
+function katakanaConfusablesFor(ch){
+  const out = new Set();
+  KATAKANA_CONFUSE_GROUPS.forEach(g=>{
+    if(g.includes(ch)) g.forEach(x=>{ if(x !== ch) out.add(x); });
+  });
+  return [...out].map(c => KATAKANA.find(k => k.k === c)).filter(Boolean);
+}
+
+function pickKatakanaDistractors(correct, count){
+  let picks = shuffle(katakanaConfusablesFor(correct.k)).slice(0, count);
+  if(picks.length < count){
+    const rest = shuffle(KATAKANA.filter(k => k.k !== correct.k && !picks.includes(k)));
+    picks = picks.concat(rest.slice(0, count - picks.length));
+  }
+  return picks;
+}
+
+function pickKatakanaRound(n){
+  // Weighted bag: each character appears 1 + 2*misses times, shuffled, then
+  // de-duplicated so a round is n distinct characters when possible.
+  let bag = [];
+  KATAKANA.forEach(c=>{
+    const st = katakanaStats[c.k];
+    const w = 1 + (st ? st.incorrect * 2 : 0);
+    for(let i=0;i<w;i++) bag.push(c);
+  });
+  bag = shuffle(bag);
+  const seen = new Set(), round = [];
+  for(const c of bag){
+    if(!seen.has(c.k)){ seen.add(c.k); round.push(c); if(round.length >= n) break; }
+  }
+  return round;
+}
+
+function buildKatakanaRound(){
+  const n = Math.min(settings.katakanaItems, KATAKANA.length);
+  return { queue: pickKatakanaRound(n), pos: 0, correct: 0, wrong: 0, current: null, shownAt: 0, answered: false };
+}
+
+function kkUpdateProgress(){
+  document.getElementById('kk-stat-correct').textContent = kk.correct;
+  document.getElementById('kk-stat-wrong').textContent = kk.wrong;
+  const pct = kk.queue.length ? Math.round((kk.pos / kk.queue.length) * 100) : 0;
+  document.getElementById('kk-progress-fill').style.width = pct + '%';
+}
+
+function kkNext(){
+  if(kk.pos >= kk.queue.length){ kkFinish(); return; }
+  kk.current = kk.queue[kk.pos];
+  kk.answered = false;
+  document.getElementById('kk-quiz').classList.remove('hidden');
+  document.getElementById('kk-done').classList.add('hidden');
+  document.getElementById('kk-prompt').textContent = kk.current.k;
+  document.getElementById('kk-next').classList.add('hidden');
+
+  const correct = kk.current;
+  const options = shuffle([correct, ...pickKatakanaDistractors(correct, 3)]);
+  const choicesEl = document.getElementById('kk-choices');
+  choicesEl.innerHTML = '';
+  options.forEach(opt=>{
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = opt.r;
+    btn.addEventListener('click', ()=> kkAnswer(opt, btn));
+    choicesEl.appendChild(btn);
+  });
+  kk.shownAt = Date.now();
+  kkUpdateProgress();
+}
+
+function kkAnswer(opt, btn){
+  if(kk.answered) return; // first answer stands
+  kk.answered = true;
+  const elapsed = Date.now() - kk.shownAt;
+  const correct = opt.k === kk.current.k;
+  const choicesEl = document.getElementById('kk-choices');
+  [...choicesEl.children].forEach(c=>c.classList.add('dim'));
+  btn.classList.remove('dim');
+  btn.classList.add(correct ? 'correct' : 'incorrect');
+  if(!correct){
+    [...choicesEl.children].forEach(c=>{
+      if(c.textContent === kk.current.r){ c.classList.remove('dim'); c.classList.add('correct'); }
+    });
+  }
+  const st = katakanaStat(kk.current.k);
+  if(!st.times) st.times = [];
+  if(correct){
+    st.correct += 1; kk.correct += 1;
+    if(elapsed > 0 && elapsed <= DISTRACTION_CAP_MS){
+      st.times.push(elapsed);
+      if(st.times.length > TIMES_PER_WORD_CAP) st.times.shift();
+    }
+  }else{
+    st.incorrect += 1; kk.wrong += 1;
+  }
+  saveKatakanaStats();
+  kk.pos += 1;
+  kkUpdateProgress();
+  document.getElementById('kk-next').classList.remove('hidden');
+}
+
+function kkFinish(){
+  document.getElementById('kk-quiz').classList.add('hidden');
+  document.getElementById('kk-done').classList.remove('hidden');
+  const total = kk.correct + kk.wrong;
+  document.getElementById('kk-done-accuracy').textContent = total ? Math.round((kk.correct/total)*100) + '%' : '–';
+}
+
+function startKatakanaRound(){
+  kk = buildKatakanaRound();
+  showScreen('katakana');
+  kkNext();
+}
+
 /* ---------- Screen switching ---------- */
 function showScreen(name){
-  ['settings','session','summary','browse'].forEach(s=>{
+  ['settings','session','summary','browse','katakana'].forEach(s=>{
     document.getElementById('screen-'+s).classList.toggle('hidden', s!==name);
   });
 }
@@ -676,6 +898,10 @@ document.getElementById('start-btn').addEventListener('click', ()=>{
   if(settings.mode === 'browse'){
     renderBrowseScreen();
     showScreen('browse');
+    return;
+  }
+  if(settings.mode === 'katakana'){
+    startKatakanaRound();
     return;
   }
   syncChipGroup('session-entry-mode-chips', settings.entryMode);
@@ -696,6 +922,18 @@ document.getElementById('start-btn').addEventListener('click', ()=>{
 });
 
 document.getElementById('browse-exit-btn').addEventListener('click', ()=>{
+  showScreen('settings');
+  updateCountLine();
+});
+
+document.getElementById('kk-next').addEventListener('click', ()=> kkNext());
+document.getElementById('kk-exit-btn').addEventListener('click', ()=>{
+  saveKatakanaStats();
+  showScreen('settings');
+  updateCountLine();
+});
+document.getElementById('kk-again-btn').addEventListener('click', ()=> startKatakanaRound());
+document.getElementById('kk-done-settings-btn').addEventListener('click', ()=>{
   showScreen('settings');
   updateCountLine();
 });
@@ -942,6 +1180,50 @@ function downloadNewVocabReport(list){
   }catch(e){}
 }
 
+/* ---------- Response-time tracking (confidence signal) ----------
+   Tracked silently — no visible stopwatch during the card itself, since
+   a ticking timer undermines the point and app-switching made a manual
+   one unreliable before. The moment measured is the actual "answering"
+   action for each mode (flash: the reveal tap, since that's the recall
+   attempt; MC: the choice tap; text: the Check tap) — not whatever
+   button gets pressed afterward to move on, which just measures reading
+   the result. Anything past DISTRACTION_CAP_MS is treated as "stepped
+   away and came back", not a slow answer, and is discarded rather than
+   counted. Only correct answers are timed — an incorrect answer doesn't
+   need a timer to tell you it wasn't confident.
+------------------------------------------------------------------------ */
+const DISTRACTION_CAP_MS = 20000;
+const TIMES_PER_WORD_CAP = 6; // short rolling window so one bad day doesn't haunt a word forever
+let cardShownAt = 0;
+
+function markAnswerMoment(){
+  if(session && session.current) session.current.answerElapsedMs = Date.now() - cardShownAt;
+}
+function recordAnswerTime(st){
+  const elapsed = session && session.current ? session.current.answerElapsedMs : null;
+  if(elapsed == null || elapsed <= 0 || elapsed > DISTRACTION_CAP_MS) return;
+  st.times.push(elapsed);
+  if(st.times.length > TIMES_PER_WORD_CAP) st.times.shift();
+}
+function avgTimeMs(st){
+  if(!st || !st.times || st.times.length === 0) return null;
+  return st.times.reduce((a,b)=>a+b, 0) / st.times.length;
+}
+function personalAvgTimeMs(){
+  let sum = 0, count = 0;
+  Object.values(stats).forEach(st=>{
+    if(st.times && st.times.length){ sum += st.times.reduce((a,b)=>a+b,0); count += st.times.length; }
+  });
+  return count > 0 ? sum / count : null;
+}
+function isSlowWord(w){
+  const st = stats[w.id];
+  const wordAvg = avgTimeMs(st);
+  const baseline = personalAvgTimeMs();
+  if(wordAvg === null || baseline === null) return false;
+  return wordAvg > baseline * 1.6; // meaningfully slower than personal average, not just noise
+}
+
 function recordResult(item, correct){
   const st = wordStat(item.word.id);
   st.seen += 1;
@@ -949,6 +1231,7 @@ function recordResult(item, correct){
     if(correct){
       st.correct += 1;
       session.correctCount += 1;
+      recordAnswerTime(st);
       item.batchEntry.passed.add(session.mode);
       if(item.batchEntry.passed.size >= NEWVOCAB_MODES.length){
         session.batch = session.batch.filter(e => e !== item.batchEntry);
@@ -967,7 +1250,7 @@ function recordResult(item, correct){
     renderNewVocabStatus();
     return;
   }
-  if(correct){ st.correct += 1; session.correctCount += 1; }
+  if(correct){ st.correct += 1; session.correctCount += 1; recordAnswerTime(st); }
   else{
     st.incorrect += 1;
     session.wrongCount += 1;
@@ -981,6 +1264,8 @@ function recordResult(item, correct){
 function renderCurrent(){
   if(!session || !session.current) return;
   session.current.dir = directionFor(session.current.word, session.mode);
+  cardShownAt = Date.now();
+  session.current.answerElapsedMs = null;
   if(session.mode === 'flash') renderFlash();
   else if(session.mode === 'mc') renderMC();
   else if(session.mode === 'text') renderText();
@@ -1020,6 +1305,7 @@ function renderFlash(){
 document.getElementById('flash-card').addEventListener('click', ()=>{
   if(flashRevealed) return;
   flashRevealed = true;
+  markAnswerMoment(); // the reveal tap is the recall attempt — this is what's timed, not Got it/Missed it
   const {word, dir} = session.current;
   const a = flashAnswerFor(word, dir);
   const ans = document.getElementById('flash-answer');
@@ -1070,6 +1356,7 @@ function renderMC(){
     btn.className = 'choice';
     btn.textContent = optionLabel(opt, dir);
     btn.addEventListener('click', ()=>{
+      markAnswerMoment();
       const correct = opt.id === word.id;
       [...choicesEl.children].forEach(c=>c.classList.add('dim'));
       btn.classList.remove('dim');
@@ -1121,6 +1408,7 @@ function renderText(){
 function checkTextAnswer(){
   if(textChecked) return;
   textChecked = true;
+  markAnswerMoment();
   const {word, dir} = session.current;
   const raw = document.getElementById('text-input').value;
   const given = normalize(raw);
@@ -1182,11 +1470,14 @@ document.addEventListener('keydown', (e)=>{
 function updateStartPanelsForMode(){
   const isNew = settings.mode === 'newvocab';
   const isBrowse = settings.mode === 'browse';
-  document.getElementById('word-set-panel').classList.toggle('hidden', isNew);
-  document.getElementById('entry-mode-panel').classList.toggle('hidden', isBrowse);
-  document.getElementById('session-length-panel').classList.toggle('hidden', isNew || isBrowse);
+  const isKatakana = settings.mode === 'katakana';
+  document.getElementById('word-set-panel').classList.toggle('hidden', isNew || isKatakana);
+  document.getElementById('category-panel').classList.toggle('hidden', isKatakana);
+  document.getElementById('entry-mode-panel').classList.toggle('hidden', isBrowse || isKatakana);
+  document.getElementById('session-length-panel').classList.toggle('hidden', isNew || isBrowse || isKatakana);
   document.getElementById('newvocab-target-panel').classList.toggle('hidden', !isNew);
-  document.getElementById('start-btn').textContent = isBrowse ? 'Show list' : 'Start practice';
+  document.getElementById('katakana-items-panel').classList.toggle('hidden', !isKatakana);
+  document.getElementById('start-btn').textContent = isBrowse ? 'Show list' : isKatakana ? 'Start drill' : 'Start practice';
 }
 
 /* ---------- Init ---------- */
@@ -1197,6 +1488,7 @@ setupChipGroup('learned-filter-chips', v=>settings.learnedFilter=v, settings.lea
 setupChipGroup('entry-mode-chips', v=>settings.entryMode=v, settings.entryMode);
 setupChipGroup('length-chips', v=>settings.length=parseInt(v,10), String(settings.length));
 setupChipGroup('newvocab-target-chips', v=>settings.newVocabTarget=parseInt(v,10), String(settings.newVocabTarget));
+setupChipGroup('katakana-items-chips', v=>settings.katakanaItems=parseInt(v,10), String(settings.katakanaItems));
 setupChipGroup('start-mode-tabs', v=>{ settings.mode=v; updateStartPanelsForMode(); }, settings.mode);
 updateStartPanelsForMode();
 updateCountLine();
