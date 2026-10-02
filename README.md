@@ -105,15 +105,51 @@ force-quitting can't fix since the staleness lives one layer below the app.
 5. **Browse list** — not a quiz. Just lists every word matching the
    current Word set + Category filters, grouped by category, with reading
    and a ✓ for anything already marked learned. Useful for sanity-checking
-   what's actually in a filter before starting a session with it.
+   what's actually in a filter before starting a session with it. A ⏱
+   marks words you tend to answer slowly (see Response-time tracking).
+6. **Katakana** — a character drill, separate from the vocabulary modes
+   (the 46 base katakana are built into the app, not read from the
+   spreadsheet, so the Word set / Category / Entry mode / Session length
+   settings don't apply). Multiple choice: see a katakana character, pick
+   its reading. Distractors come from look-alike groups first — シ/ツ/ソ/ン
+   is the main one, plus ノ/メ/ヌ, ウ/ワ/フ, ク/ケ, コ/ユ/ヨ, サ/セ, チ/テ,
+   ニ/ハ/ヒ, ホ/ネ, マ/ム, ル/レ/ロ, リ/ル — with random characters only
+   filling gaps. Characters you've missed before are asked more often.
+   First answer stands. No mnemonics or hints: contrast drilling only.
+   Round size is 10 / 20 / 30 / all 46 — growing it over time is the pace
+   indicator. Per-character results are kept locally, separate from the
+   vocabulary stats.
 
 ## Word set
 
 Filters which words are eligible before starting a flash card / multiple
 choice / text entry / browse session: **Learned only** (default), **Not
-yet learned**, **Weak words** (missed before, tracked locally), or **All
-words**. Doesn't apply to New Vocab mode, which always pulls from
+yet learned**, **Weak words** (missed before, or answered slowly — see
+below), or **All words**. Doesn't apply to New Vocab mode, which always pulls from
 not-yet-learned words regardless of this setting.
+
+## Response-time tracking
+
+Every word mode (flash cards, multiple choice, text entry, and the
+flash/MC/text legs of New vocab) records how long you took to answer, as a
+confidence signal. It runs silently — nothing ticks on screen.
+
+- The timed moment is the actual answer: the reveal tap on a flash card
+  (the recall attempt — not the Got it / Missed it tap afterward), the
+  choice tap in multiple choice, the Check tap in text entry.
+- Only **correct** answers are timed.
+- Anything over **20 seconds** is discarded as "stepped away and came
+  back" rather than counted as slow (`DISTRACTION_CAP_MS` in `template.html`).
+- Each word keeps a rolling window of its last 6 times
+  (`TIMES_PER_WORD_CAP`), so one bad day doesn't haunt it forever.
+- A word counts as **slow** when its average is more than 1.6× your own
+  overall average (relative to *you*, not a fixed number of seconds).
+  Slow words are included in the **Weak words** filter even if you've never
+  missed them, and get a ⏱ in Browse list.
+- Katakana rounds also record correct-answer times (same cap) per
+  character; nothing displays them yet.
+
+Stats are stored per device in local storage and don't sync.
 
 ## Entry mode
 
