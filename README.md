@@ -130,12 +130,12 @@ not-yet-learned words regardless of this setting.
 
 ## Response-time tracking
 
-Flash cards and multiple choice (and their legs of New vocab) record how long you took to answer, as a
+Only **multiple choice** (and its leg of New vocab) is timed, as a
 confidence signal. It runs silently — nothing ticks on screen.
 
-- The timed moment is the actual answer: the reveal tap on a flash card
-  (the recall attempt — not the Got it / Missed it tap afterward), the
-  choice tap in multiple choice, the Check tap in text entry.
+- The timed moment is the choice tap. Flash cards are **not** timed —
+  time-to-reveal can't tell "knew it" from "stared at it". Flash correctness
+  (your own Got it / Missed it) is still recorded.
 - Only **correct** answers are timed.
 - **Text entry is not tracked at all** — no correctness, no timing in the
   persistent per-word record. Exact-match typing is too noisy to trust
@@ -156,6 +156,30 @@ confidence signal. It runs silently — nothing ticks on screen.
   character; nothing displays them yet.
 
 Stats are stored per device in local storage and don't sync.
+
+## Text entry: self-graded phrase cards
+
+About 25 entries have English meanings that can't be typed fairly
+("Small animals counter: cats, dogs, fish, rabbits"). In text entry, when
+the answer is English and none of the accepted forms is short and free of
+list punctuation, the card becomes self-graded: **Show answer**, then
+**Got it / Missed it**, just like a flash card. This also applies to the
+text leg of New vocab, so those words can still be mastered. Japanese entry
+mode isn't affected (there's no English to type).
+
+## Passing New vocab back to the spreadsheet
+
+The app can't write to the spreadsheet or the tutoring repo (by design — no
+token lives in a public app). Instead, the settings screen has a **New vocab
+to pass back to the sheet** panel listing every word mastered in New vocab
+on this device that the sheet still shows as not learned. **Copy list** or
+**Download .txt**, then give it to Claude in a tutoring session, which
+updates the spreadsheet and `new_words.txt`. The list is self-cleaning:
+after the sheet is updated and the app rebuilt (see above), those words show
+as learned and drop off it. (Each New vocab session summary also has its own
+per-session report.) "Mastered" here means the app's rule — a clean pass in
+flash, multiple choice and text — not the tutoring rule of two independent
+production sentences, so treat it as "drilled", not "learned".
 
 ## Entry mode
 
