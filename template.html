@@ -175,6 +175,15 @@
       <div class="sub" style="margin:10px 0 0;">Sets which language you're answering in — flash cards, multiple choice, and text entry all quiz this way. In Japanese mode, questions mix English→Japanese translation with kanji↔kana reading practice (for words that have a kanji form).</div>
     </div>
 
+    <div class="panel" id="favor-weak-panel">
+      <div class="section-title">Favor weak &amp; newer words</div>
+      <div class="chips" id="favor-weak-chips">
+        <div class="chip on" data-val="on">On</div>
+        <div class="chip" data-val="off">Off (even draw)</div>
+      </div>
+      <div class="sub" style="margin:10px 0 0;">Words you've missed, answered slowly, or barely seen are more likely to be picked — and tend to come earlier — than words you're solid on. A soft bias, not a filter: everything in your filters can still appear.</div>
+    </div>
+
     <div class="panel" id="session-length-panel">
       <div class="section-title">Session length</div>
       <div class="chips" id="length-chips">
@@ -400,7 +409,7 @@ const KATAKANA_CONFUSE_GROUPS = [
 let stats = loadStats();
 let localMastered = loadLocalMastered();
 let katakanaStats = loadKatakanaStats();
-let settings = { learnedFilter:'learned', categories:new Set(VOCAB_DATA.map(w=>w.cat)), entryMode:'en', length:50, mode:'flash', newVocabTarget:10, katakanaItems:20 };
+let settings = { learnedFilter:'learned', categories:new Set(VOCAB_DATA.map(w=>w.cat)), entryMode:'en', length:50, mode:'flash', newVocabTarget:10, katakanaItems:20, favorWeak:'on' };
 let session = null; // built on start
 
 /* ---------- Storage helpers ---------- */
@@ -453,7 +462,8 @@ function saveSettings(){
       length:settings.length,
       mode:settings.mode,
       newVocabTarget:settings.newVocabTarget,
-      katakanaItems:settings.katakanaItems
+      katakanaItems:settings.katakanaItems,
+      favorWeak:settings.favorWeak
     }));
   }catch(e){}
 }
@@ -470,6 +480,7 @@ function loadSettings(){
     if(s.mode) settings.mode = s.mode;
     if(s.newVocabTarget !== undefined) settings.newVocabTarget = s.newVocabTarget;
     if(s.katakanaItems !== undefined) settings.katakanaItems = s.katakanaItems;
+    if(s.favorWeak === 'on' || s.favorWeak === 'off') settings.favorWeak = s.favorWeak;
   }catch(e){}
 }
 
@@ -676,10 +687,45 @@ function directionFor(word, mode){
   return mode === 'text' ? assignDirection(word) : mixedDirection(word);
 }
 
+/* ---------- Weighting toward weak & newer words ----------
+   Evidence comes only from flash cards and multiple choice (text entry
+   never writes to the per-word record). A word's weight starts at 1 and
+   grows with each sign of low confidence, capped so nothing dominates:
+     + missed more than it's been answered right (fades as you get it right)
+     + slower than your own average on multiple choice
+     + barely seen: unseen +2.25, seen once +1.5, twice +0.75
+     + not yet marked learned in the sheet: +0.5
+   Solid words stay at 1; a brand-new word is ~3-4x as likely to be picked.
+   Sampling is weighted without replacement and the order is kept, so weak
+   words also tend to come earlier — which makes the weighting matter even
+   when the session covers the whole filter.
+------------------------------------------------------------------------ */
+function wordWeight(w){
+  const st = stats[w.id];
+  const seen = st ? st.seen : 0, incorrect = st ? st.incorrect : 0, correct = st ? st.correct : 0;
+  let weight = 1;
+  weight += Math.max(0, Math.min(6, incorrect * 2 - correct)) * 0.75;
+  if(isSlowWord(w)) weight += 1.5;
+  weight += Math.max(0, 3 - seen) * 0.75;
+  if(!w.learned) weight += 0.5;
+  return Math.min(weight, 7);
+}
+function weightedSample(items, weightFn, n){
+  // Efraimidis–Spirakis: key = U^(1/w), take the n largest.
+  return items
+    .map(it => ({it, key: Math.pow(Math.random(), 1 / weightFn(it))}))
+    .sort((a, b) => b.key - a.key)
+    .slice(0, n)
+    .map(x => x.it);
+}
+
 function buildSession(){
-  const pool = shuffle(filteredPool());
-  const limit = settings.length > 0 ? Math.min(settings.length, pool.length) : pool.length;
-  const initial = pool.slice(0, limit).map(w=>({word:w}));
+  const all = filteredPool();
+  const limit = settings.length > 0 ? Math.min(settings.length, all.length) : all.length;
+  const pool = settings.favorWeak === 'off'
+    ? shuffle(all).slice(0, limit)
+    : weightedSample(all, wordWeight, limit);
+  const initial = pool.map(w=>({word:w}));
   return {
     queue: initial,
     pos: 0,
@@ -1574,6 +1620,7 @@ function updateStartPanelsForMode(){
   document.getElementById('category-panel').classList.toggle('hidden', isKatakana);
   document.getElementById('entry-mode-panel').classList.toggle('hidden', isBrowse || isKatakana);
   document.getElementById('session-length-panel').classList.toggle('hidden', isNew || isBrowse || isKatakana);
+  document.getElementById('favor-weak-panel').classList.toggle('hidden', isNew || isBrowse || isKatakana);
   document.getElementById('newvocab-target-panel').classList.toggle('hidden', !isNew);
   document.getElementById('katakana-items-panel').classList.toggle('hidden', !isKatakana);
   document.getElementById('start-btn').textContent = isBrowse ? 'Show list' : isKatakana ? 'Start drill' : 'Start practice';
@@ -1587,6 +1634,7 @@ setupChipGroup('learned-filter-chips', v=>settings.learnedFilter=v, settings.lea
 setupChipGroup('entry-mode-chips', v=>settings.entryMode=v, settings.entryMode);
 setupChipGroup('length-chips', v=>settings.length=parseInt(v,10), String(settings.length));
 setupChipGroup('newvocab-target-chips', v=>settings.newVocabTarget=parseInt(v,10), String(settings.newVocabTarget));
+setupChipGroup('favor-weak-chips', v=>settings.favorWeak=v, settings.favorWeak);
 setupChipGroup('katakana-items-chips', v=>settings.katakanaItems=parseInt(v,10), String(settings.katakanaItems));
 setupChipGroup('start-mode-tabs', v=>{ settings.mode=v; updateStartPanelsForMode(); }, settings.mode);
 updateStartPanelsForMode();
