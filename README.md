@@ -128,6 +128,32 @@ yet learned**, **Weak words** (missed before, or answered slowly — see
 below), or **All words**. Doesn't apply to New Vocab mode, which always pulls from
 not-yet-learned words regardless of this setting.
 
+## Multiple choice distractors
+
+Wrong options are chosen to look like the answer, so a card can't be solved
+by form alone (the one い-ending word among verbs, the one "To …" among
+nouns). Candidates are scored and the best picked, with some randomness:
+
+- same part of speech +100, same broad family (adjective / verb / noun /
+  adverb / function word) +40
+- inside your current filters +25 (so they're usually words you've met)
+- Japanese-side options: same last character +30 (る with る, い with い) and
+  same script style, kanji vs kana-only, +20
+- minus a small penalty for label-length difference
+- never an option with the same label as the answer (homophones on kana
+  questions), nor an English meaning that shares an accepted form with it
+
+Part of speech comes from the sheet's `type` column, normalised (い-adjective
+/ i-Adj, な-adjective / na-Adj, the many "Verb (G1-…)" spellings, etc.).
+About 20 adverbs (あまり, いつも, とても…) are tagged "Verb" in the sheet; the
+app treats a "Verb" whose meaning doesn't start with "To " as an adverb. The
+sheet itself is untouched, but fixing those tags would make it cleaner.
+
+Measured over every learned word and direction: same-part-of-speech
+distractors went from roughly 26–40% to ~99%; an い-adjective being the only
+い-ending option fell from 58% to 2.5%; a verb being the only one with its
+ending, 87% to 3%; and the "only one starting with To" tell went from 8% to 0.
+
 ## Favor weak & newer words
 
 For flash cards, multiple choice and text entry sessions (not New vocab,
