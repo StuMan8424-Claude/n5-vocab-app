@@ -1448,6 +1448,88 @@ document.getElementById('flash-fail').addEventListener('click', (e)=>{
   advanceCard();
 });
 
+/* ----- Multiple choice distractors -----
+   A random draw lets the answer be spotted by form alone: the one い-ending
+   word among verbs, the one "to …" among nouns. So distractors are scored
+   on how much they look like the answer and the best are picked, with a
+   little randomness so the same ones don't repeat:
+     + same part of speech (100) or same broad family — adjective / verb /
+       noun / adverb / function word (40)
+     + a word that's inside your current filters (25), so distractors are
+       usually ones you've actually met
+     + on the Japanese side: same last character (30 — る with る, い with い)
+       and the same script style, kanji vs kana-only (20)
+     - label length difference, so a long phrase doesn't stand out
+   Also excluded: any option whose label equals the answer's (homophones
+   in kana questions), and English meanings that share an accepted form with
+   the answer ("Big / Large" next to "big; large") — either would make two
+   options look correct.
+------------------------------------------------------------------------ */
+const _wordClassCache = {};
+function wordClass(w){
+  if(_wordClassCache[w.id]) return _wordClassCache[w.id];
+  const t = w.type || '';
+  let c;
+  if(/い-adjective|i-Adj/i.test(t) || (t === 'Adjective' && w.h.endsWith('い'))) c = 'iadj';
+  else if(/な-adjective|na-Adj/i.test(t)) c = 'naadj';
+  // Some adverbs (あまり, いつも, とても…) are tagged "Verb" in the sheet; a real
+  // verb's meaning starts with "to ", so use that to tell them apart.
+  else if(/verb/i.test(t)) c = /^to /i.test(w.e) ? 'verb' : 'adv';
+  else if(t === 'Noun') c = 'noun';
+  else if(t === 'Pronoun') c = 'pronoun';
+  else if(t === 'Adverb') c = 'adv';
+  else if(t === 'Counter') c = 'counter';
+  else if(t === 'Number') c = 'number';
+  else if(t === 'Particle') c = 'particle';
+  else if(t === 'Question word') c = 'qword';
+  else if(t === 'Conjunction') c = 'conj';
+  else if(t === 'Determiner') c = 'det';
+  else c = 'expr';
+  return (_wordClassCache[w.id] = c);
+}
+function wordFamily(c){
+  return ({iadj:'adj', naadj:'adj', verb:'verb', noun:'noun', pronoun:'noun', adv:'adv'})[c] || 'func';
+}
+function pickMCDistractors(word, dir, count){
+  const inFilter = new Set(filteredPool().map(w => w.id));
+  const correctLabel = optionLabel(word, dir);
+  const correctKey = correctLabel.toLowerCase();
+  const correctVariants = dir === 'jp-en' ? new Set(englishVariants(word.e)) : null;
+  const jpSide = dir !== 'jp-en';
+  const needKanji = dir === 'k2h' || dir === 'h2k';
+  const hasKanjiChar = str => /[\u3400-\u9fff]/.test(str);
+  const cls = wordClass(word), fam = wordFamily(cls);
+
+  const scored = [];
+  for(const w of VOCAB_DATA){
+    if(w.id === word.id) continue;
+    if(needKanji && !hasDistinctKanji(w)) continue;
+    const label = optionLabel(w, dir);
+    if(!label || label.toLowerCase() === correctKey) continue;
+    if(correctVariants && englishVariants(w.e).some(v => correctVariants.has(v))) continue;
+    const c = wordClass(w);
+    let score = c === cls ? 100 : (wordFamily(c) === fam ? 40 : 0);
+    if(inFilter.has(w.id)) score += 25;
+    if(jpSide){
+      if(label.slice(-1) === correctLabel.slice(-1)) score += 30;
+      if(hasKanjiChar(label) === hasKanjiChar(correctLabel)) score += 20;
+    }
+    score -= Math.min(Math.abs(label.length - correctLabel.length), 6) * 2;
+    score += Math.random() * 10;
+    scored.push({w, label, score});
+  }
+  scored.sort((a, b) => b.score - a.score);
+
+  const picks = [], seen = new Set([correctKey]);
+  for(const x of scored){
+    const k = x.label.toLowerCase();
+    if(seen.has(k)) continue;
+    seen.add(k); picks.push(x.w);
+    if(picks.length >= count) break;
+  }
+  return picks;
+}
+
 /* ----- Multiple choice mode ----- */
 function renderMC(){
   const {word, dir} = session.current;
@@ -1459,9 +1541,7 @@ function renderMC(){
   if(isJapanesePrompt(dir)){ speakBtn.classList.remove('hidden'); speakBtn.onclick=()=>speak(word.k||word.h); }
   else speakBtn.classList.add('hidden');
 
-  let pool = filteredPool().filter(w=>w.id !== word.id);
-  if(dir === 'k2h' || dir === 'h2k') pool = pool.filter(hasDistinctKanji);
-  const distractors = shuffle(pool).slice(0,3);
+  const distractors = pickMCDistractors(word, dir, 3);
   const options = shuffle([word, ...distractors]);
   const correctLabel = optionLabel(word, dir);
   const choicesEl = document.getElementById('mc-choices');
