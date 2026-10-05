@@ -367,12 +367,16 @@
 /* ---------- Data ---------- */
 const VOCAB_DATA = /*__VOCAB_JSON__*/[]/*__END_VOCAB_JSON__*/;
 const BUILD_INFO = /*__BUILD_INFO__*/{"builtAt":"unknown","count":0}/*__END_BUILD_INFO__*/;
+// Old row-number order (word ids used to be positions in the sheet). Only used
+// once per device, to convert progress saved under numeric ids to stable keys.
+const LEGACY_ID_KEYS = /*__LEGACY_KEYS__*/[]/*__END_LEGACY_KEYS__*/;
 
 const STORAGE_STATS = 'n5vocab_stats_v1';
 const STORAGE_SETTINGS = 'n5vocab_settings_v1';
 const STORAGE_LOCAL_MASTERED = 'n5vocab_local_mastered_v1';
 const STORAGE_MIGRATED_DEFAULT_FILTER = 'n5vocab_migrated_default_filter_v1';
 const STORAGE_KATAKANA_STATS = 'n5vocab_katakana_stats_v1';
+const STORAGE_KEYS_MIGRATED = 'n5vocab_stable_keys_migrated_v1';
 
 /* All 46 base katakana. Separate from VOCAB_DATA — this is a fixed character
    set, not vocabulary, so it isn't sourced from the spreadsheet. */
@@ -406,6 +410,30 @@ const KATAKANA_CONFUSE_GROUPS = [
 ];
 
 /* ---------- State ---------- */
+/* Word ids are stable keys now (kanji|reading), not row numbers — so a sheet
+   that gets re-sorted or has a word inserted can't re-point saved progress at
+   the wrong words. Progress saved under the old numeric ids is converted once. */
+function migrateNumericIdsToKeys(){
+  try{
+    if(localStorage.getItem(STORAGE_KEYS_MIGRATED)) return;
+    if(!LEGACY_ID_KEYS.length) return; // no mapping in this build — leave the data alone
+    const convert = obj => {
+      const out = {};
+      for(const [k, v] of Object.entries(obj || {})){
+        if(/^\d+$/.test(k)){ const key = LEGACY_ID_KEYS[+k]; if(key) out[key] = v; }
+        else out[k] = v;
+      }
+      return out;
+    };
+    [STORAGE_STATS, STORAGE_LOCAL_MASTERED].forEach(name=>{
+      const raw = localStorage.getItem(name);
+      if(raw) localStorage.setItem(name, JSON.stringify(convert(JSON.parse(raw))));
+    });
+    localStorage.setItem(STORAGE_KEYS_MIGRATED, '1');
+  }catch(e){}
+}
+migrateNumericIdsToKeys();
+
 let stats = loadStats();
 let localMastered = loadLocalMastered();
 let katakanaStats = loadKatakanaStats();
@@ -1490,6 +1518,13 @@ function wordClass(w){
 function wordFamily(c){
   return ({iadj:'adj', naadj:'adj', verb:'verb', noun:'noun', pronoun:'noun', adv:'adv'})[c] || 'func';
 }
+// "Seen" = a word you've actually met: marked learned in the sheet, mastered
+// in New vocab here, or shown to you in flash cards / multiple choice. Wrong
+// options are only drawn from these — an unfamiliar word as a distractor just
+// confuses (or, worse, teaches the wrong thing).
+function isSeenWord(w){
+  return !!(w.learned || localMastered[w.id] || (stats[w.id] && stats[w.id].seen > 0));
+}
 function pickMCDistractors(word, dir, count){
   const inFilter = new Set(filteredPool().map(w => w.id));
   const correctLabel = optionLabel(word, dir);
@@ -1500,34 +1535,43 @@ function pickMCDistractors(word, dir, count){
   const hasKanjiChar = str => /[\u3400-\u9fff]/.test(str);
   const cls = wordClass(word), fam = wordFamily(cls);
 
-  const scored = [];
-  for(const w of VOCAB_DATA){
-    if(w.id === word.id) continue;
-    if(needKanji && !hasDistinctKanji(w)) continue;
-    const label = optionLabel(w, dir);
-    if(!label || label.toLowerCase() === correctKey) continue;
-    if(correctVariants && englishVariants(w.e).some(v => correctVariants.has(v))) continue;
-    const c = wordClass(w);
-    let score = c === cls ? 100 : (wordFamily(c) === fam ? 40 : 0);
-    if(inFilter.has(w.id)) score += 25;
-    if(jpSide){
-      if(label.slice(-1) === correctLabel.slice(-1)) score += 30;
-      if(hasKanjiChar(label) === hasKanjiChar(correctLabel)) score += 20;
+  const choose = allowUnseen => {
+    const scored = [];
+    for(const w of VOCAB_DATA){
+      if(w.id === word.id) continue;
+      if(needKanji && !hasDistinctKanji(w)) continue;
+      if(!allowUnseen && !isSeenWord(w)) continue;
+      const label = optionLabel(w, dir);
+      if(!label || label.toLowerCase() === correctKey) continue;
+      if(correctVariants && englishVariants(w.e).some(v => correctVariants.has(v))) continue;
+      const c = wordClass(w);
+      let score = c === cls ? 100 : (wordFamily(c) === fam ? 40 : 0);
+      if(inFilter.has(w.id)) score += 25;
+      if(jpSide){
+        if(label.slice(-1) === correctLabel.slice(-1)) score += 30;
+        if(hasKanjiChar(label) === hasKanjiChar(correctLabel)) score += 20;
+      }
+      score -= Math.min(Math.abs(label.length - correctLabel.length), 6) * 2;
+      score += Math.random() * 10;
+      scored.push({w, label, score});
     }
-    score -= Math.min(Math.abs(label.length - correctLabel.length), 6) * 2;
-    score += Math.random() * 10;
-    scored.push({w, label, score});
-  }
-  scored.sort((a, b) => b.score - a.score);
+    scored.sort((a, b) => b.score - a.score);
+    const picks = [], used = new Set([correctKey]);
+    for(const x of scored){
+      const k = x.label.toLowerCase();
+      if(used.has(k)) continue;
+      used.add(k); picks.push(x.w);
+      if(picks.length >= count) break;
+    }
+    return picks;
+  };
 
-  const picks = [], seen = new Set([correctKey]);
-  for(const x of scored){
-    const k = x.label.toLowerCase();
-    if(seen.has(k)) continue;
-    seen.add(k); picks.push(x.w);
-    if(picks.length >= count) break;
-  }
-  return picks;
+  // Seen words only. The fallback to unseen ones is a last resort that only
+  // fires if there genuinely aren't enough seen candidates (a nearly-empty
+  // device with an empty sheet) — it exists so a card never has fewer than
+  // four options.
+  const picks = choose(false);
+  return picks.length >= count ? picks : choose(true);
 }
 
 /* ----- Multiple choice mode ----- */
@@ -1721,7 +1765,8 @@ updateStartPanelsForMode();
 updateCountLine();
 updateMasteredPanel();
 document.getElementById('build-note').textContent =
-  `${BUILD_INFO.count} words · built ${BUILD_INFO.builtAt} · works fully offline`;
+  `${BUILD_INFO.count} words · sheet ${BUILD_INFO.pulled ? 'synced' : 'copy from'} ${BUILD_INFO.sheetDate || 'unknown date'}` +
+  ` · built ${BUILD_INFO.builtAt} · works fully offline`;
 
 /* ---------- PWA: offline caching for Home Screen use ----------
    Registers the service worker so the app can be installed via
