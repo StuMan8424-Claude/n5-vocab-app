@@ -36,27 +36,44 @@ session history.
 
 ## Updating the vocab list
 
-Full workflow — pull the current spreadsheet from the private tutoring
-repo, rebuild, then push here:
+Every build **pulls the live sheet** from the private `japanese-n5-tutor`
+repo first, so it can't be made from a stale snapshot. The token is read from
+the `GITHUB_TOKEN` environment variable (it's never stored in this public
+repo):
 
 ```bash
-# 1. Pull the current spreadsheet from the private japanese-n5-tutor repo
-#    (token is in that repo's github_access.md)
-curl -s -H "Authorization: token <GITHUB_TOKEN>" \
-  -H "Accept: application/vnd.github.raw" \
-  -o japanese_n5_vocabulary_updated.xlsx \
-  https://api.github.com/repos/StuMan8424-Claude/japanese-n5-tutor/contents/japanese_n5_vocabulary_updated.xlsx
-
-# 2. Rebuild index.html (and refresh the JSON export) from it
 pip install openpyxl --break-system-packages   # first time only
-python3 build.py --xlsx japanese_n5_vocabulary_updated.xlsx --save-json
-
-# 3. Commit and push index.html, vocab_data.json, and the .xlsx snapshot to this repo
+GITHUB_TOKEN=<token> python3 build.py          # pull latest sheet, rebuild
 ```
+
+The build prints what changed since the previous one — new/removed words,
+words newly marked learned, edited meanings — and the settings-screen footer
+shows when the sheet was last synced (`786 words · sheet synced 2026-10-05`).
+Then commit and push `index.html`, `vocab_data.json` and the `.xlsx` snapshot
+to this repo.
+
+Without a token, `build.py` falls back to the local `.xlsx` and warns that it
+may be stale (`--no-pull` does that on purpose; `--xlsx` / `--json` build
+from a specific file). The token is in the tutoring repo's `github_access.md`.
 
 GitHub Pages redeploys automatically on push — the next time your phone has
 a connection and opens the app, it'll pull the update; if you're offline,
 you'll keep using whatever was cached at last connection.
+
+### Why word ids are stable keys
+
+Progress saved on a device (per-word stats, New vocab mastery) is keyed by a
+**stable word key**: `kanji|reading`, with the English meaning appended only
+where two entries share both (the two 魚 entries). It used to be keyed by row
+number, which breaks as soon as the sheet changes: marking words learned
+re-sorts it and one inserted word shifted 784 of 786 rows, which would have
+silently re-pointed saved progress at the wrong words. Stable keys make
+refreshing every build safe, including re-sorts.
+
+`legacy_ids.json` is the old row-number order. It's embedded in the app so
+progress saved under the old numeric ids is converted once on first load of
+the new build. Keep the file; don't regenerate it. If a word's kanji or
+reading is edited in the sheet, that one word's saved progress starts fresh.
 
 ## Troubleshooting: app looks out of date
 
@@ -136,10 +153,15 @@ nouns). Candidates are scored and the best picked, with some randomness:
 
 - same part of speech +100, same broad family (adjective / verb / noun /
   adverb / function word) +40
-- inside your current filters +25 (so they're usually words you've met)
+- inside your current filters +25
 - Japanese-side options: same last character +30 (る with る, い with い) and
   same script style, kanji vs kana-only, +20
 - minus a small penalty for label-length difference
+- **only words you've seen** are ever used as wrong options: marked learned
+  in the sheet, mastered in New vocab, or shown to you in flash cards /
+  multiple choice. An unfamiliar word as a distractor just confuses. (A
+  last-resort fallback to unseen words exists only so a card never has fewer
+  than four options; it can't trigger with a normal sheet.)
 - never an option with the same label as the answer (homophones on kana
   questions), nor an English meaning that shares an accepted form with it
 
@@ -256,16 +278,16 @@ once ~24–38 words later — so misses get reinforced within the same session.
 | `service-worker.js` | Caches the app for offline use after the first load. |
 | `apple-touch-icon.png`, `icon-192.png`, `icon-512.png`, `icon-512-maskable.png`, `favicon-32.png` | App icons. |
 | `template.html` | HTML/CSS/JS shell with a data placeholder — source for `build.py`. |
-| `build.py` | Regenerates `index.html` from a spreadsheet or JSON export. |
+| `build.py` | Pulls the live sheet from the tutoring repo (needs `GITHUB_TOKEN`) and regenerates `index.html`; prints what changed. |
+| `legacy_ids.json` | Old row-number order of the sheet, for the one-time conversion of saved progress to stable word keys. Keep it. |
 | `vocab_data.json` | Plain JSON export of the vocab list at last build time. |
 | `japanese_n5_vocabulary_updated.xlsx` | Snapshot of the vocab spreadsheet used for this build. |
 
 ## Notes / limitations
 
-- Per-word stats (including New Vocab mastery) are keyed by row position in
-  the vocabulary list. Reordering or deleting rows in the spreadsheet
-  between rebuilds can realign saved stats to different words — appending
-  new words at the end is safe.
+- Per-word stats (including New Vocab mastery) are keyed by stable word key
+  (`kanji|reading`), so re-sorting or adding rows is safe; editing a word's
+  kanji or reading in the sheet resets that word's saved progress.
 - The 🔊 speaker button uses the device's built-in text-to-speech; works
   offline on iOS once a Japanese voice has been used once.
 - Typing kanji in text entry (Japanese entry mode, kana→kanji questions)
