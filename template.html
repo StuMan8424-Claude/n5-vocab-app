@@ -1506,21 +1506,31 @@ document.getElementById('flash-fail').addEventListener('click', (e)=>{
 });
 
 /* ----- Answer-grid font fitting -----
-   Each answer fills its grid cell: binary-search the largest font size at
-   which the label still fits the cell (wrapping allowed, but no word may
-   overflow sideways). Sizes are then limited to 1.6x the smallest in the set
-   so one short answer doesn't dwarf a long one. If the cell hasn't been laid
-   out (hidden, or no layout engine) the CSS clamp() default is left alone.
+   All four answers on a card share ONE font size: the largest at which every
+   answer still fits its cell (binary search per cell, then the smallest wins).
+   A label with no spaces — a kana or kanji word, or a single English word —
+   stays on one line unless that would push it below ONE_LINE_MIN_PX, i.e. a
+   very long word (about 8+ characters on a phone); two lines of two
+   characters is harder to read than one smaller line. Labels with spaces
+   ("Expensive / Tall") wrap at the spaces. If the cell hasn't been laid out
+   (hidden, or no layout engine) the CSS clamp() default is left alone.
 ------------------------------------------------------------------------ */
+const ONE_LINE_MIN_PX = 20;
 function choiceText(label){
   const span = document.createElement('span');
   span.className = 'choice-text';
-  // Allow a line break after / ; , ("Machines/vehicles counter: ...") using
-  // <wbr>, which adds no text — textContent stays exactly the label.
-  label.replace(/([\/;,])/g, '$1\u0001').split('\u0001').forEach((part, i)=>{
-    if(i) span.appendChild(document.createElement('wbr'));
-    span.appendChild(document.createTextNode(part));
-  });
+  // English labels ("Machines/vehicles counter: ...", "Morning/Evening") may
+  // break after / ; , using <wbr>, which adds no text — textContent stays
+  // exactly the label. Never on Japanese labels: a <wbr> forces a break even
+  // inside a no-wrap span, which would split a short reading like し/よん.
+  if(!/[\u3000-\u30ff\u3400-\u9fff]/.test(label)){
+    label.replace(/([\/;,])/g, '$1\u0001').split('\u0001').forEach((part, i)=>{
+      if(i) span.appendChild(document.createElement('wbr'));
+      span.appendChild(document.createTextNode(part));
+    });
+  }else{
+    span.textContent = label;
+  }
   return span;
 }
 function fitChoiceFonts(container){
@@ -1543,22 +1553,18 @@ function fitChoiceFonts(container){
       }
       return best;
     };
-    // A word reads better whole than split mid-word (食べる, not 食べ / る), so
-    // keep it on one line unless that costs more than ~40% of the size it
-    // could have if wrapped — long phrases and long words still wrap.
-    // Labels with spaces ("Expensive / Tall") just wrap at the spaces.
     const wrapped = search(true);
     if(!/\s/.test(span.textContent)){
       const single = search(false);
-      if(single >= wrapped * 0.6){ span.style.whiteSpace = 'nowrap'; return single; }
+      if(single >= Math.min(ONE_LINE_MIN_PX, wrapped)){ span.style.whiteSpace = 'nowrap'; return single; }
     }
     span.style.whiteSpace = 'normal';
     return wrapped;
   });
   const valid = sizes.filter(x => x !== null);
   if(!valid.length) return;
-  const cap = Math.min(...valid) * 1.6;
-  cells.forEach((btn, i)=>{ if(sizes[i] !== null) btn.style.fontSize = Math.min(sizes[i], cap) + 'px'; });
+  const common = Math.min(...valid);
+  cells.forEach((btn, i)=>{ if(sizes[i] !== null) btn.style.fontSize = common + 'px'; });
 }
 window.addEventListener('resize', ()=>{
   ['mc-choices','kk-choices'].forEach(id=>{
