@@ -37,7 +37,7 @@
   body{
     background:var(--bg); color:var(--ink);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",sans-serif;
-    display:flex; flex-direction:column; min-height:100vh;
+    display:flex; flex-direction:column; min-height:100vh; min-height:100dvh;
     overscroll-behavior:none;
   }
   .wrap{max-width:640px; margin:0 auto; width:100%; padding:16px; flex:1; display:flex; flex-direction:column;}
@@ -109,6 +109,34 @@
   .choice.correct{background:var(--good); color:#fff; border-color:var(--good);}
   .choice.incorrect{background:var(--bad); color:#fff; border-color:var(--bad);}
   .choice.dim{opacity:0.5;}
+  .invisible{visibility:hidden; pointer-events:none;}
+
+  /* Multiple-choice answers: a 2x2 grid that fills whatever screen is left under
+     the prompt card, with each answer's font fitted to its cell (see
+     fitChoiceFonts). The Next button's space is always reserved, so the grid
+     never resizes when it appears. */
+  #screen-session, #screen-katakana{flex:1; display:flex; flex-direction:column; min-height:0;}
+  #mode-mc, #kk-quiz{flex:1; display:flex; flex-direction:column; min-height:0;}
+  #mc-card, #kk-card{flex:0 0 auto; min-height:150px; padding:16px; margin-bottom:12px;}
+  .choices.grid{
+    display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr;
+    gap:10px; flex:1; min-height:260px;
+  }
+  .choices.grid .choice{
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    padding:8px 10px; line-height:1.15; min-width:0; min-height:0; overflow:auto;
+    font-size:clamp(1.2rem, 6vw, 2.2rem);
+  }
+  .choices.grid .choice .choice-text{display:block; width:100%; text-wrap:balance;}
+  #mc-next, #kk-next{flex:0 0 auto; margin-top:10px;}
+  #kk-card .prompt{font-size:4.8rem; line-height:1.1;}
+  @media (max-height:720px){
+    #mc-card, #kk-card{min-height:104px; padding:10px 14px; margin-bottom:8px;}
+    #mc-card .prompt.small{font-size:1.9rem;}
+    #kk-card .prompt{font-size:3.2rem;}
+    .choices.grid{min-height:190px; gap:8px;}
+    #mc-next, #kk-next{margin-top:8px; padding:12px;}
+  }
 
   .text-entry-input{
     width:100%; font-size:1.2rem; padding:14px; border-radius:12px; border:1px solid var(--line);
@@ -271,14 +299,14 @@
 
     <!-- Multiple choice mode -->
     <div id="mode-mc" class="hidden">
-      <div class="card" id="mc-card" style="cursor:default; min-height:220px;">
+      <div class="card" id="mc-card" style="cursor:default;">
         <div class="tag" id="mc-tag">JAPANESE</div>
         <button class="speak-btn hidden" id="mc-speak">🔊</button>
         <div class="prompt small" id="mc-prompt">…</div>
         <div class="sub-prompt" id="mc-subprompt"></div>
       </div>
-      <div class="choices" id="mc-choices"></div>
-      <button class="btn-primary hidden" id="mc-next" style="margin-top:12px;">Next →</button>
+      <div class="choices grid" id="mc-choices"></div>
+      <button class="btn-primary invisible" id="mc-next">Next →</button>
     </div>
 
     <!-- Text entry mode -->
@@ -346,8 +374,8 @@
         <div class="tag">KATAKANA</div>
         <div class="prompt" id="kk-prompt">…</div>
       </div>
-      <div class="choices" id="kk-choices"></div>
-      <button class="btn-primary hidden" id="kk-next" style="margin-top:12px;">Next →</button>
+      <div class="choices grid" id="kk-choices"></div>
+      <button class="btn-primary invisible" id="kk-next">Next →</button>
     </div>
 
     <div id="kk-done" class="hidden">
@@ -920,7 +948,7 @@ function kkNext(){
   document.getElementById('kk-quiz').classList.remove('hidden');
   document.getElementById('kk-done').classList.add('hidden');
   document.getElementById('kk-prompt').textContent = kk.current.k;
-  document.getElementById('kk-next').classList.add('hidden');
+  document.getElementById('kk-next').classList.add('invisible');
 
   const correct = kk.current;
   const options = shuffle([correct, ...pickKatakanaDistractors(correct, 3)]);
@@ -929,10 +957,11 @@ function kkNext(){
   options.forEach(opt=>{
     const btn = document.createElement('button');
     btn.className = 'choice';
-    btn.textContent = opt.r;
+    btn.appendChild(choiceText(opt.r));
     btn.addEventListener('click', ()=> kkAnswer(opt, btn));
     choicesEl.appendChild(btn);
   });
+  fitChoiceFonts(choicesEl);
   kk.shownAt = Date.now();
   kkUpdateProgress();
 }
@@ -965,7 +994,7 @@ function kkAnswer(opt, btn){
   saveKatakanaStats();
   kk.pos += 1;
   kkUpdateProgress();
-  document.getElementById('kk-next').classList.remove('hidden');
+  document.getElementById('kk-next').classList.remove('invisible');
 }
 
 function kkFinish(){
@@ -1476,6 +1505,68 @@ document.getElementById('flash-fail').addEventListener('click', (e)=>{
   advanceCard();
 });
 
+/* ----- Answer-grid font fitting -----
+   Each answer fills its grid cell: binary-search the largest font size at
+   which the label still fits the cell (wrapping allowed, but no word may
+   overflow sideways). Sizes are then limited to 1.6x the smallest in the set
+   so one short answer doesn't dwarf a long one. If the cell hasn't been laid
+   out (hidden, or no layout engine) the CSS clamp() default is left alone.
+------------------------------------------------------------------------ */
+function choiceText(label){
+  const span = document.createElement('span');
+  span.className = 'choice-text';
+  // Allow a line break after / ; , ("Machines/vehicles counter: ...") using
+  // <wbr>, which adds no text — textContent stays exactly the label.
+  label.replace(/([\/;,])/g, '$1\u0001').split('\u0001').forEach((part, i)=>{
+    if(i) span.appendChild(document.createElement('wbr'));
+    span.appendChild(document.createTextNode(part));
+  });
+  return span;
+}
+function fitChoiceFonts(container){
+  const cells = [...container.children];
+  const sizes = cells.map(btn=>{
+    const span = btn.firstElementChild;
+    if(!span) return null;
+    const cs = getComputedStyle(btn);
+    const innerW = btn.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    const innerH = btn.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+    if(!(innerW > 0 && innerH > 0)) return null;
+    const search = wrap => {
+      span.style.whiteSpace = wrap ? 'normal' : 'nowrap';
+      let lo = 12, hi = Math.max(lo, Math.min(innerH * 0.7, innerW * 0.8, 120)), best = lo;
+      for(let i = 0; i < 10; i++){
+        const mid = (lo + hi) / 2;
+        btn.style.fontSize = mid + 'px';
+        const fits = span.scrollWidth <= span.clientWidth + 1 && span.offsetHeight <= innerH + 0.5;
+        if(fits){ best = mid; lo = mid; } else hi = mid;
+      }
+      return best;
+    };
+    // A word reads better whole than split mid-word (食べる, not 食べ / る), so
+    // keep it on one line unless that costs more than ~40% of the size it
+    // could have if wrapped — long phrases and long words still wrap.
+    // Labels with spaces ("Expensive / Tall") just wrap at the spaces.
+    const wrapped = search(true);
+    if(!/\s/.test(span.textContent)){
+      const single = search(false);
+      if(single >= wrapped * 0.6){ span.style.whiteSpace = 'nowrap'; return single; }
+    }
+    span.style.whiteSpace = 'normal';
+    return wrapped;
+  });
+  const valid = sizes.filter(x => x !== null);
+  if(!valid.length) return;
+  const cap = Math.min(...valid) * 1.6;
+  cells.forEach((btn, i)=>{ if(sizes[i] !== null) btn.style.fontSize = Math.min(sizes[i], cap) + 'px'; });
+}
+window.addEventListener('resize', ()=>{
+  ['mc-choices','kk-choices'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el && el.offsetParent !== null && el.children.length) fitChoiceFonts(el);
+  });
+});
+
 /* ----- Multiple choice distractors -----
    A random draw lets the answer be spotted by form alone: the one い-ending
    word among verbs, the one "to …" among nouns. So distractors are scored
@@ -1590,12 +1681,15 @@ function renderMC(){
   const correctLabel = optionLabel(word, dir);
   const choicesEl = document.getElementById('mc-choices');
   choicesEl.innerHTML = '';
-  document.getElementById('mc-next').classList.add('hidden');
+  document.getElementById('mc-next').classList.add('invisible');
+  let answered = false; // first answer stands — later taps on this card do nothing
   options.forEach(opt=>{
     const btn = document.createElement('button');
     btn.className = 'choice';
-    btn.textContent = optionLabel(opt, dir);
+    btn.appendChild(choiceText(optionLabel(opt, dir)));
     btn.addEventListener('click', ()=>{
+      if(answered) return;
+      answered = true;
       markAnswerMoment();
       const correct = opt.id === word.id;
       [...choicesEl.children].forEach(c=>c.classList.add('dim'));
@@ -1607,11 +1701,12 @@ function renderMC(){
         });
       }
       [...choicesEl.children].forEach(c=>c.onclick=null);
-      document.getElementById('mc-next').classList.remove('hidden');
+      document.getElementById('mc-next').classList.remove('invisible');
       recordResult(session.current, correct);
     });
     choicesEl.appendChild(btn);
   });
+  fitChoiceFonts(choicesEl);
 }
 document.getElementById('mc-next').addEventListener('click', advanceCard);
 
