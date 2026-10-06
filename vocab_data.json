@@ -400,6 +400,16 @@
   "id": "狭い|せまい"
  },
  {
+  "k": "甘い",
+  "h": "あまい",
+  "r": "amai",
+  "e": "Sweet",
+  "cat": "Adjectives",
+  "type": "い-adjective",
+  "learned": true,
+  "id": "甘い|あまい"
+ },
+ {
   "k": "痛い",
   "h": "いたい",
   "r": "itai",
@@ -458,6 +468,16 @@
   "type": "い-adjective",
   "learned": true,
   "id": "軽い|かるい"
+ },
+ {
+  "k": "辛い",
+  "h": "からい",
+  "r": "karai",
+  "e": "Spicy / Hot",
+  "cat": "Adjectives",
+  "type": "い-adjective",
+  "learned": true,
+  "id": "辛い|からい"
  },
  {
   "k": "近い",
@@ -1210,6 +1230,16 @@
   "id": "卵|たまご"
  },
  {
+  "k": "塩",
+  "h": "しお",
+  "r": "shio",
+  "e": "Salt",
+  "cat": "Food & Drink",
+  "type": "Noun",
+  "learned": true,
+  "id": "塩|しお"
+ },
+ {
   "k": "夕飯",
   "h": "ゆうはん",
   "r": "yuuhan",
@@ -1280,6 +1310,16 @@
   "id": "牛肉|ぎゅうにく"
  },
  {
+  "k": "砂糖",
+  "h": "さとう",
+  "r": "satou",
+  "e": "Sugar",
+  "cat": "Food & Drink",
+  "type": "Noun",
+  "learned": true,
+  "id": "砂糖|さとう"
+ },
+ {
   "k": "緑茶",
   "h": "りょくちゃ",
   "r": "ryokucha",
@@ -1308,6 +1348,16 @@
   "type": "Noun",
   "learned": true,
   "id": "豚肉|ぶたにく"
+ },
+ {
+  "k": "醤油",
+  "h": "しょうゆ",
+  "r": "shouyu",
+  "e": "soy sauce",
+  "cat": "Food & Drink",
+  "type": "Noun",
+  "learned": true,
+  "id": "醤油|しょうゆ"
  },
  {
   "k": "野菜",
@@ -3580,6 +3630,16 @@
   "id": "会う|あう"
  },
  {
+  "k": "分かる",
+  "h": "わかる",
+  "r": "wakaru",
+  "e": "To understand",
+  "cat": "Verbs",
+  "type": "Verb (G1-る)",
+  "learned": true,
+  "id": "分かる|わかる"
+ },
+ {
   "k": "勉強する",
   "h": "べんきょうする",
   "r": "benkyousuru",
@@ -3658,6 +3718,16 @@
   "type": "Verb (G1-つ)",
   "learned": true,
   "id": "待つ|まつ"
+ },
+ {
+  "k": "教える",
+  "h": "おしえる",
+  "r": "oshieru",
+  "e": "To teach",
+  "cat": "Verbs",
+  "type": "Verb (G2)",
+  "learned": true,
+  "id": "教える|おしえる"
  },
  {
   "k": "散歩する",
@@ -3780,6 +3850,26 @@
   "id": "着る|きる"
  },
  {
+  "k": "知る",
+  "h": "しる",
+  "r": "shiru",
+  "e": "To come to know / find out (知っている = to know; 知りません = don't know)",
+  "cat": "Verbs",
+  "type": "Verb (G1-る)",
+  "learned": true,
+  "id": "知る|しる"
+ },
+ {
+  "k": "答える",
+  "h": "こたえる",
+  "r": "kotaeru",
+  "e": "To answer",
+  "cat": "Verbs",
+  "type": "Verb (G2)",
+  "learned": true,
+  "id": "答える|こたえる"
+ },
+ {
   "k": "締める",
   "h": "しめる",
   "r": "shimeru",
@@ -3788,6 +3878,16 @@
   "type": "Verb",
   "learned": true,
   "id": "締める|しめる"
+ },
+ {
+  "k": "習う",
+  "h": "ならう",
+  "r": "narau",
+  "e": "To learn",
+  "cat": "Verbs",
+  "type": "Verb (G1-う)",
+  "learned": true,
+  "id": "習う|ならう"
  },
  {
   "k": "聞く",
@@ -4210,16 +4310,6 @@
   "id": "温かい|あたたかい"
  },
  {
-  "k": "甘い",
-  "h": "あまい",
-  "r": "amai",
-  "e": "Sweet",
-  "cat": "Adjectives",
-  "type": "い-adjective",
-  "learned": true,
-  "id": "甘い|あまい"
- },
- {
   "k": "細い",
   "h": "ほそい",
   "r": "hosoi",
@@ -4278,16 +4368,6 @@
   "type": "な-adjective",
   "learned": false,
   "id": "賑やか|にぎやか"
- },
- {
-  "k": "辛い",
-  "h": "からい",
-  "r": "karai",
-  "e": "Spicy / Hot",
-  "cat": "Adjectives",
-  "type": "い-adjective",
-  "learned": true,
-  "id": "辛い|からい"
  },
  {
   "k": "静か",
@@ -4640,16 +4720,6 @@
   "id": "バター|バター"
  },
  {
-  "k": "塩",
-  "h": "しお",
-  "r": "shio",
-  "e": "Salt",
-  "cat": "Food & Drink",
-  "type": "Noun",
-  "learned": true,
-  "id": "塩|しお"
- },
- {
   "k": "弁当",
   "h": "べんとう",
   "r": "bentou",
@@ -4658,16 +4728,6 @@
   "type": "Noun",
   "learned": false,
   "id": "弁当|べんとう"
- },
- {
-  "k": "砂糖",
-  "h": "さとう",
-  "r": "satou",
-  "e": "Sugar",
-  "cat": "Food & Drink",
-  "type": "Noun",
-  "learned": true,
-  "id": "砂糖|さとう"
  },
  {
   "k": "紅茶",
@@ -4698,16 +4758,6 @@
   "type": "Noun",
   "learned": false,
   "id": "酒|さけ"
- },
- {
-  "k": "醤油",
-  "h": "しょうゆ",
-  "r": "shouyu",
-  "e": "soy sauce",
-  "cat": "Food & Drink",
-  "type": "Noun",
-  "learned": true,
-  "id": "醤油|しょうゆ"
  },
  {
   "k": "食堂",
@@ -7230,16 +7280,6 @@
   "id": "出る|でる"
  },
  {
-  "k": "分かる",
-  "h": "わかる",
-  "r": "wakaru",
-  "e": "To understand",
-  "cat": "Verbs",
-  "type": "Verb (G1-る)",
-  "learned": false,
-  "id": "分かる|わかる"
- },
- {
   "k": "切る",
   "h": "きる",
   "r": "kiru",
@@ -7410,16 +7450,6 @@
   "id": "撮る|とる"
  },
  {
-  "k": "教える",
-  "h": "おしえる",
-  "r": "oshieru",
-  "e": "To teach",
-  "cat": "Verbs",
-  "type": "Verb (G2)",
-  "learned": false,
-  "id": "教える|おしえる"
- },
- {
   "k": "歌う",
   "h": "うたう",
   "r": "utau",
@@ -7540,16 +7570,6 @@
   "id": "着く|つく"
  },
  {
-  "k": "知る",
-  "h": "しる",
-  "r": "shiru",
-  "e": "To know",
-  "cat": "Verbs",
-  "type": "Verb (G1-る)",
-  "learned": false,
-  "id": "知る|しる"
- },
- {
   "k": "磨く",
   "h": "みがく",
   "r": "migaku",
@@ -7570,16 +7590,6 @@
   "id": "立つ|たつ"
  },
  {
-  "k": "答える",
-  "h": "こたえる",
-  "r": "kotaeru",
-  "e": "To answer",
-  "cat": "Verbs",
-  "type": "Verb (G2)",
-  "learned": false,
-  "id": "答える|こたえる"
- },
- {
   "k": "終わる",
   "h": "おわる",
   "r": "owaru",
@@ -7598,16 +7608,6 @@
   "type": "Verb",
   "learned": false,
   "id": "置く|おく"
- },
- {
-  "k": "習う",
-  "h": "ならう",
-  "r": "narau",
-  "e": "To learn",
-  "cat": "Verbs",
-  "type": "Verb (G1-う)",
-  "learned": false,
-  "id": "習う|ならう"
  },
  {
   "k": "脱ぐ",
