@@ -108,14 +108,19 @@ force-quitting can't fix since the staleness lives one layer below the app.
    never shows the reading — the flip reveals everything the prompt didn't
    already give away.
 2. **Multiple choice** — four answers in a 2×2 grid that fills the screen
-   below the prompt card, each answer's font fitted to its cell (kanji up to
-   ~120px; long English phrases shrink to fit and may break after `/`, `;` or
-   `,`). Single words/kanji stay on one line rather than splitting mid-word,
-   and sizes within a card are kept within 1.6× of each other. The Next
-   button's space is always reserved so the grid never jumps when it
-   appears. The first answer stands — later taps on that card do nothing. If
-   a reading hint is available for the prompt, it's hidden behind a "Tap to
-   show reading" line. The Katakana drill uses the same grid.
+   below the prompt card. **All four answers share one font size**: the
+   largest at which every answer fits its cell (kanji up to ~120px; a card
+   with a long phrase shrinks all four together). A label with no spaces —
+   kana, kanji, or a single English word — stays on **one line** unless that
+   would push it below 20px, i.e. a very long word (about 8+ characters on a
+   phone; in the current list only なければならない, ありがとうございます,
+   いってらっしゃい, ごちそうさまでした and テープレコーダー wrap). Labels with
+   spaces wrap at the spaces, and English labels may also break after `/`,
+   `;` or `,`. The Next button's space is always reserved so the grid never
+   jumps when it appears. The first answer stands — later taps on that card
+   do nothing. If a reading hint is available for the prompt, it's hidden
+   behind a "Tap to show reading" line. The Katakana drill uses the same
+   grid.
 3. **Text entry** — type the answer and check it. Same tap-to-reveal
    reading hint as multiple choice.
 4. **New vocab** — drills up to 5 "not yet learned" words at once. A word
