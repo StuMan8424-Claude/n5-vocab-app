@@ -107,9 +107,15 @@ force-quitting can't fix since the staleness lives one layer below the app.
 1. **Flash cards** — tap to reveal, mark ✓ Got it / ✕ Missed it. The prompt
    never shows the reading — the flip reveals everything the prompt didn't
    already give away.
-2. **Multiple choice** — pick from 4 options. If a reading hint is
-   available for the prompt, it's hidden behind a "Tap to show reading"
-   line rather than shown outright.
+2. **Multiple choice** — four answers in a 2×2 grid that fills the screen
+   below the prompt card, each answer's font fitted to its cell (kanji up to
+   ~120px; long English phrases shrink to fit and may break after `/`, `;` or
+   `,`). Single words/kanji stay on one line rather than splitting mid-word,
+   and sizes within a card are kept within 1.6× of each other. The Next
+   button's space is always reserved so the grid never jumps when it
+   appears. The first answer stands — later taps on that card do nothing. If
+   a reading hint is available for the prompt, it's hidden behind a "Tap to
+   show reading" line. The Katakana drill uses the same grid.
 3. **Text entry** — type the answer and check it. Same tap-to-reveal
    reading hint as multiple choice.
 4. **New vocab** — drills up to 5 "not yet learned" words at once. A word
