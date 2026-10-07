@@ -129,6 +129,15 @@
   }
   .choices.grid .choice .choice-text{display:block; width:100%; text-wrap:balance;}
   #mc-next, #kk-next{flex:0 0 auto; margin-top:10px;}
+  /* kanji <-> reading questions: room for the two feedback lines under the prompt, reserved up front so the grid never moves */
+  .kq-feedback{display:none; width:100%; margin-top:8px; font-size:0.82rem; line-height:1.35; color:var(--muted); min-height:2.7em;}
+  .kq-feedback div{white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  #mc-card.kq{min-height:176px;}
+  #mc-card.kq .kq-feedback{display:block;}
+  .choices.grid .choice{position:relative;}
+  .choices.has-fakes .choice{padding-bottom:26px;}
+  .fake-tag{position:absolute; left:6px; right:6px; bottom:6px; font-size:0.68rem; line-height:1.2; color:var(--muted); text-align:center; font-weight:400;}
+  .choice.incorrect .fake-tag, .choice.correct .fake-tag{color:rgba(255,255,255,0.85);}
   #kk-card .prompt{font-size:4.8rem; line-height:1.1;}
   @media (max-height:720px){
     #mc-card, #kk-card{min-height:104px; padding:10px 14px; margin-bottom:8px;}
@@ -136,6 +145,8 @@
     #kk-card .prompt{font-size:3.2rem;}
     .choices.grid{min-height:190px; gap:8px;}
     #mc-next, #kk-next{margin-top:8px; padding:12px;}
+    #mc-card.kq{min-height:140px;}
+    .kq-feedback{font-size:0.74rem; margin-top:4px;}
   }
 
   .text-entry-input{
@@ -304,6 +315,7 @@
         <button class="speak-btn hidden" id="mc-speak">🔊</button>
         <div class="prompt small" id="mc-prompt">…</div>
         <div class="sub-prompt" id="mc-subprompt"></div>
+        <div class="kq-feedback" id="mc-feedback"><div></div><div></div></div>
       </div>
       <div class="choices grid" id="mc-choices"></div>
       <button class="btn-primary invisible" id="mc-next">Next →</button>
@@ -398,6 +410,11 @@ const BUILD_INFO = /*__BUILD_INFO__*/{"builtAt":"unknown","count":0}/*__END_BUIL
 // Old row-number order (word ids used to be positions in the sheet). Only used
 // once per device, to convert progress saved under numeric ids to stable keys.
 const LEGACY_ID_KEYS = /*__LEGACY_KEYS__*/[]/*__END_LEGACY_KEYS__*/;
+// Per kanji: meaning (m), kun (k) and on (o) readings for display, and every valid reading incl. sound
+// changes (v) — used to keep a second correct answer out of the options. From kanji_info.txt.
+const KANJI_INFO = /*__KANJI_INFO__*/{}/*__END_KANJI_INFO__*/;
+// Visually similar kanji, used to build wrong kanji options (lookalikes.txt).
+const LOOKALIKES = /*__LOOKALIKES__*/{}/*__END_LOOKALIKES__*/;
 
 const STORAGE_STATS = 'n5vocab_stats_v1';
 const STORAGE_SETTINGS = 'n5vocab_settings_v1';
@@ -739,8 +756,17 @@ function mixedDirection(word){
   }
   return Math.random() < 0.5 ? 'jp-en' : 'en-jp';
 }
+function mcDirection(word){
+  // Multiple choice: kanji words can be asked all four ways; the kanji<->reading
+  // routes are built by buildK2HQuestion / buildH2KQuestion at render time and
+  // fall back (k2h -> meaning, h2k -> the real-word picker) if they can't be asked safely.
+  const options = word.rn ? ['jp-en', 'en-jp', 'k2h', 'h2k'] : ['jp-en', 'en-jp'];
+  return options[Math.floor(Math.random() * options.length)];
+}
 function directionFor(word, mode){
-  return mode === 'text' ? assignDirection(word) : mixedDirection(word);
+  if(mode === 'text') return assignDirection(word);
+  if(mode === 'mc') return mcDirection(word);
+  return mixedDirection(word);
 }
 
 /* ---------- Weighting toward weak & newer words ----------
@@ -1672,42 +1698,225 @@ function pickMCDistractors(word, dir, count){
   return picks.length >= count ? picks : choose(true);
 }
 
+/* ----- Kanji <-> reading multiple choice -----
+   The goal is learning what each kanji means and how it's read, so:
+   KANJI -> READING: the prompt is ONE continuous kanji string from a word (食
+   from 食べる, 物 or 食 from 食べ物, 大学 from 大学) with all kana stripped, so
+   there's no okurigana to match against. The options are bare readings — the
+   answer is the reading of that string in this word (た), never the whole
+   word. Wrong options are readings used by kanji in words you've seen, of a
+   similar length, and NEVER another valid reading of the prompt (answering し
+   for 四 keeps よん, よっ and よ out), nor from a word sharing a kanji with it.
+   KANA -> KANJI: the prompt is the word in kana, the options are kanji forms
+   that keep the answer's kana beginning and ending. Real words you've seen
+   with the same kana frame come first, then real words sharing the ending or
+   beginning; only if that's not enough is a kanji swapped for a look-alike (or
+   another kanji from your list) to make a made-up form, tagged "not a word"
+   once you've answered. A made-up form is never a word that's in your list.
+   After answering, the card shows the word, its meaning and the kanji's
+   meaning and readings.
+------------------------------------------------------------------------ */
+function kanjiRuns(word){ return (word.rn || []).filter(t => t.t === 'k'); }
+let _runReadings = null;
+function runReadings(){
+  if(_runReadings) return _runReadings;
+  const m = new Map();
+  VOCAB_DATA.forEach(w => (w.rn || []).forEach(t => {
+    if(t.t !== 'k') return;
+    if(!m.has(t.s)) m.set(t.s, new Set());
+    t.r.forEach(r => m.get(t.s).add(r));
+  }));
+  return (_runReadings = m);
+}
+function validReadingsFor(s){
+  const set = new Set(runReadings().get(s) || []);
+  if(s.length === 1 && KANJI_INFO[s]) KANJI_INFO[s].v.forEach(r => set.add(r));
+  return set;
+}
+function toKatakana(s){ return s.replace(/[\u3041-\u3096]/g, c => String.fromCharCode(c.charCodeAt(0) + 0x60)); }
+function kanjiFacts(ch){
+  const e = KANJI_INFO[ch];
+  if(!e) return '';
+  const kun = e.k.slice(0, 3).join(', '), on = e.o.slice(0, 3).map(toKatakana).join(', ');
+  return `${ch} — ${e.m}` + (kun ? ` · ${kun}` : '') + (on ? ` · ${on}` : '');
+}
+function kanjiFeedback(word, run){
+  const line1 = `${word.k} · ${word.h.split('/')[0]} — ${word.e}`;
+  const line2 = run.s.length === 1
+    ? kanjiFacts(run.s)
+    : [...run.s].filter(c => KANJI_INFO[c]).map(c => `${c} ${KANJI_INFO[c].m.split(',')[0]}`).join(' · ') +
+      (run.i ? ' · irregular reading: learn it as one word' : '');
+  return [line1, line2];
+}
+function seenRunPool(){
+  const out = [];
+  VOCAB_DATA.forEach(w => {
+    if(!w.rn || !isSeenWord(w)) return;
+    w.rn.forEach(t => { if(t.t === 'k') t.r.forEach(r => out.push({s: t.s, r})); });
+  });
+  return out;
+}
+function buildK2HQuestion(word){
+  const runs = kanjiRuns(word);
+  if(!runs.length) return null;
+  const pool = seenRunPool();
+  for(const run of shuffle(runs)){
+    if(run.s.length === 1 && !KANJI_INFO[run.s]) continue;      // no reading-table entry: never ask it unchecked
+    const valid = validReadingsFor(run.s);
+    const answer = run.r[Math.floor(Math.random() * run.r.length)];
+    const chars = new Set(run.s);
+    for(const slack of [1, 2]){
+      const taken = new Set([answer]), cands = [];
+      for(const c of pool){
+        if([...c.s].some(ch => chars.has(ch))) continue;        // shares a kanji with the prompt
+        if(valid.has(c.r) || taken.has(c.r)) continue;          // another valid reading, or a repeat
+        if(Math.abs(c.r.length - answer.length) > slack) continue;
+        taken.add(c.r); cands.push(c);
+      }
+      if(cands.length >= 3){
+        const picks = cands
+          .map(c => ({c, score: -2 * Math.abs(c.r.length - answer.length) - Math.abs(c.s.length - run.s.length) + Math.random() * 2}))
+          .sort((a, b) => b.score - a.score).slice(0, 3).map(x => x.c);
+        return {
+          kind: 'k2h', tag: 'KANJI', prompt: run.s, run, word,
+          options: [{label: answer, correct: true}, ...picks.map(c => ({label: c.r, correct: false}))],
+          feedback: kanjiFeedback(word, run)
+        };
+      }
+    }
+  }
+  return null;
+}
+const WRITTEN_FORMS = new Set(VOCAB_DATA.map(w => w.k));
+function skeleton(word){ return (word.rn || []).map(t => t.t === 'k' ? '#' : t.s).join(''); }
+function kanjiLen(word){ return (word.rn || []).filter(t => t.t === 'k').reduce((n, t) => n + t.s.length, 0); }
+function buildH2KQuestion(word){
+  const toks = word.rn;
+  if(!toks || !toks.some(t => t.t === 'f')) return null;        // pure-kanji words keep the real-word picker
+  const readings = word.h.split('/');
+  const promptSet = new Set(readings.map(r => r.replace('〜', '')));
+  const prompt = readings[Math.floor(Math.random() * readings.length)];
+  const skel = skeleton(word);
+  const firstF = toks[0].t === 'f' ? toks[0].s : '', lastF = toks[toks.length - 1].t === 'f' ? toks[toks.length - 1].s : '';
+  // a different word read the same way would be a second correct answer — never offered
+  const homophone = w2 => w2.h.split('/').some(r => promptSet.has(r.replace('〜', '')));
+  const seen = VOCAB_DATA.filter(w2 => w2.id !== word.id && w2.rn && w2.k !== word.k && isSeenWord(w2) && !homophone(w2));
+  const L = kanjiLen(word);
+  const byCloseness = list => shuffle(list).sort((a, b) => Math.abs(kanjiLen(a) - L) - Math.abs(kanjiLen(b) - L));
+  const used = new Set([word.k]);
+  const options = [{label: word.k, correct: true}];
+  const take = list => {
+    for(const w2 of list){
+      if(options.length >= 4) break;
+      if(used.has(w2.k)) continue;
+      used.add(w2.k); options.push({label: w2.k, correct: false});
+    }
+  };
+  take(byCloseness(seen.filter(w2 => skeleton(w2) === skel)));              // 1. same kana frame
+  if(options.length < 4){
+    take(byCloseness(seen.filter(w2 => {                                      // 2. same ending, or same beginning
+      if(skeleton(w2) === skel) return false;
+      const t2 = w2.rn, f2 = t2[0].t === 'f' ? t2[0].s : '', l2 = t2[t2.length - 1].t === 'f' ? t2[t2.length - 1].s : '';
+      return (lastF.length >= 2 && l2 === lastF) || (!lastF && firstF && f2 === firstF);
+    })));
+  }
+  const fakes = [], need = 4 - options.length;
+  if(need > 0){                                                               // 3. made-up forms: swap a kanji, keep the kana
+    const kIdx = toks.map((t, i) => t.t === 'k' ? i : -1).filter(i => i >= 0);
+    const byLen = new Map();
+    seenRunPool().forEach(c => { if(!byLen.has(c.s.length)) byLen.set(c.s.length, new Set()); byLen.get(c.s.length).add(c.s); });
+    for(let guard = 0; fakes.length < need && guard < 80; guard++){
+      const idx = kIdx[Math.floor(Math.random() * kIdx.length)], orig = toks[idx].s;
+      let repl = null, hint = null;
+      if(orig.length === 1 && LOOKALIKES[orig] && Math.random() < 0.8){
+        const la = LOOKALIKES[orig];
+        repl = la[Math.floor(Math.random() * la.length)];
+        if(KANJI_INFO[repl]) hint = `${repl} = ${KANJI_INFO[repl].m.split(',')[0]}`;
+      }else{
+        const cand = [...(byLen.get(orig.length) || [])].filter(s => s !== orig && ![...s].some(ch => orig.includes(ch)));
+        if(cand.length) repl = cand[Math.floor(Math.random() * cand.length)];
+      }
+      if(!repl) continue;
+      const label = toks.map((t, i) => i === idx ? repl : t.s).join('');
+      if(used.has(label) || WRITTEN_FORMS.has(label)) continue;               // a real word is never passed off as a fake
+      used.add(label); fakes.push({label, correct: false, fake: true, hint});
+    }
+  }
+  if(options.length + fakes.length < 4) return null;
+  const run = kanjiRuns(word)[0];
+  return {kind: 'h2k', tag: 'KANA', prompt, word, options: [...options, ...fakes], feedback: kanjiFeedback(word, run)};
+}
+
 /* ----- Multiple choice mode ----- */
 function renderMC(){
-  const {word, dir} = session.current;
-  const p = promptFor(word, dir);
-  document.getElementById('mc-tag').textContent = p.tag;
-  setPromptText(document.getElementById('mc-prompt'), p.text);
-  setupRevealableSub('mc-subprompt', p.sub);
-  const speakBtn = document.getElementById('mc-speak');
-  if(isJapanesePrompt(dir)){ speakBtn.classList.remove('hidden'); speakBtn.onclick=()=>speak(word.k||word.h); }
-  else speakBtn.classList.add('hidden');
+  const {word} = session.current;
+  let dir = session.current.dir;
+  let q = null;
+  if(dir === 'k2h') q = buildK2HQuestion(word);
+  else if(dir === 'h2k') q = buildH2KQuestion(word);
+  if(!q && dir === 'k2h'){ dir = 'jp-en'; session.current.dir = dir; }   // can't ask it safely — ask the meaning instead
+  session.current.q = q;
 
-  const distractors = pickMCDistractors(word, dir, 3);
-  const options = shuffle([word, ...distractors]);
-  const correctLabel = optionLabel(word, dir);
+  document.getElementById('mc-card').classList.toggle('kq', !!q);
+  const fbEl = document.getElementById('mc-feedback');
+  fbEl.children[0].textContent = '';
+  fbEl.children[1].textContent = '';
+  const speakBtn = document.getElementById('mc-speak');
+  speakBtn.onclick = null;
+  let options;
+  if(q){
+    document.getElementById('mc-tag').textContent = q.tag;
+    setPromptText(document.getElementById('mc-prompt'), q.prompt);
+    setupRevealableSub('mc-subprompt', '');
+    if(q.kind === 'h2k'){ speakBtn.classList.remove('hidden'); speakBtn.onclick = ()=>speak(q.prompt); }
+    else speakBtn.classList.add('hidden');            // saying the word would give the reading away — offered after answering
+    options = shuffle(q.options.map(o => ({...o})));
+  }else{
+    const p = promptFor(word, dir);
+    document.getElementById('mc-tag').textContent = p.tag;
+    setPromptText(document.getElementById('mc-prompt'), p.text);
+    setupRevealableSub('mc-subprompt', p.sub);
+    if(isJapanesePrompt(dir)){ speakBtn.classList.remove('hidden'); speakBtn.onclick = ()=>speak(word.k||word.h); }
+    else speakBtn.classList.add('hidden');
+    options = shuffle([word, ...pickMCDistractors(word, dir, 3)])
+      .map(w2 => ({label: optionLabel(w2, dir), correct: w2.id === word.id}));
+  }
+
   const choicesEl = document.getElementById('mc-choices');
   choicesEl.innerHTML = '';
+  choicesEl.classList.toggle('has-fakes', options.some(o => o.fake));
   document.getElementById('mc-next').classList.add('invisible');
   let answered = false; // first answer stands — later taps on this card do nothing
   options.forEach(opt=>{
     const btn = document.createElement('button');
     btn.className = 'choice';
-    btn.appendChild(choiceText(optionLabel(opt, dir)));
+    btn.dataset.correct = opt.correct ? '1' : '';
+    btn.appendChild(choiceText(opt.label));
     btn.addEventListener('click', ()=>{
       if(answered) return;
       answered = true;
       markAnswerMoment();
-      const correct = opt.id === word.id;
-      [...choicesEl.children].forEach(c=>c.classList.add('dim'));
+      const correct = !!opt.correct;
+      const cells = [...choicesEl.children];
+      cells.forEach(c=>c.classList.add('dim'));
       btn.classList.remove('dim');
       btn.classList.add(correct ? 'correct' : 'incorrect');
       if(!correct){
-        [...choicesEl.children].forEach(c=>{
-          if(c.textContent === correctLabel){ c.classList.remove('dim'); c.classList.add('correct'); }
+        const right = cells.find(c => c.dataset.correct === '1');
+        if(right){ right.classList.remove('dim'); right.classList.add('correct'); }
+      }
+      if(q){
+        fbEl.children[0].textContent = q.feedback[0];
+        fbEl.children[1].textContent = q.feedback[1];
+        if(q.kind === 'k2h'){ speakBtn.classList.remove('hidden'); speakBtn.onclick = ()=>speak(word.k||word.h); }
+        cells.forEach((c, i)=>{
+          if(!options[i].fake) return;
+          const tag = document.createElement('div');
+          tag.className = 'fake-tag';
+          tag.textContent = options[i].hint ? `not a word (${options[i].hint})` : 'not a word';
+          c.appendChild(tag);
         });
       }
-      [...choicesEl.children].forEach(c=>c.onclick=null);
       document.getElementById('mc-next').classList.remove('invisible');
       recordResult(session.current, correct);
     });
