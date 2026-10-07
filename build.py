@@ -99,6 +99,11 @@ def sanitize_english(english):
         notes.append("".join(JP_RE.findall(s)))
         s = JP_RE.sub("", s)
     s = re.sub(r"\s+", " ", s).strip(" +:,;")
+    # Meanings are a mix of "Spoon" and "spoon", and the lowercase ones are mostly words you haven't
+    # learned yet — so in multiple choice the answer could stand out just by its capital letter
+    # (or its lack of one). Display them all the same way; matching ignores case anyway.
+    if s and s[0].islower() and s[0].isascii():
+        s = s[0].upper() + s[1:]
     return s, "; ".join(n for n in notes if n)
 
 
@@ -112,8 +117,10 @@ def sanitize_words(words):
             if note:
                 w["n"] = (w["n"] + "; " + note) if w.get("n") else note
     if changed:
-        print(f"Sanitised {len(changed)} English meaning(s) containing Japanese:")
-        for old, new in changed:
+        jp = [(o, n) for o, n in changed if JP_RE.search(o)]
+        print(f"Cleaned {len(changed)} English meaning(s): {len(jp)} contained Japanese, "
+              f"{len(changed) - len(jp)} only needed a capital letter.")
+        for old, new in jp:
             print(f"  {old!r}  ->  {new!r}")
     assert not any(JP_RE.search(w["e"]) for w in words), "Japanese text survived sanitising"
     return words
