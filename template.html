@@ -686,7 +686,7 @@ function renderBrowseScreen(){
       const reading = (w.h && w.h !== w.k) ? `${w.h} · ${w.r}` : w.r;
       const mark = w.learned ? ' <span style="color:var(--good);">✓</span>' : '';
       const slow = isSlowWord(w) ? ' <span style="color:var(--bad); font-size:0.85em;">⏱</span>' : '';
-      return `<div class="summary-row"><span>${escapeHtml(w.k||w.h)} <span style="color:var(--muted);">(${escapeHtml(reading)})</span>${slow}</span><b>${escapeHtml(w.e)}${mark}</b></div>`;
+      return `<div class="summary-row"><span>${escapeHtml(w.k||w.h)} <span style="color:var(--muted);">(${escapeHtml(reading)})</span>${slow}</span><b>${escapeHtml(w.e)}${w.n ? ` <span style="color:var(--muted); font-weight:400; font-size:0.85em;">(${escapeHtml(w.n)})</span>` : ''}${mark}</b></div>`;
     }).join('');
     return `<div class="panel"><div class="section-title">${escapeHtml(cat)} (${words.length})</div>${rows}</div>`;
   }).join('');
@@ -1482,7 +1482,8 @@ document.getElementById('flash-card').addEventListener('click', ()=>{
   const {word, dir} = session.current;
   const a = flashAnswerFor(word, dir);
   const ans = document.getElementById('flash-answer');
-  ans.innerHTML = escapeHtml(a.text) + (a.sub ? `<div class="romaji">${escapeHtml(a.sub)}</div>` : '');
+  ans.innerHTML = escapeHtml(a.text) + (a.sub ? `<div class="romaji">${escapeHtml(a.sub)}</div>` : '') +
+    (word.n ? `<div class="romaji">${escapeHtml(word.n)}</div>` : '');
   ans.classList.toggle('compact', (a.text||'').length > 20);
   ans.classList.remove('hidden');
   document.getElementById('flash-hint').classList.add('hidden');
@@ -1764,7 +1765,8 @@ function renderText(){
 document.getElementById('text-reveal').addEventListener('click', ()=>{
   const {word} = session.current;
   document.getElementById('text-feedback').innerHTML =
-    `<div class="feedback">Answer: ${escapeHtml(word.e)}</div>`;
+    `<div class="feedback">Answer: ${escapeHtml(word.e)}` +
+    (word.n ? `<div class="sub" style="margin:6px 0 0;">${escapeHtml(word.n)}</div>` : '') + `</div>`;
   document.getElementById('text-reveal').classList.add('hidden');
   document.getElementById('text-grade-actions').classList.remove('hidden');
 });
