@@ -1543,6 +1543,15 @@ document.getElementById('flash-fail').addEventListener('click', (e)=>{
    (hidden, or no layout engine) the CSS clamp() default is left alone.
 ------------------------------------------------------------------------ */
 const ONE_LINE_MIN_PX = 20;
+// Short answers would otherwise grow until they fill the cell ("Old / Big / Hot", a lone が at
+// 120px). Each kind of answer gets a ceiling relative to the cell's width, so it scales with the
+// phone: English and kana top out at a comfortable size, kanji keeps the full ceiling.
+const MAX_FONT_BY_WIDTH = {latin: 0.31, kana: 0.46, kanji: Infinity};
+function answerScript(text){
+  if(/[\u3400-\u9fff々]/.test(text)) return 'kanji';
+  if(/[\u3040-\u30ff]/.test(text)) return 'kana';
+  return 'latin';
+}
 function choiceText(label){
   const span = document.createElement('span');
   span.className = 'choice-text';
@@ -1569,9 +1578,10 @@ function fitChoiceFonts(container){
     const innerW = btn.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
     const innerH = btn.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
     if(!(innerW > 0 && innerH > 0)) return null;
+    const capPx = innerW * MAX_FONT_BY_WIDTH[answerScript(span.textContent)];
     const search = wrap => {
       span.style.whiteSpace = wrap ? 'normal' : 'nowrap';
-      let lo = 12, hi = Math.max(lo, Math.min(innerH * 0.7, innerW * 0.8, 120)), best = lo;
+      let lo = 12, hi = Math.max(lo, Math.min(innerH * 0.7, innerW * 0.8, 120, capPx)), best = lo;
       for(let i = 0; i < 10; i++){
         const mid = (lo + hi) / 2;
         btn.style.fontSize = mid + 'px';
