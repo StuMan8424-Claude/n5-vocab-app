@@ -1853,10 +1853,11 @@
   "k": "〜つ",
   "h": "〜つ",
   "r": "~tsu",
-  "e": "General counter (1-10 things): ひとつ、ふたつ、みっつ...",
+  "e": "General counter (1-10 things)",
   "cat": "Grammar & Expressions",
   "type": "Counter",
   "learned": true,
+  "n": "ひとつ、ふたつ、みっつ...",
   "id": "〜つ|〜つ"
  },
  {
@@ -2113,10 +2114,11 @@
   "k": "ことができる",
   "h": "ことができる",
   "r": "koto ga dekiru",
-  "e": "Can / Able to (plain form + ことができる)",
+  "e": "Can / Able to",
   "cat": "Grammar & Expressions",
   "type": "Grammar",
   "learned": true,
+  "n": "plain form + ことができる",
   "id": "ことができる|ことができる"
  },
  {
@@ -2153,10 +2155,11 @@
   "k": "すぎる",
   "h": "すぎる",
   "r": "sugiru",
-  "e": "Too much / Too ~ (ます stem + すぎる)",
+  "e": "Too much / Too ~",
   "cat": "Grammar & Expressions",
   "type": "Grammar",
   "learned": true,
+  "n": "ます stem + すぎる",
   "id": "すぎる|すぎる"
  },
  {
@@ -2243,10 +2246,11 @@
   "k": "たことがある",
   "h": "たことがある",
   "r": "ta koto ga aru",
-  "e": "Have experienced ~ (た form + ことがある)",
+  "e": "Have experienced ~",
   "cat": "Grammar & Expressions",
   "type": "Grammar",
   "learned": true,
+  "n": "た form + ことがある",
   "id": "たことがある|たことがある"
  },
  {
@@ -2293,10 +2297,11 @@
   "k": "てはいけない",
   "h": "てはいけない",
   "r": "tewa ikenai",
-  "e": "Must not ~ (て form + は(particle) + いけない)",
+  "e": "Must not ~",
   "cat": "Grammar & Expressions",
   "type": "Grammar",
   "learned": true,
+  "n": "て form + は(particle) + いけない",
   "id": "てはいけない|てはいけない"
  },
  {
@@ -2363,20 +2368,22 @@
   "k": "と思います",
   "h": "とおもいます",
   "r": "to omoimasu",
-  "e": "I think that ~ (plain form + と思います)",
+  "e": "I think that ~",
   "cat": "Grammar & Expressions",
   "type": "Grammar",
   "learned": true,
+  "n": "plain form + と思います",
   "id": "と思います|とおもいます"
  },
  {
   "k": "と言います",
   "h": "といいます",
   "r": "to iimasu",
-  "e": "Said that ~ (plain form + と言います)",
+  "e": "Said that ~",
   "cat": "Grammar & Expressions",
   "type": "Grammar",
   "learned": true,
+  "n": "plain form + と言います",
   "id": "と言います|といいます"
  },
  {
@@ -2533,10 +2540,11 @@
   "k": "ほうがいい",
   "h": "ほうがいい",
   "r": "hou ga ii",
-  "e": "It would be better to ~ (た/ない form + ほうがいい)",
+  "e": "It would be better to ~",
   "cat": "Grammar & Expressions",
   "type": "Grammar",
   "learned": true,
+  "n": "た/ない form + ほうがいい",
   "id": "ほうがいい|ほうがいい"
  },
  {
@@ -2793,10 +2801,11 @@
   "k": "前に",
   "h": "まえに",
   "r": "mae ni",
-  "e": "Before ~ (plain form + 前に)",
+  "e": "Before ~",
   "cat": "Grammar & Expressions",
   "type": "Grammar",
   "learned": true,
+  "n": "plain form + 前に",
   "id": "前に|まえに"
  },
  {
@@ -2833,10 +2842,11 @@
   "k": "後で",
   "h": "あとで",
   "r": "ato de",
-  "e": "After ~ (た form + 後で)",
+  "e": "After ~",
   "cat": "Grammar & Expressions",
   "type": "Grammar",
   "learned": true,
+  "n": "た form + 後で",
   "id": "後で|あとで"
  },
  {
@@ -3853,10 +3863,11 @@
   "k": "知る",
   "h": "しる",
   "r": "shiru",
-  "e": "To come to know / find out (知っている = to know; 知りません = don't know)",
+  "e": "To come to know / find out",
   "cat": "Verbs",
   "type": "Verb (G1-る)",
   "learned": true,
+  "n": "知っている = to know; 知りません = don't know",
   "id": "知る|しる"
  },
  {
