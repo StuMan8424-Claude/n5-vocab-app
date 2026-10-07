@@ -35,6 +35,8 @@ import os
 import re
 import sys
 import urllib.request
+
+import kanji_tools as kt
 from collections import Counter
 from datetime import datetime, timezone
 
@@ -267,6 +269,39 @@ def main():
     if not words:
         sys.exit(f"No words loaded from {src} - nothing to build.")
 
+    # Kanji <-> reading support: line each kanji run up with its reading, validate the
+    # hand-written tables against the sheet, and embed them for the app.
+    table = kt.parse_table(os.path.join(HERE, "kanji_info.txt"))
+    lookalikes = kt.parse_lookalikes(os.path.join(HERE, "lookalikes.txt"))
+    krep = kt.annotate_runs(words, table)
+    print(f"Kanji runs lined up for {sum(1 for w in words if 'rn' in w)} words; "
+          f"{len(krep['irregular'])} irregular multi-kanji runs flagged (read as whole words).")
+    if krep["failed"]:
+        print(f"!! could not line up readings for: {krep['failed']} (they get no kanji questions)")
+    if krep["missing_kanji"]:
+        print(f"!! kanji missing from kanji_info.txt (add them): {''.join(sorted(krep['missing_kanji']))}")
+    if krep["single_not_in_table"]:
+        print("!! readings in the sheet that kanji_info.txt doesn't list (fix the table):")
+        for item in krep["single_not_in_table"]:
+            print("   ", item)
+    thin = []
+    for w in words:
+        toks = w.get("rn")
+        if not toks or not w["learned"] or not any(t["t"] == "f" for t in toks):
+            continue
+        skel = "".join("#" if t["t"] == "k" else t["s"] for t in toks)
+        partners = [x for x in words if x is not w and x["learned"] and x.get("rn")
+                    and "".join("#" if t["t"] == "k" else t["s"] for t in x["rn"]) == skel]
+        if len(partners) < 3:
+            ks = [t["s"] for t in toks if t["t"] == "k"]
+            missing = [k for k in ks if len(k) == 1 and k not in lookalikes]
+            if missing:
+                thin.append((w["k"], "".join(missing)))
+    if thin:
+        print(f"Note: {len(thin)} learned words have thin kana frames and kanji without look-alike entries "
+              f"(they fall back to other kanji from your list): {thin[:10]}{' ...' if len(thin) > 10 else ''}")
+    kanji_info = kt.embed_table(words, table)
+
     previous = None
     if os.path.exists(DEFAULT_JSON):
         try:
@@ -299,6 +334,8 @@ def main():
     out = template
     for marker, payload in (("VOCAB_JSON", json.dumps(words, ensure_ascii=False)),
                             ("BUILD_INFO", build_info),
+                            ("KANJI_INFO", json.dumps(kanji_info, ensure_ascii=False, separators=(",", ":"))),
+                            ("LOOKALIKES", json.dumps(lookalikes, ensure_ascii=False, separators=(",", ":"))),
                             ("LEGACY_KEYS", json.dumps(legacy, ensure_ascii=False))):
         start, end = f"/*__{marker}__*/", f"/*__END_{marker}__*/"
         i, j = out.find(start), out.find(end)
