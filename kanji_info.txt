@@ -1,0 +1,454 @@
+# kanji|meaning|kun readings (okurigana in brackets)|on readings (hiragana)
+日|day, sun|ひ,か|にち,じつ,に
+月|moon, month|つき|げつ,がつ
+一|one|ひと(つ),ひと|いち,いっ,いつ
+人|person|ひと|じん,にん
+大|big|おお(きい),おお(いに)|だい,たい
+二|two|ふた(つ),ふた|に,じ
+物|thing|もの|ぶつ,もつ
+今|now|いま|こん,きん
+十|ten|とお|じゅう,じっ,じゅっ
+年|year|とし|ねん
+時|time, hour|とき|じ
+曜|day of the week||よう
+生|life, birth, raw|い(きる),う(まれる),は(える),なま|せい,しょう
+子|child|こ|し,す
+手|hand|て|しゅ
+毎|every||まい
+下|below, down|した,しも,さ(げる),くだ(さる),お(りる)|か,げ
+八|eight|や(っつ),や,やっ(つ)|はち,はっ
+分|minute, understand, part|わ(かる),わ(ける)|ぶん,ふん,ぷん,ぶ
+学|study|まな(ぶ)|がく,がっ
+後|after, behind|のち,うし(ろ),あと,おく(れる)|ご,こう
+来|come|く(る),き,こ|らい
+茶|tea||ちゃ,さ
+週|week||しゅう
+飯|meal, cooked rice|めし|はん
+七|seven|なな(つ),なの,なな|しち
+三|three|み(っつ),み,みっ(つ)|さん
+上|above, up|うえ,うわ,かみ,あ(げる),のぼ(る)|じょう,しょう
+九|nine|ここの(つ),ここの|く,きゅう
+五|five|いつ(つ),いつ|ご
+先|previous, ahead|さき|せん
+六|six|む(っつ),む,むい,むっ(つ)|ろく
+出|go out, exit|で(る),だ(す)|しゅつ,すい
+切|cut|き(る),きっ|せつ,さい
+前|before, front|まえ|ぜん
+四|four|よっ(つ),よ,よん|し
+女|woman|おんな,め|じょ,にょ
+晩|evening, night||ばん
+書|write|か(く),かき|しょ
+朝|morning|あさ|ちょう
+本|book, origin|もと|ほん
+気|spirit, air||き,け
+洗|wash|あら(う)|せん
+肉|meat||にく
+色|color|いろ|しょく,しき
+行|go, line|い(く),ゆ(く),おこな(う)|こう,ぎょう,あん
+見|see|み(る),み(える),み(せる)|けん
+車|car, wheel|くるま|しゃ
+何|what|なに,なん|か
+兄|older brother|あに,にい|けい,きょう
+入|enter|い(る),はい(る),い(れる),いり|にゅう
+動|move|うご(く)|どう
+半|half|なか(ば)|はん
+口|mouth|くち|こう,く
+台|stand, platform||だい,たい
+国|country|くに|こく
+外|outside|そと,ほか|がい,げ
+姉|older sister|あね,ねえ|し
+家|house, family|いえ,や|か,け
+強|strong|つよ(い)|きょう,ごう
+明|bright|あか(るい),あ(ける)|めい,みょう
+昨|yesterday||さく
+歩|walk|ある(く)|ほ,ぶ,ふ
+母|mother|はは,かあ|ぼ
+父|father|ちち,とう|ふ
+牛|cow|うし|ぎゅう
+男|man|おとこ|だん,なん
+番|number, turn||ばん
+白|white|しろ(い),しら|はく,びゃく
+着|wear, arrive|き(る),つ(く)|ちゃく
+自|self|みずか(ら)|じ,し
+言|say|い(う),こと|げん,ごん
+話|talk, story|はなし,はな(す)|わ
+赤|red|あか(い)|せき,しゃく
+近|near|ちか(い)|きん
+電|electricity||でん
+風|wind|かぜ,かざ|ふう,ふ
+食|eat, food|た(べる),く(う)|しょく,じき
+館|building, hall|やかた|かん
+万|ten thousand||まん,ばん
+丈|length, sturdy|たけ|じょう
+並|line up|なら(ぶ),なら(べる),なみ|へい
+交|mix, exchange|まじ(わる),か(わす)|こう
+休|rest|やす(む),やす(み)|きゅう
+会|meet|あ(う)|かい,え
+作|make|つく(る)|さく,さ
+使|use|つか(う)|し
+便|convenience, mail|たよ(り)|べん,びん
+冊|volume (counter)||さつ,さく
+冷|cold, cool|つめ(たい),ひ(える),ひ(や)|れい
+勉|effort||べん
+匹|animal counter|ひき|ひつ
+午|noon||ご
+名|name|な|めい,みょう
+問|question|と(う)|もん
+図|diagram, plan|はか(る)|ず,と
+園|garden, park|その|えん
+地|ground|つち|ち,じ
+夕|evening|ゆう|せき
+夜|night|よる,よ|や
+夫|husband|おっと|ふ,ふう
+妹|younger sister|いもうと|まい
+始|begin|はじ(める),はじ(まる)|し
+嫌|dislike|きら(い),いや|けん,げん
+字|character||じ
+小|small|ちい(さい),こ,お|しょう
+少|few, little|すく(ない),すこ(し)|しょう
+屋|shop, roof|や|おく
+差|difference|さ(す)|さ
+広|wide|ひろ(い)|こう
+店|shop|みせ|てん
+庭|garden|にわ|てい
+弁|speech, valve||べん
+引|pull|ひ(く),ひき|いん
+弟|younger brother|おとうと|てい,だい,で
+当|hit, this|あ(たる)|とう
+彼|he, that|かれ,かの|ひ
+思|think|おも(う)|し
+所|place|ところ|しょ
+教|teach|おし(える),おそ(わる)|きょう
+散|scatter|ち(る)|さん
+文|sentence, writing|ふみ|ぶん,もん
+料|fee, materials||りょう
+新|new|あたら(しい),あら(た),にい|しん
+方|direction, person|かた|ほう
+映|reflect, project|うつ(る),は(える)|えい
+昼|noon|ひる|ちゅう
+晴|clear weather|は(れる)|せい
+曇|cloudy|くも(る),くも(り)|どん
+服|clothes||ふく
+木|tree, wood|き,こ|もく,ぼく
+杯|cup (counter)|さかずき|はい
+枚|flat-thing counter||まい
+楽|fun, music|たの(しい)|がく,らく
+歌|song, sing|うた,うた(う)|か
+歯|tooth|は|し
+水|water|みず|すい
+消|vanish, erase|き(える),け(す)|しょう
+渡|cross, hand over|わた(す),わた(る)|と
+温|warm|あたた(かい),ぬる(い)|おん
+濯|rinse||たく
+理|reason, logic||り
+画|picture||が,かく
+病|illness|や(む)|びょう,へい
+百|hundred||ひゃく,びゃく,ぴゃく
+皿|plate|さら|
+石|stone|いし|せき,しゃく,こく
+社|company, shrine|やしろ|しゃ
+祖|ancestor||そ
+空|sky, empty|そら,あ(く),から|くう
+筆|writing brush, pen|ふで|ひつ
+紙|paper|かみ|し
+結|tie, bind|むす(ぶ),ゆ(う)|けつ
+緑|green|みどり|りょく,ろく
+習|learn|なら(う)|しゅう
+聞|hear, ask|き(く),き(こえる)|ぶん,もん
+背|back, height|せ,せい,そむ(く)|はい
+花|flower|はな|か
+葉|leaf|は|よう
+語|language, word|かた(る)|ご
+豚|pig|ぶた|とん
+買|buy|か(う)|ばい
+遠|far|とお(い)|えん,おん
+部|part, section||ぶ
+酒|alcohol, sake|さけ,さか|しゅ
+金|gold, money|かね,かな|きん,こん
+閉|close|し(まる),し(める),と(じる)|へい
+開|open|あ(く),あ(ける),ひら(く)|かい
+間|interval, between|あいだ,ま|かん,けん
+降|fall, descend|ふ(る),お(りる)|こう
+青|blue, green|あお(い)|せい,しょう
+靴|shoes|くつ|か
+頭|head|あたま,かしら|とう,ず
+題|topic, title||だい
+飛|fly|と(ぶ)|ひ
+飲|drink|の(む)|いん
+魚|fish|さかな,うお|ぎょ
+鳥|bird|とり|ちょう
+黄|yellow|き,こ|おう,こう
+黒|black|くろ(い)|こく
+両|both||りょう
+中|middle, inside|なか|ちゅう,じゅう
+主|master, main|おも,ぬし|しゅ,す
+乗|ride|の(る)|じょう
+乳|milk|ちち|にゅう
+事|matter, thing|こと|じ
+仕|serve, do|つか(える)|し,じ
+付|attach|つ(ける),つ(く)|ふ
+低|low|ひく(い)|てい
+住|live, reside|す(む)|じゅう
+体|body|からだ|たい,てい
+供|accompany|とも|きょう,く
+借|borrow|か(りる)|しゃく
+停|stop||てい
+傘|umbrella|かさ|さん
+働|work|はたら(く)|どう
+元|origin, former|もと|げん,がん
+兎|rabbit|うさぎ|と
+全|whole, all|まった(く),すべ(て)|ぜん
+公|public||こう
+円|circle, yen|まる(い)|えん
+写|copy, photograph|うつ(す)|しゃ
+冬|winter|ふゆ|とう
+初|first, beginning|はじ(めて),はつ,はじ(め)|しょ
+利|profit, benefit|き(く)|り
+勢|force, vigor|いきお(い)|せい
+勤|work (for)|つと(める)|きん,ごん
+北|north|きた|ほく
+医|medicine, doctor||い
+千|thousand|ち|せん
+南|south|みなみ|なん,な
+危|danger|あぶ(ない),あや(うい)|き
+卵|egg|たまご|らん
+厚|thick|あつ(い)|こう
+去|past, leave|さ(る)|きょ,こ
+友|friend|とも|ゆう
+取|take|と(る)|しゅ
+古|old|ふる(い)|こ
+右|right|みぎ|う,ゆう
+号|number, issue||ごう
+司|official||し
+同|same|おな(じ)|どう
+向|face, toward|む(く),む(かう),む(こう)|こう
+吸|inhale|す(う)|きゅう
+吹|blow|ふ(く)|すい
+呂|spine||ろ
+味|taste|あじ,あじ(わう)|み
+呼|call|よ(ぶ)|こ
+咲|bloom|さ(く)|
+喫|consume, drink||きつ
+困|trouble|こま(る)|こん
+土|earth, soil|つち|ど,と
+堂|hall||どう
+塩|salt|しお|えん
+声|voice|こえ,こわ|せい,しょう
+売|sell|う(る)|ばい
+夏|summer|なつ|か,げ
+多|many|おお(い)|た
+天|heaven, sky|あめ,あま|てん
+太|thick, fat|ふと(い)|たい,た
+奥|interior, inner|おく|おう
+婚|marriage||こん
+安|cheap, peaceful|やす(い)|あん
+官|official||かん
+室|room|むろ|しつ
+宿|inn, lodging|やど|しゅく
+寒|cold|さむ(い)|かん
+寝|sleep|ね(る)|しん
+寺|temple|てら|じ
+寿|longevity|ことぶき|じゅ
+封|seal||ふう,ほう
+局|bureau, office||きょく
+履|wear on feet|は(く)|り
+山|mountain|やま|さん
+川|river|かわ|せん
+左|left|ひだり|さ
+布|cloth|ぬの|ふ
+帰|return|かえ(る)|き
+帽|hat||ぼう
+座|sit|すわ(る)|ざ
+庫|storehouse||こ,く
+廊|corridor||ろう
+弱|weak|よわ(い)|じゃく
+弾|play (instrument), bullet|ひ(く),はず(む),たま|だん
+待|wait|ま(つ)|たい
+徒|follower, pupil||と
+心|heart|こころ|しん
+忘|forget|わす(れる)|ぼう
+忙|busy|いそが(しい)|ぼう
+念|thought, wish||ねん
+悪|bad|わる(い)|あく,お
+意|meaning, mind||い
+戸|door|と|こ
+押|push|お(す)|おう
+持|hold, have|も(つ)|じ
+掃|sweep|は(く)|そう
+授|give, teach||じゅ
+撮|take (photo)|と(る)|さつ
+旅|trip|たび|りょ
+族|tribe, family||ぞく
+早|early|はや(い)|そう,さっ
+易|easy|やさ(しい)|い,えき
+星|star|ほし|せい,しょう
+春|spring|はる|しゅん
+暇|free time|ひま|か
+暑|hot (weather)|あつ(い)|しょ
+暖|warm|あたた(かい)|だん
+暗|dark|くら(い)|あん
+曲|bend, tune|ま(がる)|きょく
+最|most||さい
+有|have, exist|あ(る)|ゆう,う
+末|end||まつ,ばつ
+机|desk|つくえ|き
+村|village|むら|そん
+東|east|ひがし|とう
+果|fruit, result|くだ,は(たす)|か
+校|school||こう
+棚|shelf|たな|
+森|forest|もり|しん
+椅|chair||い
+業|business, work|わざ|ぎょう,ごう
+構|structure, set up|かま(う)|こう
+横|side, horizontal|よこ|おう
+橋|bridge|はし|きょう
+機|machine, opportunity|はた|き
+次|next|つぎ,つ(ぐ)|じ,し
+止|stop|と(まる),と(める),や(む)|し
+歳|years old|とし|さい,せい
+死|die|し(ぬ)|し
+残|remain|のこ(る)|ざん
+段|step||だん
+汚|dirty|きたな(い),よご(れる)|お
+池|pond|いけ|ち
+油|oil|あぶら|ゆ
+泊|stay overnight|と(まる)|はく
+泳|swim|およ(ぐ)|えい
+洋|ocean, Western||よう
+浴|bathe|あ(びる)|よく
+海|sea|うみ|かい
+涼|cool|すず(しい)|りょう
+港|harbor|みなと|こう
+漢|Chinese||かん
+火|fire|ひ,ほ|か
+灰|ash|はい|かい
+点|point, dot||てん
+無|none, nothing|な(い),な(くす)|む,ぶ
+熊|bear|くま|ゆう
+熱|heat, fever|あつ(い)|ねつ
+犬|dog|いぬ|けん
+狭|narrow|せま(い)|きょう
+猫|cat|ねこ|びょう
+玄|mysterious||げん
+瓶|bottle, jar||びん
+甘|sweet|あま(い)|かん
+町|town|まち|ちょう
+留|stay, stop|と(める),と(まる)|りゅう,る
+疲|tired|つか(れる)|ひ
+痛|painful|いた(い)|つう
+登|climb|のぼ(る)|とう,と
+皆|everyone|みな|かい
+目|eye|め|もく,ぼく
+真|true||しん
+眠|sleep, sleepy|ねむ(い)|みん
+眼|eye|め|がん,げん
+知|know|し(る)|ち
+短|short|みじか(い)|たん
+砂|sand|すな|さ,しゃ
+磨|polish|みが(く)|ま
+神|god|かみ,かん|しん,じん
+私|I, private|わたし,わたくし|し
+秋|autumn|あき|しゅう
+窓|window|まど|そう
+立|stand|た(つ)|りつ,りゅう
+章|chapter, badge||しょう
+符|ticket, sign||ふ
+筒|tube, cylinder|つつ|とう
+答|answer|こた(える)|とう
+箱|box|はこ|そう
+糖|sugar||とう
+紅|crimson|べに,くれない|こう,ぐ
+紫|purple|むらさき|し
+細|thin, narrow|ほそ(い),こま(かい)|さい
+終|end|お(わる),お(える)|しゅう
+緒|cord, beginning|お|しょ,ちょ
+締|tighten|し(める),し(まる)|てい
+練|practice, knead|ね(る)|れん
+置|put|お(く)|ち
+者|person|もの|しゃ
+耳|ear|みみ|じ
+脱|take off|ぬ(ぐ)|だつ
+腹|belly|はら,なか|ふく
+良|good|よ(い),い(い)|りょう
+若|young|わか(い)|じゃく,にゃく
+英|England, excellent||えい
+荷|load, baggage|に|か
+菓|sweets||か
+菜|vegetable|な|さい
+蔵|storehouse|くら|ぞう
+薄|thin, light|うす(い)|はく
+薬|medicine|くすり|やく
+袋|bag|ふくろ|たい
+被|wear, cover|かぶ(る)|ひ
+西|west|にし|せい,さい
+要|need, essential|い(る),かなめ|よう
+覚|remember, feel|おぼ(える),さ(める)|かく
+親|parent, intimate|おや,した(しい)|しん
+角|corner, angle|かど,つの|かく
+計|measure, plan|はか(る)|けい
+誌|magazine, record||し
+誕|birth||たん
+読|read|よ(む)|どく,とく,とう
+誰|who|だれ|すい
+警|warn||けい
+象|elephant, shape|ぞう|しょう,ぞう
+財|wealth||ざい,さい
+貸|lend|か(す)|たい
+貼|paste, stick|は(る)|ちょう
+賑|bustling|にぎ(やか)|しん
+質|quality, ask||しつ,しち,ち
+走|run|はし(る)|そう
+起|get up, wake|お(きる),お(こす)|き
+足|foot, leg|あし,た(りる)|そく
+転|turn, roll|ころ(ぶ),ころ(がる)|てん
+軽|light (weight)|かる(い)|けい
+辛|spicy, hard|から(い),つら(い)|しん
+辞|resign, words|や(める)|じ
+辺|vicinity|あた(り)|へん
+返|return (something)|かえ(す)|へん
+送|send|おく(る)|そう
+速|fast|はや(い)|そく
+遅|late, slow|おそ(い),おく(れる)|ち
+遊|play|あそ(ぶ)|ゆう,ゆ
+道|road, way|みち|どう,とう
+達|reach, plural suffix|たち|たつ
+違|differ|ちが(う)|い
+邪|evil||じゃ
+郵|mail||ゆう
+配|distribute, worry|くば(る)|はい
+醤|soy sauce||しょう
+重|heavy|おも(い),え|じゅう,ちょう
+野|field|の|や
+鉄|iron||てつ
+鉛|lead||えん
+銀|silver||ぎん
+鍵|key|かぎ|けん
+鏡|mirror|かがみ|きょう
+長|long, chief|なが(い)|ちょう
+門|gate|かど|もん
+関|barrier, relate|せき|かん
+院|institution||いん
+除|remove|のぞ(く)|じょ,じ
+階|floor, stairs||かい
+隣|neighbor|となり|りん
+雑|miscellaneous||ざつ,ぞう
+難|difficult|むずか(しい),かた(い)|なん
+雨|rain|あめ|う
+雪|snow|ゆき|せつ
+雲|cloud|くも|うん
+零|zero||れい
+静|quiet|しず(か)|せい,じょう
+面|face, surface|おもて,つら,おも|めん
+鞄|bag|かばん|
+音|sound|おと,ね|おん,いん
+頼|rely, request|たの(む),たよ(る)|らい
+顔|face|かお|がん
+飴|candy|あめ|い
+馬|horse|うま|ば
+駅|station||えき
+高|tall, expensive|たか(い)|こう
+髪|hair|かみ|はつ
+鳴|chirp, sound|な(く),な(る)|めい
+鹸|alkali||けん
+鼻|nose|はな|び
