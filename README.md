@@ -60,6 +60,21 @@ GitHub Pages redeploys automatically on push — the next time your phone has
 a connection and opens the app, it'll pull the update; if you're offline,
 you'll keep using whatever was cached at last connection.
 
+### English sanitising
+
+Some English meanings in the sheet carry Japanese — grammar hints like
+`It would be better to ~ (た/ない form + ほうがいい)` or a list of example
+readings (`General counter (1-10 things): ひとつ、ふたつ、みっつ...`). As a
+prompt or a multiple-choice option that hands over the answer, so `build.py`
+cleans them: the English keeps everything except the Japanese
+(`It would be better to ~`), and what was removed is stored as a note (`n`).
+The note appears only where it helps and can't spoil — under the answer after
+you flip a flash card, on the answer reveal of a self-graded text card, and in
+Browse list. The sheet itself is never modified, the build prints each change,
+and it refuses to ship if any English meaning still contains Japanese (11
+entries are affected today: the grammar patterns, 知る and 〜つ). Cleaning is
+idempotent, and nested brackets like `は(particle)` are handled.
+
 ### Why word ids are stable keys
 
 Progress saved on a device (per-word stats, New vocab mastery) is keyed by a
