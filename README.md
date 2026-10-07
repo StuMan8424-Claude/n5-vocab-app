@@ -60,6 +60,68 @@ GitHub Pages redeploys automatically on push — the next time your phone has
 a connection and opens the app, it'll pull the update; if you're offline,
 you'll keep using whatever was cached at last connection.
 
+## Kanji ↔ reading questions (multiple choice only)
+
+The aim is to learn what each kanji **means and how it's read**. Flash cards
+and text entry are unchanged; in multiple choice, words written with kanji
+also come up two extra ways. A kanji is never in the question and the answers
+at the same time.
+
+**Kanji → reading.** The prompt is **one continuous kanji string** from a
+word, with all kana stripped (so there's no okurigana to match against): 食
+from 食べる, 食 *or* 物 from 食べ物 (never 食物 — kana separates them), 大学
+from 大学. The options are **bare readings, not words**: the answer is the
+reading of that string in this word (食 → た, 物 → もの, 大学 → だいがく).
+Wrong options are readings of other kanji in words you've seen, of similar
+length, and:
+
+- never another valid reading of the prompt — answer し for 四 and よん, よっ,
+  よ are kept out (and the reverse); 食 never offers しょく or じき beside た;
+- never from a word that shares a kanji with the prompt;
+- never the same string twice. Words with two readings in one entry (四 =
+  し/よん) pick one at random as the answer.
+
+**Kana → kanji.** The prompt is the word in kana; the options are kanji forms
+that keep the answer's kana beginning and ending. Order of preference:
+1. real words you've seen with the same kana frame (見える → 教える, 答える);
+2. real words sharing just the ending (or beginning);
+3. only if that's not enough, a **made-up form**: one kanji swapped, the kana
+   kept (食べる → 飲べる, 良べる), preferring look-alike kanji
+   (`lookalikes.txt`) then other kanji from your list. A made-up form is never
+   a word in your list, and a real word that reads like the prompt (a second
+   correct answer) is never offered. After you answer, made-up options are
+   tagged "not a word" — with what a look-alike kanji actually means ("飲 =
+   drink") — so they don't pass for vocabulary.
+Pure-kanji words (no kana to match) keep the ordinary real-word options.
+
+**After every kanji question** the card shows the word, its meaning, and the
+kanji's meaning and kun/on readings (`食 — eat, food · た(べる), く(う) ·
+ショク, ジキ`); a multi-kanji word whose reading can't be built from its kanji
+(今日 きょう, 大人 おとな, 明日…) says "irregular reading: learn it as one
+word". The speaker button is hidden until you've answered a kanji → reading
+question, since saying the word would give the reading away.
+
+If a word can't be asked safely (no table entry for its kanji, or too few
+suitable wrong readings) the card quietly asks the meaning instead.
+
+### The kanji tables (`kanji_info.txt`, `lookalikes.txt`)
+
+`kanji_info.txt` has a line per kanji in the list — `kanji|meaning|kun
+readings (okurigana in brackets)|on readings` — written from general knowledge
+and **checked against the sheet on every build**: every reading the sheet shows
+for a single kanji must be in the table, every multi-kanji run is tested to
+see whether it can be built from the kanji's readings, and 591 words' kanji are
+lined up with their readings (`rn` in `vocab_data.json`; 23 irregular runs
+flagged). Sound changes (び for ひ, がっ for がく…) are added automatically.
+The build prints `!!` lines for anything missing or inconsistent — add the
+kanji or fix the reading and rebuild. When a newly learned word brings in a new
+kanji, the build tells you to add it.
+
+`lookalikes.txt` (`kanji|look-alike,look-alike`) is optional polish: 38 kanji
+so far, covering the words whose kana frame has too few real partners. Kanji
+without an entry fall back to other kanji from your list; the build notes which
+learned words that affects. Both files are plain text — edit freely.
+
 ### English sanitising
 
 Some English meanings in the sheet carry Japanese — grammar hints like
@@ -135,7 +197,7 @@ force-quitting can't fix since the staleness lives one layer below the app.
    jumps when it appears. The first answer stands — later taps on that card
    do nothing. If a reading hint is available for the prompt, it's hidden
    behind a "Tap to show reading" line. The Katakana drill uses the same
-   grid.
+   grid. Kanji words are also asked two kanji↔reading ways — see below.
 3. **Text entry** — type the answer and check it. Same tap-to-reveal
    reading hint as multiple choice.
 4. **New vocab** — drills up to 5 "not yet learned" words at once. A word
@@ -305,6 +367,9 @@ once ~24–38 words later — so misses get reinforced within the same session.
 | `apple-touch-icon.png`, `icon-192.png`, `icon-512.png`, `icon-512-maskable.png`, `favicon-32.png` | App icons. |
 | `template.html` | HTML/CSS/JS shell with a data placeholder — source for `build.py`. |
 | `build.py` | Pulls the live sheet from the tutoring repo (needs `GITHUB_TOKEN`) and regenerates `index.html`; prints what changed. |
+| `kanji_tools.py` | Lines each kanji run up with its reading and validates the kanji tables against the sheet; used by `build.py`. |
+| `kanji_info.txt` | Meaning, kun and on readings for every kanji in the list (the "Kanji ↔ reading" questions). |
+| `lookalikes.txt` | Visually similar kanji used for made-up options in kana → kanji questions. |
 | `legacy_ids.json` | Old row-number order of the sheet, for the one-time conversion of saved progress to stable word keys. Keep it. |
 | `vocab_data.json` | Plain JSON export of the vocab list at last build time. |
 | `japanese_n5_vocabulary_updated.xlsx` | Snapshot of the vocab spreadsheet used for this build. |
