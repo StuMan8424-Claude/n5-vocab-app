@@ -32,6 +32,7 @@ Requires: openpyxl (only when reading an .xlsx)
 import argparse
 import json
 import os
+import re
 import sys
 import urllib.request
 from collections import Counter
@@ -48,6 +49,72 @@ DEFAULT_REPO = "StuMan8424-Claude/japanese-n5-tutor"
 DEFAULT_SHEET_PATH = "japanese_n5_vocabulary_updated.xlsx"
 
 EXPECTED_HEADER = ["Kanji", "Hiragana", "Romaji", "English", "Category", "Word Type", "Learned", "Notes", "Last Used"]
+
+
+# ---------- English sanitising ----------
+# Some English meanings carry Japanese: grammar hints like
+# "It would be better to ~ (た/ない form + ほうがいい)" or a list of example
+# readings. As a flash-card prompt or a multiple-choice option that hands over
+# the very answer being asked for. The clean English goes in `e` (prompts,
+# options, answer matching); what was stripped is kept in `n` (a note) so it
+# can still be shown where it's a help rather than a spoiler.
+JP_RE = re.compile(r"[\u3040-\u30ff\u3400-\u9fff\uff66-\uff9f]")
+
+
+def _strip_jp_parentheticals(text):
+    notes, out, i = [], [], 0
+    while i < len(text):
+        if text[i] == "(":
+            depth, j = 0, i
+            while j < len(text):
+                if text[j] == "(":
+                    depth += 1
+                elif text[j] == ")":
+                    depth -= 1
+                    if depth == 0:
+                        break
+                j += 1
+            # balanced match, so nested (...) like "は(particle)" is handled
+            if j < len(text) and JP_RE.search(text[i + 1:j]):
+                notes.append(text[i + 1:j].strip())
+                while out and out[-1] == " ":
+                    out.pop()
+                i = j + 1
+                continue
+        out.append(text[i])
+        i += 1
+    return "".join(out), notes
+
+
+def sanitize_english(english):
+    # Return (clean_english, note). Idempotent; clean English never contains Japanese.
+    s, notes = _strip_jp_parentheticals(english)
+    m = re.search(r"\s*:\s*([^A-Za-z]*[\u3040-\u30ff\u3400-\u9fff][^A-Za-z]*)$", s)  # "...counter: ひとつ、ふたつ..."
+    if m:
+        notes.append(m.group(1).strip())
+        s = s[:m.start()]
+    if JP_RE.search(s):  # fallback: anything left over, so a spoiler never ships
+        notes.append("".join(JP_RE.findall(s)))
+        s = JP_RE.sub("", s)
+    s = re.sub(r"\s+", " ", s).strip(" +:,;")
+    return s, "; ".join(n for n in notes if n)
+
+
+def sanitize_words(words):
+    changed = []
+    for w in words:
+        clean, note = sanitize_english(w["e"])
+        if clean != w["e"]:
+            changed.append((w["e"], clean))
+            w["e"] = clean
+            if note:
+                w["n"] = (w["n"] + "; " + note) if w.get("n") else note
+    if changed:
+        print(f"Sanitised {len(changed)} English meaning(s) containing Japanese:")
+        for old, new in changed:
+            print(f"  {old!r}  ->  {new!r}")
+    assert not any(JP_RE.search(w["e"]) for w in words), "Japanese text survived sanitising"
+    return words
 
 
 # ---------- ids ----------
@@ -104,13 +171,13 @@ def load_from_xlsx(path):
         })
     if skipped:
         print(f"Note: skipped {skipped} row(s) missing required fields.", file=sys.stderr)
-    return assign_ids(words)
+    return assign_ids(sanitize_words(words))
 
 
 def load_from_json(path):
     with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
-    return assign_ids(data)
+    return assign_ids(sanitize_words(data))
 
 
 # ---------- pulling the live sheet ----------
