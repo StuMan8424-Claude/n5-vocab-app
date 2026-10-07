@@ -132,7 +132,10 @@ cleans them: the English keeps everything except the Japanese
 (`It would be better to ~`), and what was removed is stored as a note (`n`).
 The note appears only where it helps and can't spoil — under the answer after
 you flip a flash card, on the answer reveal of a self-graded text card, and in
-Browse list. The sheet itself is never modified, the build prints each change,
+Browse list. Meanings are also given a capital first letter ("spoon" → "Spoon"): the
+lowercase ones are mostly words you haven't learned yet, so in New vocab the
+answer would otherwise stand out among capitalised options. Typed answers
+ignore case. The sheet itself is never modified, the build prints each change,
 and it refuses to ship if any English meaning still contains Japanese (11
 entries are affected today: the grammar patterns, 知る and 〜つ). Cleaning is
 idempotent, and nested brackets like `は(particle)` are handled.
@@ -186,8 +189,10 @@ force-quitting can't fix since the staleness lives one layer below the app.
    already give away.
 2. **Multiple choice** — four answers in a 2×2 grid that fills the screen
    below the prompt card. **All four answers share one font size**: the
-   largest at which every answer fits its cell (kanji up to ~120px; a card
-   with a long phrase shrinks all four together). A label with no spaces —
+   largest at which every answer fits its cell, capped by kind so short answers
+   don't balloon: English up to ~31% of the cell width (about 48px on a
+   phone), kana ~46% (about 71px), kanji uncapped up to ~120px. A card with a
+   long phrase shrinks all four together. A label with no spaces —
    kana, kanji, or a single English word — stays on **one line** unless that
    would push it below 20px, i.e. a very long word (about 8+ characters on a
    phone; in the current list only なければならない, ありがとうございます,
