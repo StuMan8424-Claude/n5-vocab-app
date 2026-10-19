@@ -214,6 +214,15 @@
       <div class="sub" style="margin:10px 0 0;">Sets which language you're answering in — flash cards, multiple choice, and text entry all quiz this way. In Japanese mode, questions mix English→Japanese translation with kanji↔kana reading practice (for words that have a kanji form).</div>
     </div>
 
+    <div class="panel" id="kanji-only-panel">
+      <div class="section-title">Pure kanji only</div>
+      <div class="chips" id="kanji-only-chips">
+        <div class="chip on" data-val="off">Off</div>
+        <div class="chip" data-val="on">On</div>
+      </div>
+      <div class="sub" style="margin:10px 0 0;">Multiple choice only. Uses just words written entirely in kanji (水, 上手, 大学 — no kana), and every question is kanji → reading or reading → kanji. No meaning questions. Applies on top of your Word set and Category filters.</div>
+    </div>
+
     <div class="panel" id="favor-weak-panel">
       <div class="section-title">Favor weak &amp; newer words</div>
       <div class="chips" id="favor-weak-chips">
@@ -482,7 +491,7 @@ migrateNumericIdsToKeys();
 let stats = loadStats();
 let localMastered = loadLocalMastered();
 let katakanaStats = loadKatakanaStats();
-let settings = { learnedFilter:'learned', categories:new Set(VOCAB_DATA.map(w=>w.cat)), entryMode:'en', length:50, mode:'flash', newVocabTarget:10, katakanaItems:20, favorWeak:'on' };
+let settings = { learnedFilter:'learned', categories:new Set(VOCAB_DATA.map(w=>w.cat)), entryMode:'en', length:50, mode:'flash', newVocabTarget:10, katakanaItems:20, favorWeak:'on', kanjiOnly:'off' };
 let session = null; // built on start
 
 /* ---------- Storage helpers ---------- */
@@ -536,7 +545,8 @@ function saveSettings(){
       mode:settings.mode,
       newVocabTarget:settings.newVocabTarget,
       katakanaItems:settings.katakanaItems,
-      favorWeak:settings.favorWeak
+      favorWeak:settings.favorWeak,
+      kanjiOnly:settings.kanjiOnly
     }));
   }catch(e){}
 }
@@ -554,6 +564,7 @@ function loadSettings(){
     if(s.newVocabTarget !== undefined) settings.newVocabTarget = s.newVocabTarget;
     if(s.katakanaItems !== undefined) settings.katakanaItems = s.katakanaItems;
     if(s.favorWeak === 'on' || s.favorWeak === 'off') settings.favorWeak = s.favorWeak;
+    if(s.kanjiOnly === 'on' || s.kanjiOnly === 'off') settings.kanjiOnly = s.kanjiOnly;
   }catch(e){}
 }
 
@@ -640,8 +651,13 @@ function hasDistinctKanji(w){
   return !!(w.k && w.h && w.k !== w.h);
 }
 
+function isPureKanji(w){
+  return !!(w.rn && w.k && w.k !== w.h && /^[\u3400-\u9fff々]+$/.test(w.k));
+}
+function kanjiOnlyActive(){ return settings.mode === 'mc' && settings.kanjiOnly === 'on'; }
 function filteredPool(){
   return VOCAB_DATA.filter(w=>{
+    if(kanjiOnlyActive() && !isPureKanji(w)) return false;
     if(!settings.categories.has(w.cat)) return false;
     if(settings.learnedFilter === 'learned' && !w.learned) return false;
     if(settings.learnedFilter === 'unlearned' && w.learned) return false;
@@ -760,6 +776,7 @@ function mcDirection(word){
   // Multiple choice: kanji words can be asked all four ways; the kanji<->reading
   // routes are built by buildK2HQuestion / buildH2KQuestion at render time and
   // fall back (k2h -> meaning, h2k -> the real-word picker) if they can't be asked safely.
+  if(kanjiOnlyActive()) return Math.random() < 0.5 ? 'k2h' : 'h2k';
   const options = word.rn ? ['jp-en', 'en-jp', 'k2h', 'h2k'] : ['jp-en', 'en-jp'];
   return options[Math.floor(Math.random() * options.length)];
 }
@@ -1864,7 +1881,11 @@ function renderMC(){
   let q = null;
   if(dir === 'k2h') q = buildK2HQuestion(word);
   else if(dir === 'h2k') q = buildH2KQuestion(word);
-  if(!q && dir === 'k2h'){ dir = 'jp-en'; session.current.dir = dir; }   // can't ask it safely — ask the meaning instead
+  if(!q && dir === 'k2h'){                                               // can't ask it safely
+    if(kanjiOnlyActive()){ dir = 'h2k'; q = buildH2KQuestion(word); }    // stay kanji-only: ask it the other way
+    else dir = 'jp-en';                                                  // otherwise ask the meaning instead
+    session.current.dir = dir;
+  }
   session.current.q = q;
 
   document.getElementById('mc-card').classList.toggle('kq', !!q);
@@ -2067,6 +2088,7 @@ function updateStartPanelsForMode(){
   document.getElementById('entry-mode-panel').classList.toggle('hidden', isBrowse || isKatakana);
   document.getElementById('session-length-panel').classList.toggle('hidden', isNew || isBrowse || isKatakana);
   document.getElementById('favor-weak-panel').classList.toggle('hidden', isNew || isBrowse || isKatakana);
+  document.getElementById('kanji-only-panel').classList.toggle('hidden', settings.mode !== 'mc');
   document.getElementById('newvocab-target-panel').classList.toggle('hidden', !isNew);
   document.getElementById('katakana-items-panel').classList.toggle('hidden', !isKatakana);
   document.getElementById('start-btn').textContent = isBrowse ? 'Show list' : isKatakana ? 'Start drill' : 'Start practice';
@@ -2080,6 +2102,7 @@ setupChipGroup('learned-filter-chips', v=>settings.learnedFilter=v, settings.lea
 setupChipGroup('entry-mode-chips', v=>settings.entryMode=v, settings.entryMode);
 setupChipGroup('length-chips', v=>settings.length=parseInt(v,10), String(settings.length));
 setupChipGroup('newvocab-target-chips', v=>settings.newVocabTarget=parseInt(v,10), String(settings.newVocabTarget));
+setupChipGroup('kanji-only-chips', v=>settings.kanjiOnly=v, settings.kanjiOnly);
 setupChipGroup('favor-weak-chips', v=>settings.favorWeak=v, settings.favorWeak);
 setupChipGroup('katakana-items-chips', v=>settings.katakanaItems=parseInt(v,10), String(settings.katakanaItems));
 setupChipGroup('start-mode-tabs', v=>{ settings.mode=v; updateStartPanelsForMode(); }, settings.mode);

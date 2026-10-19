@@ -104,6 +104,13 @@ question, since saying the word would give the reading away.
 If a word can't be asked safely (no table entry for its kanji, or too few
 suitable wrong readings) the card quietly asks the meaning instead.
 
+**Pure kanji only (Settings, multiple choice).** Restricts multiple choice to
+words written entirely in kanji (水, 上手, 大学 — currently about 346 words, on
+top of your Word set and Category filters) and asks only kanji → reading and
+reading → kanji; no meaning questions. Words with kana (食べる, 高い, 〜台) are
+left out. Pure-kanji words have no kana frame to keep, so reading → kanji uses
+real kanji words as options.
+
 ### The kanji tables (`kanji_info.txt`, `lookalikes.txt`)
 
 `kanji_info.txt` has a line per kanji in the list — `kanji|meaning|kun
