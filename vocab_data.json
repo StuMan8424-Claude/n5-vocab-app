@@ -259,7 +259,7 @@
   "r": "ookina",
   "e": "Big; large",
   "cat": "Adjectives",
-  "type": "na-Adj",
+  "type": "Pre-noun adjective",
   "learned": true,
   "id": "大きな|おおきな",
   "rn": [
@@ -370,7 +370,7 @@
   "r": "chiisana",
   "e": "Small; little",
   "cat": "Adjectives",
-  "type": "na-Adj",
+  "type": "Pre-noun adjective",
   "learned": true,
   "id": "小さな|ちいさな",
   "rn": [
@@ -745,7 +745,7 @@
   "r": "atsui",
   "e": "Hot (objects/touch)",
   "cat": "Adjectives",
-  "type": "i-Adj",
+  "type": "い-adjective",
   "learned": true,
   "id": "熱い|あつい",
   "rn": [
@@ -1439,11 +1439,11 @@
   "k": "魚",
   "h": "さかな",
   "r": "sakana",
-  "e": "Fish",
+  "e": "Fish (animal; also as food)",
   "cat": "Animals",
   "type": "Noun",
   "learned": true,
-  "id": "魚|さかな|Fish",
+  "id": "魚|さかな",
   "rn": [
    {
     "t": "k",
@@ -1600,6 +1600,120 @@
   ]
  },
  {
+  "k": "口",
+  "h": "くち",
+  "r": "kuchi",
+  "e": "Mouth",
+  "cat": "Body Parts",
+  "type": "Noun",
+  "learned": true,
+  "id": "口|くち",
+  "rn": [
+   {
+    "t": "k",
+    "s": "口",
+    "r": [
+     "くち"
+    ]
+   }
+  ]
+ },
+ {
+  "k": "手",
+  "h": "て",
+  "r": "te",
+  "e": "Hand",
+  "cat": "Body Parts",
+  "type": "Noun",
+  "learned": true,
+  "id": "手|て",
+  "rn": [
+   {
+    "t": "k",
+    "s": "手",
+    "r": [
+     "て"
+    ]
+   }
+  ]
+ },
+ {
+  "k": "目",
+  "h": "め",
+  "r": "me",
+  "e": "Eye",
+  "cat": "Body Parts",
+  "type": "Noun",
+  "learned": true,
+  "id": "目|め",
+  "rn": [
+   {
+    "t": "k",
+    "s": "目",
+    "r": [
+     "め"
+    ]
+   }
+  ]
+ },
+ {
+  "k": "耳",
+  "h": "みみ",
+  "r": "mimi",
+  "e": "Ear",
+  "cat": "Body Parts",
+  "type": "Noun",
+  "learned": true,
+  "id": "耳|みみ",
+  "rn": [
+   {
+    "t": "k",
+    "s": "耳",
+    "r": [
+     "みみ"
+    ]
+   }
+  ]
+ },
+ {
+  "k": "足",
+  "h": "あし",
+  "r": "ashi",
+  "e": "Foot / Leg",
+  "cat": "Body Parts",
+  "type": "Noun",
+  "learned": true,
+  "id": "足|あし",
+  "rn": [
+   {
+    "t": "k",
+    "s": "足",
+    "r": [
+     "あし"
+    ]
+   }
+  ]
+ },
+ {
+  "k": "頭",
+  "h": "あたま",
+  "r": "atama",
+  "e": "Head",
+  "cat": "Body Parts",
+  "type": "Noun",
+  "learned": true,
+  "id": "頭|あたま",
+  "rn": [
+   {
+    "t": "k",
+    "s": "頭",
+    "r": [
+     "あたま"
+    ]
+   }
+  ]
+ },
+ {
   "k": "顔",
   "h": "かお",
   "r": "kao",
@@ -1614,6 +1728,44 @@
     "s": "顔",
     "r": [
      "かお"
+    ]
+   }
+  ]
+ },
+ {
+  "k": "髪",
+  "h": "かみ",
+  "r": "kami",
+  "e": "Hair",
+  "cat": "Body Parts",
+  "type": "Noun",
+  "learned": true,
+  "id": "髪|かみ",
+  "rn": [
+   {
+    "t": "k",
+    "s": "髪",
+    "r": [
+     "かみ"
+    ]
+   }
+  ]
+ },
+ {
+  "k": "鼻",
+  "h": "はな",
+  "r": "hana",
+  "e": "Nose",
+  "cat": "Body Parts",
+  "type": "Noun",
+  "learned": true,
+  "id": "鼻|はな",
+  "rn": [
+   {
+    "t": "k",
+    "s": "鼻",
+    "r": [
+     "はな"
     ]
    }
   ]
@@ -2710,25 +2862,6 @@
   ]
  },
  {
-  "k": "魚",
-  "h": "さかな",
-  "r": "sakana",
-  "e": "Fish (food)",
-  "cat": "Food & Drink",
-  "type": "Noun",
-  "learned": true,
-  "id": "魚|さかな|Fish (food)",
-  "rn": [
-   {
-    "t": "k",
-    "s": "魚",
-    "r": [
-     "さかな"
-    ]
-   }
-  ]
- },
- {
   "k": "鳥肉",
   "h": "とりにく",
   "r": "toriniku",
@@ -2746,6 +2879,16 @@
     ]
    }
   ]
+ },
+ {
+  "k": "あなた",
+  "h": "あなた",
+  "r": "anata",
+  "e": "You",
+  "cat": "General",
+  "type": "Noun",
+  "learned": true,
+  "id": "あなた|あなた"
  },
  {
   "k": "みんな",
@@ -2768,6 +2911,175 @@
   "id": "もしもし|もしもし"
  },
  {
+  "k": "カメラ",
+  "h": "カメラ",
+  "r": "kamera",
+  "e": "Camera",
+  "cat": "General",
+  "type": "Noun",
+  "learned": true,
+  "id": "カメラ|カメラ"
+ },
+ {
+  "k": "クラス",
+  "h": "クラス",
+  "r": "kurasu",
+  "e": "Class",
+  "cat": "General",
+  "type": "Noun",
+  "learned": true,
+  "id": "クラス|クラス"
+ },
+ {
+  "k": "タクシー",
+  "h": "タクシー",
+  "r": "takushii",
+  "e": "Taxi",
+  "cat": "General",
+  "type": "Noun",
+  "learned": true,
+  "id": "タクシー|タクシー"
+ },
+ {
+  "k": "テレビ",
+  "h": "テレビ",
+  "r": "terebi",
+  "e": "Television",
+  "cat": "General",
+  "type": "Noun",
+  "learned": true,
+  "id": "テレビ|テレビ"
+ },
+ {
+  "k": "ノート",
+  "h": "ノート",
+  "r": "nooto",
+  "e": "Notebook",
+  "cat": "General",
+  "type": "Noun",
+  "learned": true,
+  "id": "ノート|ノート"
+ },
+ {
+  "k": "バス",
+  "h": "バス",
+  "r": "basu",
+  "e": "Bus",
+  "cat": "General",
+  "type": "Noun",
+  "learned": true,
+  "id": "バス|バス"
+ },
+ {
+  "k": "ペン",
+  "h": "ペン",
+  "r": "pen",
+  "e": "Pen",
+  "cat": "General",
+  "type": "Noun",
+  "learned": true,
+  "id": "ペン|ペン"
+ },
+ {
+  "k": "ラジオ",
+  "h": "ラジオ",
+  "r": "rajio",
+  "e": "Radio",
+  "cat": "General",
+  "type": "Noun",
+  "learned": true,
+  "id": "ラジオ|ラジオ"
+ },
+ {
+  "k": "一つ",
+  "h": "ひとつ",
+  "r": "hitotsu",
+  "e": "One (thing)",
+  "cat": "General",
+  "type": "Counter",
+  "learned": true,
+  "id": "一つ|ひとつ",
+  "rn": [
+   {
+    "t": "k",
+    "s": "一",
+    "r": [
+     "ひと"
+    ]
+   },
+   {
+    "t": "f",
+    "s": "つ"
+   }
+  ]
+ },
+ {
+  "k": "一人",
+  "h": "ひとり",
+  "r": "hitori",
+  "e": "One person; alone",
+  "cat": "General",
+  "type": "Noun",
+  "learned": true,
+  "id": "一人|ひとり",
+  "rn": [
+   {
+    "t": "k",
+    "s": "一人",
+    "r": [
+     "ひとり"
+    ],
+    "i": 1
+   }
+  ]
+ },
+ {
+  "k": "七つ",
+  "h": "ななつ",
+  "r": "nanatsu",
+  "e": "Seven (things)",
+  "cat": "General",
+  "type": "Counter",
+  "learned": true,
+  "id": "七つ|ななつ",
+  "rn": [
+   {
+    "t": "k",
+    "s": "七",
+    "r": [
+     "なな"
+    ]
+   },
+   {
+    "t": "f",
+    "s": "つ"
+   }
+  ]
+ },
+ {
+  "k": "三つ",
+  "h": "みっつ",
+  "r": "mittsu",
+  "e": "Three (things)",
+  "cat": "General",
+  "type": "Counter",
+  "learned": true,
+  "id": "三つ|みっつ",
+  "rn": [
+   {
+    "t": "k",
+    "s": "三",
+    "r": [
+     "みっ"
+    ]
+   },
+   {
+    "t": "f",
+    "s": "つ"
+   }
+  ]
+ },
+ {
   "k": "中",
   "h": "なか",
   "r": "naka",
@@ -2782,6 +3094,114 @@
     "s": "中",
     "r": [
      "なか"
+    ]
+   }
+  ]
+ },
+ {
+  "k": "九つ",
+  "h": "ここのつ",
+  "r": "kokonotsu",
+  "e": "Nine (things)",
+  "cat": "General",
+  "type": "Counter",
+  "learned": true,
+  "id": "九つ|ここのつ",
+  "rn": [
+   {
+    "t": "k",
+    "s": "九",
+    "r": [
+     "ここの"
+    ]
+   },
+   {
+    "t": "f",
+    "s": "つ"
+   }
+  ]
+ },
+ {
+  "k": "二つ",
+  "h": "ふたつ",
+  "r": "futatsu",
+  "e": "Two (things)",
+  "cat": "General",
+  "type": "Counter",
+  "learned": true,
+  "id": "二つ|ふたつ",
+  "rn": [
+   {
+    "t": "k",
+    "s": "二",
+    "r": [
+     "ふた"
+    ]
+   },
+   {
+    "t": "f",
+    "s": "つ"
+   }
+  ]
+ },
+ {
+  "k": "二人",
+  "h": "ふたり",
+  "r": "futari",
+  "e": "Two people",
+  "cat": "General",
+  "type": "Noun",
+  "learned": true,
+  "id": "二人|ふたり",
+  "rn": [
+   {
+    "t": "k",
+    "s": "二人",
+    "r": [
+     "ふたり"
+    ],
+    "i": 1
+   }
+  ]
+ },
+ {
+  "k": "五つ",
+  "h": "いつつ",
+  "r": "itsutsu",
+  "e": "Five (things)",
+  "cat": "General",
+  "type": "Counter",
+  "learned": true,
+  "id": "五つ|いつつ",
+  "rn": [
+   {
+    "t": "k",
+    "s": "五",
+    "r": [
+     "いつ"
+    ]
+   },
+   {
+    "t": "f",
+    "s": "つ"
+   }
+  ]
+ },
+ {
+  "k": "人",
+  "h": "ひと",
+  "r": "hito",
+  "e": "Person",
+  "cat": "General",
+  "type": "Noun",
+  "learned": true,
+  "id": "人|ひと",
+  "rn": [
+   {
+    "t": "k",
+    "s": "人",
+    "r": [
+     "ひと"
     ]
    }
   ]
@@ -2806,6 +3226,71 @@
   ]
  },
  {
+  "k": "先生",
+  "h": "せんせい",
+  "r": "sensei",
+  "e": "Teacher",
+  "cat": "General",
+  "type": "Noun",
+  "learned": true,
+  "id": "先生|せんせい",
+  "rn": [
+   {
+    "t": "k",
+    "s": "先生",
+    "r": [
+     "せんせい"
+    ]
+   }
+  ]
+ },
+ {
+  "k": "八つ",
+  "h": "やっつ",
+  "r": "yatsu",
+  "e": "Eight (things)",
+  "cat": "General",
+  "type": "Counter",
+  "learned": true,
+  "id": "八つ|やっつ",
+  "rn": [
+   {
+    "t": "k",
+    "s": "八",
+    "r": [
+     "やっ"
+    ]
+   },
+   {
+    "t": "f",
+    "s": "つ"
+   }
+  ]
+ },
+ {
+  "k": "六つ",
+  "h": "むっつ",
+  "r": "mutsu",
+  "e": "Six (things)",
+  "cat": "General",
+  "type": "Counter",
+  "learned": true,
+  "id": "六つ|むっつ",
+  "rn": [
+   {
+    "t": "k",
+    "s": "六",
+    "r": [
+     "むっ"
+    ]
+   },
+   {
+    "t": "f",
+    "s": "つ"
+   }
+  ]
+ },
+ {
   "k": "前",
   "h": "まえ",
   "r": "mae",
@@ -2820,6 +3305,25 @@
     "s": "前",
     "r": [
      "まえ"
+    ]
+   }
+  ]
+ },
+ {
+  "k": "勉強",
+  "h": "べんきょう",
+  "r": "benkyou",
+  "e": "Study",
+  "cat": "General",
+  "type": "Noun",
+  "learned": true,
+  "id": "勉強|べんきょう",
+  "rn": [
+   {
+    "t": "k",
+    "s": "勉強",
+    "r": [
+     "べんきょう"
     ]
    }
   ]
@@ -2844,25 +3348,6 @@
   ]
  },
  {
-  "k": "口",
-  "h": "くち",
-  "r": "kuchi",
-  "e": "Mouth",
-  "cat": "General",
-  "type": "Noun",
-  "learned": true,
-  "id": "口|くち",
-  "rn": [
-   {
-    "t": "k",
-    "s": "口",
-    "r": [
-     "くち"
-    ]
-   }
-  ]
- },
- {
   "k": "右",
   "h": "みぎ",
   "r": "migi",
@@ -2878,6 +3363,29 @@
     "r": [
      "みぎ"
     ]
+   }
+  ]
+ },
+ {
+  "k": "四つ",
+  "h": "よっつ",
+  "r": "yotsu",
+  "e": "Four (things)",
+  "cat": "General",
+  "type": "Counter",
+  "learned": true,
+  "id": "四つ|よっつ",
+  "rn": [
+   {
+    "t": "k",
+    "s": "四",
+    "r": [
+     "よっ"
+    ]
+   },
+   {
+    "t": "f",
+    "s": "つ"
    }
   ]
  },
@@ -2973,6 +3481,44 @@
     "s": "天気",
     "r": [
      "てんき"
+    ]
+   }
+  ]
+ },
+ {
+  "k": "子供",
+  "h": "こども",
+  "r": "kodomo",
+  "e": "Child",
+  "cat": "General",
+  "type": "Noun",
+  "learned": true,
+  "id": "子供|こども",
+  "rn": [
+   {
+    "t": "k",
+    "s": "子供",
+    "r": [
+     "こども"
+    ]
+   }
+  ]
+ },
+ {
+  "k": "学生",
+  "h": "がくせい",
+  "r": "gakusei",
+  "e": "Student",
+  "cat": "General",
+  "type": "Noun",
+  "learned": true,
+  "id": "学生|がくせい",
+  "rn": [
+   {
+    "t": "k",
+    "s": "学生",
+    "r": [
+     "がくせい"
     ]
    }
   ]
@@ -3111,25 +3657,6 @@
    {
     "t": "f",
     "s": "ろ"
-   }
-  ]
- },
- {
-  "k": "手",
-  "h": "て",
-  "r": "te",
-  "e": "Hand",
-  "cat": "General",
-  "type": "Noun",
-  "learned": true,
-  "id": "手|て",
-  "rn": [
-   {
-    "t": "k",
-    "s": "手",
-    "r": [
-     "て"
-    ]
    }
   ]
  },
@@ -3286,21 +3813,44 @@
   ]
  },
  {
-  "k": "目",
-  "h": "め",
-  "r": "me",
-  "e": "Eye",
+  "k": "私",
+  "h": "わたし",
+  "r": "watashi",
+  "e": "I; me",
   "cat": "General",
   "type": "Noun",
   "learned": true,
-  "id": "目|め",
+  "id": "私|わたし",
   "rn": [
    {
     "t": "k",
-    "s": "目",
+    "s": "私",
     "r": [
-     "め"
+     "わたし"
     ]
+   }
+  ]
+ },
+ {
+  "k": "私たち",
+  "h": "わたしたち",
+  "r": "watashitachi",
+  "e": "We; us",
+  "cat": "General",
+  "type": "Noun",
+  "learned": true,
+  "id": "私たち|わたしたち",
+  "rn": [
+   {
+    "t": "k",
+    "s": "私",
+    "r": [
+     "わたし"
+    ]
+   },
+   {
+    "t": "f",
+    "s": "たち"
    }
   ]
  },
@@ -3319,25 +3869,6 @@
     "s": "空",
     "r": [
      "そら"
-    ]
-   }
-  ]
- },
- {
-  "k": "耳",
-  "h": "みみ",
-  "r": "mimi",
-  "e": "Ear",
-  "cat": "General",
-  "type": "Noun",
-  "learned": true,
-  "id": "耳|みみ",
-  "rn": [
-   {
-    "t": "k",
-    "s": "耳",
-    "r": [
-     "みみ"
     ]
    }
   ]
@@ -3376,25 +3907,6 @@
     "s": "英語",
     "r": [
      "えいご"
-    ]
-   }
-  ]
- },
- {
-  "k": "足",
-  "h": "あし",
-  "r": "ashi",
-  "e": "Foot / Leg",
-  "cat": "General",
-  "type": "Noun",
-  "learned": true,
-  "id": "足|あし",
-  "rn": [
-   {
-    "t": "k",
-    "s": "足",
-    "r": [
-     "あし"
     ]
    }
   ]
@@ -3509,63 +4021,6 @@
     "s": "音楽",
     "r": [
      "おんがく"
-    ]
-   }
-  ]
- },
- {
-  "k": "頭",
-  "h": "あたま",
-  "r": "atama",
-  "e": "Head",
-  "cat": "General",
-  "type": "Noun",
-  "learned": true,
-  "id": "頭|あたま",
-  "rn": [
-   {
-    "t": "k",
-    "s": "頭",
-    "r": [
-     "あたま"
-    ]
-   }
-  ]
- },
- {
-  "k": "髪",
-  "h": "かみ",
-  "r": "kami",
-  "e": "Hair",
-  "cat": "General",
-  "type": "Noun",
-  "learned": true,
-  "id": "髪|かみ",
-  "rn": [
-   {
-    "t": "k",
-    "s": "髪",
-    "r": [
-     "かみ"
-    ]
-   }
-  ]
- },
- {
-  "k": "鼻",
-  "h": "はな",
-  "r": "hana",
-  "e": "Nose",
-  "cat": "General",
-  "type": "Noun",
-  "learned": true,
-  "id": "鼻|はな",
-  "rn": [
-   {
-    "t": "k",
-    "s": "鼻",
-    "r": [
-     "はな"
     ]
    }
   ]
@@ -3796,6 +4251,16 @@
   "id": "あちら|あちら"
  },
  {
+  "k": "あっち",
+  "h": "あっち",
+  "r": "atchi",
+  "e": "Over there (casual)",
+  "cat": "Grammar & Expressions",
+  "type": "Expression",
+  "learned": true,
+  "id": "あっち|あっち"
+ },
+ {
   "k": "あの",
   "h": "あの",
   "r": "ano",
@@ -3824,6 +4289,26 @@
   "type": "Pronoun",
   "learned": true,
   "id": "あれ|あれ"
+ },
+ {
+  "k": "あんな",
+  "h": "あんな",
+  "r": "anna",
+  "e": "That kind of (over there)",
+  "cat": "Grammar & Expressions",
+  "type": "Expression",
+  "learned": true,
+  "id": "あんな|あんな"
+ },
+ {
+  "k": "いかが",
+  "h": "いかが",
+  "r": "ikaga",
+  "e": "How (polite)",
+  "cat": "Grammar & Expressions",
+  "type": "Expression",
+  "learned": true,
+  "id": "いかが|いかが"
  },
  {
   "k": "いくつ",
@@ -3856,6 +4341,16 @@
   "id": "いつ|いつ"
  },
  {
+  "k": "いつか",
+  "h": "いつか",
+  "r": "itsuka",
+  "e": "Someday",
+  "cat": "Grammar & Expressions",
+  "type": "Adverb",
+  "learned": true,
+  "id": "いつか|いつか"
+ },
+ {
   "k": "いつも",
   "h": "いつも",
   "r": "itsumo",
@@ -3866,13 +4361,24 @@
   "id": "いつも|いつも"
  },
  {
+  "k": "ええ",
+  "h": "ええ",
+  "r": "ee",
+  "e": "Yes",
+  "cat": "Grammar & Expressions",
+  "type": "Expression",
+  "learned": true,
+  "id": "ええ|ええ"
+ },
+ {
   "k": "か〜か",
   "h": "か〜か",
   "r": "ka~ka",
-  "e": "Or (between options)",
+  "e": "Either A or B",
   "cat": "Grammar & Expressions",
   "type": "Grammar",
   "learned": true,
+  "n": "か〜か pattern",
   "id": "か〜か|か〜か"
  },
  {
@@ -3936,6 +4442,16 @@
   "id": "こちら|こちら"
  },
  {
+  "k": "こっち",
+  "h": "こっち",
+  "r": "kotchi",
+  "e": "This way (casual)",
+  "cat": "Grammar & Expressions",
+  "type": "Expression",
+  "learned": true,
+  "id": "こっち|こっち"
+ },
+ {
   "k": "ことができる",
   "h": "ことができる",
   "r": "koto ga dekiru",
@@ -3967,14 +4483,45 @@
   "id": "これ|これ"
  },
  {
+  "k": "こんな",
+  "h": "こんな",
+  "r": "konna",
+  "e": "Like this; such",
+  "cat": "Grammar & Expressions",
+  "type": "Expression",
+  "learned": true,
+  "id": "こんな|こんな"
+ },
+ {
+  "k": "さあ",
+  "h": "さあ",
+  "r": "saa",
+  "e": "Come now; well",
+  "cat": "Grammar & Expressions",
+  "type": "Expression",
+  "learned": true,
+  "id": "さあ|さあ"
+ },
+ {
   "k": "しか〜ない",
   "h": "しか〜ない",
   "r": "shika~nai",
-  "e": "Only (limitation)",
+  "e": "Only — with a NEGATIVE verb",
   "cat": "Grammar & Expressions",
   "type": "Grammar",
   "learned": true,
+  "n": "しか〜ない",
   "id": "しか〜ない|しか〜ない"
+ },
+ {
+  "k": "しかし",
+  "h": "しかし",
+  "r": "shikashi",
+  "e": "However",
+  "cat": "Grammar & Expressions",
+  "type": "Expression",
+  "learned": true,
+  "id": "しかし|しかし"
  },
  {
   "k": "すぎる",
@@ -4028,6 +4575,16 @@
   "id": "そちら|そちら"
  },
  {
+  "k": "そっち",
+  "h": "そっち",
+  "r": "sotchi",
+  "e": "That way (casual)",
+  "cat": "Grammar & Expressions",
+  "type": "Expression",
+  "learned": true,
+  "id": "そっち|そっち"
+ },
+ {
   "k": "その",
   "h": "その",
   "r": "sono",
@@ -4056,6 +4613,36 @@
   "type": "Grammar",
   "learned": true,
   "id": "それから|それから"
+ },
+ {
+  "k": "それでは",
+  "h": "それでは",
+  "r": "soredeha",
+  "e": "In that case; well then",
+  "cat": "Grammar & Expressions",
+  "type": "Expression",
+  "learned": true,
+  "id": "それでは|それでは"
+ },
+ {
+  "k": "それとも",
+  "h": "それとも",
+  "r": "soretomo",
+  "e": "Or (in questions)",
+  "cat": "Grammar & Expressions",
+  "type": "Grammar",
+  "learned": true,
+  "id": "それとも|それとも"
+ },
+ {
+  "k": "そんな",
+  "h": "そんな",
+  "r": "sonna",
+  "e": "That kind of (near you)",
+  "cat": "Grammar & Expressions",
+  "type": "Expression",
+  "learned": true,
+  "id": "そんな|そんな"
  },
  {
   "k": "たくさん",
@@ -4097,6 +4684,16 @@
   "type": "Grammar",
   "learned": true,
   "id": "だけ|だけ"
+ },
+ {
+  "k": "ちょっと",
+  "h": "ちょっと",
+  "r": "chotto",
+  "e": "A little; a moment",
+  "cat": "Grammar & Expressions",
+  "type": "Adverb",
+  "learned": true,
+  "id": "ちょっと|ちょっと"
  },
  {
   "k": "てから",
@@ -4148,6 +4745,16 @@
   "type": "Particle",
   "learned": true,
   "id": "で|で"
+ },
+ {
+  "k": "では",
+  "h": "では",
+  "r": "deha",
+  "e": "Well then",
+  "cat": "Grammar & Expressions",
+  "type": "Expression",
+  "learned": true,
+  "id": "では|では"
  },
  {
   "k": "でも",
@@ -4286,6 +4893,26 @@
   "id": "どちら|どちら"
  },
  {
+  "k": "どっち",
+  "h": "どっち",
+  "r": "dotchi",
+  "e": "Which way (casual)",
+  "cat": "Grammar & Expressions",
+  "type": "Expression",
+  "learned": true,
+  "id": "どっち|どっち"
+ },
+ {
+  "k": "どなた",
+  "h": "どなた",
+  "r": "donata",
+  "e": "Who (polite)",
+  "cat": "Grammar & Expressions",
+  "type": "Expression",
+  "learned": true,
+  "id": "どなた|どなた"
+ },
+ {
   "k": "どの",
   "h": "どの",
   "r": "dono",
@@ -4346,6 +4973,16 @@
   "id": "なければならない|なければならない"
  },
  {
+  "k": "なぜ",
+  "h": "なぜ",
+  "r": "naze",
+  "e": "Why",
+  "cat": "Grammar & Expressions",
+  "type": "Expression",
+  "learned": true,
+  "id": "なぜ|なぜ"
+ },
+ {
   "k": "に",
   "h": "に",
   "r": "ni",
@@ -4394,6 +5031,16 @@
   "type": "Particle",
   "learned": true,
   "id": "は|は"
+ },
+ {
+  "k": "へ",
+  "h": "へ",
+  "r": "e",
+  "e": "Towards (direction)",
+  "cat": "Grammar & Expressions",
+  "type": "Particle",
+  "learned": true,
+  "id": "へ|へ"
  },
  {
   "k": "ほうがいい",
@@ -4455,6 +5102,26 @@
   "type": "Adverb",
   "learned": true,
   "id": "まだ|まだ"
+ },
+ {
+  "k": "まっすぐ",
+  "h": "まっすぐ",
+  "r": "massugu",
+  "e": "Straight ahead",
+  "cat": "Grammar & Expressions",
+  "type": "Adverb",
+  "learned": true,
+  "id": "まっすぐ|まっすぐ"
+ },
+ {
+  "k": "まで",
+  "h": "まで",
+  "r": "made",
+  "e": "Until / As far as",
+  "cat": "Grammar & Expressions",
+  "type": "Particle",
+  "learned": true,
+  "id": "まで|まで"
  },
  {
   "k": "も",
@@ -4571,6 +5238,29 @@
     "r": [
      "いちばん"
     ]
+   }
+  ]
+ },
+ {
+  "k": "一緒に",
+  "h": "いっしょに",
+  "r": "isshoni",
+  "e": "Together",
+  "cat": "Grammar & Expressions",
+  "type": "Adverb",
+  "learned": true,
+  "id": "一緒に|いっしょに",
+  "rn": [
+   {
+    "t": "k",
+    "s": "一緒",
+    "r": [
+     "いっしょ"
+    ]
+   },
+   {
+    "t": "f",
+    "s": "に"
    }
   ]
  },
@@ -4854,6 +5544,29 @@
   ]
  },
  {
+  "k": "少し",
+  "h": "すこし",
+  "r": "sukoshi",
+  "e": "A little",
+  "cat": "Grammar & Expressions",
+  "type": "Adverb",
+  "learned": true,
+  "id": "少し|すこし",
+  "rn": [
+   {
+    "t": "k",
+    "s": "少",
+    "r": [
+     "すこ"
+    ]
+   },
+   {
+    "t": "f",
+    "s": "し"
+   }
+  ]
+ },
+ {
   "k": "後で",
   "h": "あとで",
   "r": "ato de",
@@ -4874,6 +5587,25 @@
    {
     "t": "f",
     "s": "で"
+   }
+  ]
+ },
+ {
+  "k": "時々",
+  "h": "ときどき",
+  "r": "tokidoki",
+  "e": "Sometimes",
+  "cat": "Grammar & Expressions",
+  "type": "Adverb",
+  "learned": true,
+  "id": "時々|ときどき",
+  "rn": [
+   {
+    "t": "k",
+    "s": "時々",
+    "r": [
+     "ときどき"
+    ]
    }
   ]
  },
@@ -4977,6 +5709,44 @@
   "type": "Noun",
   "learned": true,
   "id": "レストラン|レストラン"
+ },
+ {
+  "k": "上",
+  "h": "うえ",
+  "r": "ue",
+  "e": "Above; on top of",
+  "cat": "Places",
+  "type": "Noun",
+  "learned": true,
+  "id": "上|うえ",
+  "rn": [
+   {
+    "t": "k",
+    "s": "上",
+    "r": [
+     "うえ"
+    ]
+   }
+  ]
+ },
+ {
+  "k": "下",
+  "h": "した",
+  "r": "shita",
+  "e": "Below; under",
+  "cat": "Places",
+  "type": "Noun",
+  "learned": true,
+  "id": "下|した",
+  "rn": [
+   {
+    "t": "k",
+    "s": "下",
+    "r": [
+     "した"
+    ]
+   }
+  ]
  },
  {
   "k": "会社",
@@ -5165,6 +5935,30 @@
     "r": [
      "じんじゃ"
     ]
+   }
+  ]
+ },
+ {
+  "k": "近く",
+  "h": "ちかく",
+  "r": "chikaku",
+  "e": "The nearby area; vicinity",
+  "cat": "Places",
+  "type": "Noun",
+  "learned": true,
+  "n": "noun: 駅の近く",
+  "id": "近く|ちかく",
+  "rn": [
+   {
+    "t": "k",
+    "s": "近",
+    "r": [
+     "ちか"
+    ]
+   },
+   {
+    "t": "f",
+    "s": "く"
    }
   ]
  },
@@ -5460,6 +6254,25 @@
   ]
  },
  {
+  "k": "今",
+  "h": "いま",
+  "r": "ima",
+  "e": "Now",
+  "cat": "Time",
+  "type": "Noun",
+  "learned": true,
+  "id": "今|いま",
+  "rn": [
+   {
+    "t": "k",
+    "s": "今",
+    "r": [
+     "いま"
+    ]
+   }
+  ]
+ },
+ {
   "k": "今年",
   "h": "ことし",
   "r": "kotoshi",
@@ -5496,6 +6309,25 @@
      "きょう"
     ],
     "i": 1
+   }
+  ]
+ },
+ {
+  "k": "今晩",
+  "h": "こんばん",
+  "r": "konban",
+  "e": "Tonight; this evening",
+  "cat": "Time",
+  "type": "Noun",
+  "learned": true,
+  "id": "今晩|こんばん",
+  "rn": [
+   {
+    "t": "k",
+    "s": "今晩",
+    "r": [
+     "こんばん"
+    ]
    }
   ]
  },
@@ -5653,6 +6485,25 @@
   ]
  },
  {
+  "k": "分",
+  "h": "ふん",
+  "r": "fun",
+  "e": "Minute",
+  "cat": "Time",
+  "type": "Noun",
+  "learned": true,
+  "id": "分|ふん",
+  "rn": [
+   {
+    "t": "k",
+    "s": "分",
+    "r": [
+     "ふん"
+    ]
+   }
+  ]
+ },
+ {
   "k": "十一月",
   "h": "じゅういちがつ",
   "r": "juuichigatsu",
@@ -5805,6 +6656,25 @@
   ]
  },
  {
+  "k": "年",
+  "h": "とし",
+  "r": "nen",
+  "e": "Year; age",
+  "cat": "Time",
+  "type": "Noun",
+  "learned": true,
+  "id": "年|とし",
+  "rn": [
+   {
+    "t": "k",
+    "s": "年",
+    "r": [
+     "とし"
+    ]
+   }
+  ]
+ },
+ {
   "k": "日曜日",
   "h": "にちようび",
   "r": "nichiyoubi",
@@ -5914,6 +6784,25 @@
   ]
  },
  {
+  "k": "時",
+  "h": "とき",
+  "r": "toki",
+  "e": "Time; when",
+  "cat": "Time",
+  "type": "Noun",
+  "learned": true,
+  "id": "時|とき",
+  "rn": [
+   {
+    "t": "k",
+    "s": "時",
+    "r": [
+     "とき"
+    ]
+   }
+  ]
+ },
+ {
   "k": "時計",
   "h": "とけい",
   "r": "tokei",
@@ -5930,6 +6819,25 @@
      "とけい"
     ],
     "i": 1
+   }
+  ]
+ },
+ {
+  "k": "晩",
+  "h": "ばん",
+  "r": "ban",
+  "e": "Evening; night",
+  "cat": "Time",
+  "type": "Noun",
+  "learned": true,
+  "id": "晩|ばん",
+  "rn": [
+   {
+    "t": "k",
+    "s": "晩",
+    "r": [
+     "ばん"
+    ]
    }
   ]
  },
@@ -5997,6 +6905,25 @@
     "s": "月曜日",
     "r": [
      "げつようび"
+    ]
+   }
+  ]
+ },
+ {
+  "k": "朝",
+  "h": "あさ",
+  "r": "asa",
+  "e": "Morning",
+  "cat": "Time",
+  "type": "Noun",
+  "learned": true,
+  "id": "朝|あさ",
+  "rn": [
+   {
+    "t": "k",
+    "s": "朝",
+    "r": [
+     "あさ"
     ]
    }
   ]
@@ -6284,7 +7211,7 @@
   "r": "aru",
   "e": "To exist (inanimate)",
   "cat": "Verbs",
-  "type": "Verb (G1)",
+  "type": "Verb (G1-る)",
   "learned": true,
   "id": "ある|ある"
  },
@@ -6365,6 +7292,76 @@
   ]
  },
  {
+  "k": "作る",
+  "h": "つくる",
+  "r": "tsukuru",
+  "e": "To make",
+  "cat": "Verbs",
+  "type": "Verb (G1-る)",
+  "learned": true,
+  "id": "作る|つくる",
+  "rn": [
+   {
+    "t": "k",
+    "s": "作",
+    "r": [
+     "つく"
+    ]
+   },
+   {
+    "t": "f",
+    "s": "る"
+   }
+  ]
+ },
+ {
+  "k": "使う",
+  "h": "つかう",
+  "r": "tsukau",
+  "e": "To use",
+  "cat": "Verbs",
+  "type": "Verb (G1-う)",
+  "learned": true,
+  "id": "使う|つかう",
+  "rn": [
+   {
+    "t": "k",
+    "s": "使",
+    "r": [
+     "つか"
+    ]
+   },
+   {
+    "t": "f",
+    "s": "う"
+   }
+  ]
+ },
+ {
+  "k": "入れる",
+  "h": "いれる",
+  "r": "ireru",
+  "e": "To put in; insert; add or pour into",
+  "cat": "Verbs",
+  "type": "Verb (G2)",
+  "learned": true,
+  "n": "砂糖をお茶に入れる, 水をコップに入れる",
+  "id": "入れる|いれる",
+  "rn": [
+   {
+    "t": "k",
+    "s": "入",
+    "r": [
+     "い"
+    ]
+   },
+   {
+    "t": "f",
+    "s": "れる"
+   }
+  ]
+ },
+ {
   "k": "分かる",
   "h": "わかる",
   "r": "wakaru",
@@ -6388,6 +7385,29 @@
   ]
  },
  {
+  "k": "切る",
+  "h": "きる",
+  "r": "kiru",
+  "e": "To cut",
+  "cat": "Verbs",
+  "type": "Verb (G1-る, exception)",
+  "learned": true,
+  "id": "切る|きる",
+  "rn": [
+   {
+    "t": "k",
+    "s": "切",
+    "r": [
+     "き"
+    ]
+   },
+   {
+    "t": "f",
+    "s": "る"
+   }
+  ]
+ },
+ {
   "k": "勉強する",
   "h": "べんきょうする",
   "r": "benkyousuru",
@@ -6407,6 +7427,29 @@
    {
     "t": "f",
     "s": "する"
+   }
+  ]
+ },
+ {
+  "k": "取る",
+  "h": "とる",
+  "r": "toru",
+  "e": "To take; pick up",
+  "cat": "Verbs",
+  "type": "Verb (G1-る)",
+  "learned": true,
+  "id": "取る|とる",
+  "rn": [
+   {
+    "t": "k",
+    "s": "取",
+    "r": [
+     "と"
+    ]
+   },
+   {
+    "t": "f",
+    "s": "る"
    }
   ]
  },
@@ -6508,7 +7551,7 @@
   "r": "kaeru",
   "e": "To return home",
   "cat": "Verbs",
-  "type": "Verb (G1-る)",
+  "type": "Verb (G1-る, exception)",
   "learned": true,
   "id": "帰る|かえる",
   "rn": [
@@ -6595,29 +7638,6 @@
   ]
  },
  {
-  "k": "散歩する",
-  "h": "さんぽする",
-  "r": "sanposuru",
-  "e": "To take a walk",
-  "cat": "Verbs",
-  "type": "Verb (する)",
-  "learned": true,
-  "id": "散歩する|さんぽする",
-  "rn": [
-   {
-    "t": "k",
-    "s": "散歩",
-    "r": [
-     "さんぽ"
-    ]
-   },
-   {
-    "t": "f",
-    "s": "する"
-   }
-  ]
- },
- {
   "k": "料理する",
   "h": "りょうりする",
   "r": "ryourisuru",
@@ -6646,7 +7666,7 @@
   "r": "magaru",
   "e": "To turn; bend",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-る)",
   "learned": true,
   "id": "曲がる|まがる",
   "rn": [
@@ -6784,7 +7804,7 @@
   "r": "arau",
   "e": "To wash",
   "cat": "Verbs",
-  "type": "Group 1 verb",
+  "type": "Verb (G1-う)",
   "learned": true,
   "id": "洗う|あらう",
   "rn": [
@@ -6830,7 +7850,7 @@
   "r": "tsukareru",
   "e": "To get tired",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G2)",
   "learned": true,
   "id": "疲れる|つかれる",
   "rn": [
@@ -6876,7 +7896,7 @@
   "r": "shiru",
   "e": "To come to know / find out",
   "cat": "Verbs",
-  "type": "Verb (G1-る)",
+  "type": "Verb (G1-る, exception)",
   "learned": true,
   "n": "知っている = to know; 知りません = don't know",
   "id": "知る|しる",
@@ -6923,7 +7943,7 @@
   "r": "shimeru",
   "e": "To tie; fasten",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G2)",
   "learned": true,
   "id": "締める|しめる",
   "rn": [
@@ -7015,7 +8035,7 @@
   "r": "kaburu",
   "e": "To wear on head",
   "cat": "Verbs",
-  "type": "Group 1 verb",
+  "type": "Verb (G1-る)",
   "learned": true,
   "id": "被る|かぶる",
   "rn": [
@@ -7038,7 +8058,7 @@
   "r": "mieru",
   "e": "To be visible",
   "cat": "Verbs",
-  "type": "Group 2 verb",
+  "type": "Verb (G2)",
   "learned": true,
   "id": "見える|みえる",
   "rn": [
@@ -7176,7 +8196,7 @@
   "r": "haru",
   "e": "To paste; attach",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-る)",
   "learned": true,
   "id": "貼る|はる",
   "rn": [
@@ -7199,7 +8219,7 @@
   "r": "hashiru",
   "e": "To run",
   "cat": "Verbs",
-  "type": "Verb (G1-る)",
+  "type": "Verb (G1-る, exception)",
   "learned": true,
   "id": "走る|はしる",
   "rn": [
@@ -7245,7 +8265,7 @@
   "r": "furu",
   "e": "To fall (rain/snow)",
   "cat": "Verbs",
-  "type": "Group 1 verb",
+  "type": "Verb (G1-る)",
   "learned": true,
   "id": "降る|ふる",
   "rn": [
@@ -7493,7 +8513,7 @@
   "r": "tsumaranai",
   "e": "Boring; dull",
   "cat": "Adjectives",
-  "type": "i-Adj",
+  "type": "い-adjective",
   "learned": false,
   "id": "つまらない|つまらない"
  },
@@ -7503,7 +8523,7 @@
   "r": "mazui",
   "e": "Bad-tasting",
   "cat": "Adjectives",
-  "type": "i-Adj",
+  "type": "い-adjective",
   "learned": false,
   "id": "まずい|まずい"
  },
@@ -7513,7 +8533,7 @@
   "r": "rippa",
   "e": "Splendid; magnificent",
   "cat": "Adjectives",
-  "type": "na-Adj",
+  "type": "な-adjective",
   "learned": false,
   "id": "りっぱ|りっぱ"
  },
@@ -7584,7 +8604,7 @@
   "r": "onaji",
   "e": "Same",
   "cat": "Adjectives",
-  "type": "na-Adj",
+  "type": "な-adjective",
   "learned": false,
   "id": "同じ|おなじ",
   "rn": [
@@ -7672,7 +8692,7 @@
   "r": "iya",
   "e": "Disagreeable; unpleasant",
   "cat": "Adjectives",
-  "type": "na-Adj",
+  "type": "な-adjective",
   "learned": false,
   "id": "嫌|いや",
   "rn": [
@@ -7760,7 +8780,7 @@
   "r": "yasashii",
   "e": "Easy; simple",
   "cat": "Adjectives",
-  "type": "i-Adj",
+  "type": "い-adjective",
   "learned": false,
   "id": "易しい|やさしい",
   "rn": [
@@ -7806,7 +8826,7 @@
   "r": "nukui",
   "e": "Lukewarm",
   "cat": "Adjectives",
-  "type": "i-Adj",
+  "type": "い-adjective",
   "learned": false,
   "id": "温い|ぬるい",
   "rn": [
@@ -7875,7 +8895,7 @@
   "r": "kekkou",
   "e": "Enough; splendid; fairly",
   "cat": "Adjectives",
-  "type": "na-Adj",
+  "type": "な-adjective",
   "learned": false,
   "id": "結構|けっこう",
   "rn": [
@@ -7894,7 +8914,7 @@
   "r": "yoi",
   "e": "Good",
   "cat": "Adjectives",
-  "type": "i-Adj",
+  "type": "い-adjective",
   "learned": false,
   "id": "良い|よい",
   "rn": [
@@ -8249,6 +9269,48 @@
   ]
  },
  {
+  "k": "お腹",
+  "h": "おなか",
+  "r": "onaka",
+  "e": "Stomach",
+  "cat": "Body Parts",
+  "type": "Noun",
+  "learned": false,
+  "id": "お腹|おなか",
+  "rn": [
+   {
+    "t": "f",
+    "s": "お"
+   },
+   {
+    "t": "k",
+    "s": "腹",
+    "r": [
+     "なか"
+    ]
+   }
+  ]
+ },
+ {
+  "k": "体",
+  "h": "からだ",
+  "r": "karada",
+  "e": "Body",
+  "cat": "Body Parts",
+  "type": "Noun",
+  "learned": false,
+  "id": "体|からだ",
+  "rn": [
+   {
+    "t": "k",
+    "s": "体",
+    "r": [
+     "からだ"
+    ]
+   }
+  ]
+ },
+ {
   "k": "声",
   "h": "こえ",
   "r": "koe",
@@ -8263,6 +9325,44 @@
     "s": "声",
     "r": [
      "こえ"
+    ]
+   }
+  ]
+ },
+ {
+  "k": "歯",
+  "h": "は",
+  "r": "ha",
+  "e": "Teeth",
+  "cat": "Body Parts",
+  "type": "Noun",
+  "learned": false,
+  "id": "歯|は",
+  "rn": [
+   {
+    "t": "k",
+    "s": "歯",
+    "r": [
+     "は"
+    ]
+   }
+  ]
+ },
+ {
+  "k": "背",
+  "h": "せい",
+  "r": "sei",
+  "e": "Height",
+  "cat": "Body Parts",
+  "type": "Noun",
+  "learned": false,
+  "id": "背|せい",
+  "rn": [
+   {
+    "t": "k",
+    "s": "背",
+    "r": [
+     "せい"
     ]
    }
   ]
@@ -8639,16 +9739,6 @@
   ]
  },
  {
-  "k": "あなた",
-  "h": "あなた",
-  "r": "anata",
-  "e": "You",
-  "cat": "General",
-  "type": "Noun",
-  "learned": false,
-  "id": "あなた|あなた"
- },
- {
   "k": "ありがとうございます",
   "h": "ありがとうございます",
   "r": "arigatou gozaimasu",
@@ -8704,7 +9794,7 @@
   "r": "ippai",
   "e": "Full/A lot",
   "cat": "General",
-  "type": "Adjective",
+  "type": "な-adjective",
   "learned": false,
   "id": "いっぱい|いっぱい"
  },
@@ -8737,29 +9827,6 @@
   "type": "Noun",
   "learned": false,
   "id": "おまわりさん|おまわりさん"
- },
- {
-  "k": "お腹",
-  "h": "おなか",
-  "r": "onaka",
-  "e": "Stomach",
-  "cat": "General",
-  "type": "Noun",
-  "learned": false,
-  "id": "お腹|おなか",
-  "rn": [
-   {
-    "t": "f",
-    "s": "お"
-   },
-   {
-    "t": "k",
-    "s": "腹",
-    "r": [
-     "なか"
-    ]
-   }
-  ]
  },
  {
   "k": "お金",
@@ -8898,16 +9965,6 @@
   "id": "エレベーター|エレベーター"
  },
  {
-  "k": "カメラ",
-  "h": "カメラ",
-  "r": "kamera",
-  "e": "Camera",
-  "cat": "General",
-  "type": "Noun",
-  "learned": false,
-  "id": "カメラ|カメラ"
- },
- {
   "k": "カレンダー",
   "h": "カレンダー",
   "r": "karendaa",
@@ -8926,16 +9983,6 @@
   "type": "Noun",
   "learned": false,
   "id": "ギター|ギター"
- },
- {
-  "k": "クラス",
-  "h": "クラス",
-  "r": "kurasu",
-  "e": "Class",
-  "cat": "General",
-  "type": "Noun",
-  "learned": false,
-  "id": "クラス|クラス"
  },
  {
   "k": "グラム",
@@ -8988,16 +10035,6 @@
   "id": "タオル|タオル"
  },
  {
-  "k": "タクシー",
-  "h": "タクシー",
-  "r": "takushii",
-  "e": "Taxi",
-  "cat": "General",
-  "type": "Noun",
-  "learned": false,
-  "id": "タクシー|タクシー"
- },
- {
   "k": "テスト",
   "h": "テスト",
   "r": "tesuto",
@@ -9006,16 +10043,6 @@
   "type": "Noun",
   "learned": false,
   "id": "テスト|テスト"
- },
- {
-  "k": "テレビ",
-  "h": "テレビ",
-  "r": "terebi",
-  "e": "Television",
-  "cat": "General",
-  "type": "Noun",
-  "learned": false,
-  "id": "テレビ|テレビ"
  },
  {
   "k": "テープ",
@@ -9048,26 +10075,6 @@
   "id": "ニュース|ニュース"
  },
  {
-  "k": "ノート",
-  "h": "ノート",
-  "r": "nooto",
-  "e": "Notebook",
-  "cat": "General",
-  "type": "Noun",
-  "learned": false,
-  "id": "ノート|ノート"
- },
- {
-  "k": "バス",
-  "h": "バス",
-  "r": "basu",
-  "e": "Bus",
-  "cat": "General",
-  "type": "Noun",
-  "learned": false,
-  "id": "バス|バス"
- },
- {
   "k": "パーティー",
   "h": "パーティー",
   "r": "paateii",
@@ -9086,16 +10093,6 @@
   "type": "Noun",
   "learned": false,
   "id": "フィルム|フィルム"
- },
- {
-  "k": "ペン",
-  "h": "ペン",
-  "r": "pen",
-  "e": "Pen",
-  "cat": "General",
-  "type": "Noun",
-  "learned": false,
-  "id": "ペン|ペン"
  },
  {
   "k": "ページ",
@@ -9148,16 +10145,6 @@
   "id": "メートル|メートル"
  },
  {
-  "k": "ラジオ",
-  "h": "ラジオ",
-  "r": "rajio",
-  "e": "Radio",
-  "cat": "General",
-  "type": "Noun",
-  "learned": false,
-  "id": "ラジオ|ラジオ"
- },
- {
   "k": "レコード",
   "h": "レコード",
   "r": "rekoodo",
@@ -9166,72 +10153,6 @@
   "type": "Noun",
   "learned": false,
   "id": "レコード|レコード"
- },
- {
-  "k": "一つ",
-  "h": "ひとつ",
-  "r": "hitotsu",
-  "e": "One (thing)",
-  "cat": "General",
-  "type": "Counter",
-  "learned": false,
-  "id": "一つ|ひとつ",
-  "rn": [
-   {
-    "t": "k",
-    "s": "一",
-    "r": [
-     "ひと"
-    ]
-   },
-   {
-    "t": "f",
-    "s": "つ"
-   }
-  ]
- },
- {
-  "k": "一人",
-  "h": "ひとり",
-  "r": "hitori",
-  "e": "One person; alone",
-  "cat": "General",
-  "type": "Noun",
-  "learned": false,
-  "id": "一人|ひとり",
-  "rn": [
-   {
-    "t": "k",
-    "s": "一人",
-    "r": [
-     "ひとり"
-    ],
-    "i": 1
-   }
-  ]
- },
- {
-  "k": "七つ",
-  "h": "ななつ",
-  "r": "nanatsu",
-  "e": "Seven (things)",
-  "cat": "General",
-  "type": "Counter",
-  "learned": false,
-  "id": "七つ|ななつ",
-  "rn": [
-   {
-    "t": "k",
-    "s": "七",
-    "r": [
-     "なな"
-    ]
-   },
-   {
-    "t": "f",
-    "s": "つ"
-   }
-  ]
  },
  {
   "k": "万年筆",
@@ -9248,137 +10169,6 @@
     "s": "万年筆",
     "r": [
      "まんねんひつ"
-    ]
-   }
-  ]
- },
- {
-  "k": "三つ",
-  "h": "みっつ",
-  "r": "mittsu",
-  "e": "Three (things)",
-  "cat": "General",
-  "type": "Counter",
-  "learned": false,
-  "id": "三つ|みっつ",
-  "rn": [
-   {
-    "t": "k",
-    "s": "三",
-    "r": [
-     "みっ"
-    ]
-   },
-   {
-    "t": "f",
-    "s": "つ"
-   }
-  ]
- },
- {
-  "k": "九つ",
-  "h": "ここのつ",
-  "r": "kokonotsu",
-  "e": "Nine (things)",
-  "cat": "General",
-  "type": "Counter",
-  "learned": false,
-  "id": "九つ|ここのつ",
-  "rn": [
-   {
-    "t": "k",
-    "s": "九",
-    "r": [
-     "ここの"
-    ]
-   },
-   {
-    "t": "f",
-    "s": "つ"
-   }
-  ]
- },
- {
-  "k": "二つ",
-  "h": "ふたつ",
-  "r": "futatsu",
-  "e": "Two (things)",
-  "cat": "General",
-  "type": "Counter",
-  "learned": false,
-  "id": "二つ|ふたつ",
-  "rn": [
-   {
-    "t": "k",
-    "s": "二",
-    "r": [
-     "ふた"
-    ]
-   },
-   {
-    "t": "f",
-    "s": "つ"
-   }
-  ]
- },
- {
-  "k": "二人",
-  "h": "ふたり",
-  "r": "futari",
-  "e": "Two people",
-  "cat": "General",
-  "type": "Noun",
-  "learned": false,
-  "id": "二人|ふたり",
-  "rn": [
-   {
-    "t": "k",
-    "s": "二人",
-    "r": [
-     "ふたり"
-    ],
-    "i": 1
-   }
-  ]
- },
- {
-  "k": "五つ",
-  "h": "いつつ",
-  "r": "itsutsu",
-  "e": "Five (things)",
-  "cat": "General",
-  "type": "Counter",
-  "learned": false,
-  "id": "五つ|いつつ",
-  "rn": [
-   {
-    "t": "k",
-    "s": "五",
-    "r": [
-     "いつ"
-    ]
-   },
-   {
-    "t": "f",
-    "s": "つ"
-   }
-  ]
- },
- {
-  "k": "人",
-  "h": "ひと",
-  "r": "hito",
-  "e": "Person",
-  "cat": "General",
-  "type": "Noun",
-  "learned": false,
-  "id": "人|ひと",
-  "rn": [
-   {
-    "t": "k",
-    "s": "人",
-    "r": [
-     "ひと"
     ]
    }
   ]
@@ -9403,25 +10193,6 @@
    {
     "t": "f",
     "s": "み"
-   }
-  ]
- },
- {
-  "k": "体",
-  "h": "からだ",
-  "r": "karada",
-  "e": "Body",
-  "cat": "General",
-  "type": "Noun",
-  "learned": false,
-  "id": "体|からだ",
-  "rn": [
-   {
-    "t": "k",
-    "s": "体",
-    "r": [
-     "からだ"
-    ]
    }
   ]
  },
@@ -9483,25 +10254,6 @@
   ]
  },
  {
-  "k": "先生",
-  "h": "せんせい",
-  "r": "sensei",
-  "e": "Teacher",
-  "cat": "General",
-  "type": "Noun",
-  "learned": false,
-  "id": "先生|せんせい",
-  "rn": [
-   {
-    "t": "k",
-    "s": "先生",
-    "r": [
-     "せんせい"
-    ]
-   }
-  ]
- },
- {
   "k": "全部",
   "h": "ぜんぶ",
   "r": "zenbu",
@@ -9516,71 +10268,6 @@
     "s": "全部",
     "r": [
      "ぜんぶ"
-    ]
-   }
-  ]
- },
- {
-  "k": "八つ",
-  "h": "やっつ",
-  "r": "yatsu",
-  "e": "Eight (things)",
-  "cat": "General",
-  "type": "Counter",
-  "learned": false,
-  "id": "八つ|やっつ",
-  "rn": [
-   {
-    "t": "k",
-    "s": "八",
-    "r": [
-     "やっ"
-    ]
-   },
-   {
-    "t": "f",
-    "s": "つ"
-   }
-  ]
- },
- {
-  "k": "六つ",
-  "h": "むっつ",
-  "r": "mutsu",
-  "e": "Six (things)",
-  "cat": "General",
-  "type": "Counter",
-  "learned": false,
-  "id": "六つ|むっつ",
-  "rn": [
-   {
-    "t": "k",
-    "s": "六",
-    "r": [
-     "むっ"
-    ]
-   },
-   {
-    "t": "f",
-    "s": "つ"
-   }
-  ]
- },
- {
-  "k": "冊",
-  "h": "さつ",
-  "r": "satsu",
-  "e": "Counter for books",
-  "cat": "General",
-  "type": "Counter",
-  "learned": false,
-  "id": "冊|さつ",
-  "rn": [
-   {
-    "t": "k",
-    "s": "冊",
-    "r": [
-     "さつ"
     ]
    }
   ]
@@ -9666,44 +10353,6 @@
   ]
  },
  {
-  "k": "勉強",
-  "h": "べんきょう",
-  "r": "benkyou",
-  "e": "Study",
-  "cat": "General",
-  "type": "Noun",
-  "learned": false,
-  "id": "勉強|べんきょう",
-  "rn": [
-   {
-    "t": "k",
-    "s": "勉強",
-    "r": [
-     "べんきょう"
-    ]
-   }
-  ]
- },
- {
-  "k": "匹",
-  "h": "ひき",
-  "r": "hiki",
-  "e": "Counter for small animals",
-  "cat": "General",
-  "type": "Counter",
-  "learned": false,
-  "id": "匹|ひき",
-  "rn": [
-   {
-    "t": "k",
-    "s": "匹",
-    "r": [
-     "ひき"
-    ]
-   }
-  ]
- },
- {
   "k": "医者",
   "h": "いしゃ",
   "r": "isha",
@@ -9737,25 +10386,6 @@
     "s": "半分",
     "r": [
      "はんぶん"
-    ]
-   }
-  ]
- },
- {
-  "k": "台",
-  "h": "だい",
-  "r": "dai",
-  "e": "Counter for machines/vehicles",
-  "cat": "General",
-  "type": "Counter",
-  "learned": false,
-  "id": "台|だい",
-  "rn": [
-   {
-    "t": "k",
-    "s": "台",
-    "r": [
-     "だい"
     ]
    }
   ]
@@ -9795,29 +10425,6 @@
     "r": [
      "もんだい"
     ]
-   }
-  ]
- },
- {
-  "k": "四つ",
-  "h": "よっつ",
-  "r": "yotsu",
-  "e": "Four (things)",
-  "cat": "General",
-  "type": "Counter",
-  "learned": false,
-  "id": "四つ|よっつ",
-  "rn": [
-   {
-    "t": "k",
-    "s": "四",
-    "r": [
-     "よっ"
-    ]
-   },
-   {
-    "t": "f",
-    "s": "つ"
    }
   ]
  },
@@ -9962,25 +10569,6 @@
   ]
  },
  {
-  "k": "子供",
-  "h": "こども",
-  "r": "kodomo",
-  "e": "Child",
-  "cat": "General",
-  "type": "Noun",
-  "learned": false,
-  "id": "子供|こども",
-  "rn": [
-   {
-    "t": "k",
-    "s": "子供",
-    "r": [
-     "こども"
-    ]
-   }
-  ]
- },
- {
   "k": "字引",
   "h": "じびき",
   "r": "jibiki",
@@ -9995,25 +10583,6 @@
     "s": "字引",
     "r": [
      "じびき"
-    ]
-   }
-  ]
- },
- {
-  "k": "学生",
-  "h": "がくせい",
-  "r": "gakusei",
-  "e": "Student",
-  "cat": "General",
-  "type": "Noun",
-  "learned": false,
-  "id": "学生|がくせい",
-  "rn": [
-   {
-    "t": "k",
-    "s": "学生",
-    "r": [
-     "がくせい"
     ]
    }
   ]
@@ -10266,44 +10835,6 @@
   ]
  },
  {
-  "k": "杯",
-  "h": "はい",
-  "r": "hai",
-  "e": "Counter for cups/glasses",
-  "cat": "General",
-  "type": "Counter",
-  "learned": false,
-  "id": "杯|はい",
-  "rn": [
-   {
-    "t": "k",
-    "s": "杯",
-    "r": [
-     "はい"
-    ]
-   }
-  ]
- },
- {
-  "k": "枚",
-  "h": "まい",
-  "r": "mai",
-  "e": "Counter for flat objects",
-  "cat": "General",
-  "type": "Counter",
-  "learned": false,
-  "id": "枚|まい",
-  "rn": [
-   {
-    "t": "k",
-    "s": "枚",
-    "r": [
-     "まい"
-    ]
-   }
-  ]
- },
- {
   "k": "次",
   "h": "つぎ",
   "r": "tsugi",
@@ -10337,25 +10868,6 @@
     "s": "歌",
     "r": [
      "うた"
-    ]
-   }
-  ]
- },
- {
-  "k": "歯",
-  "h": "は",
-  "r": "ha",
-  "e": "Teeth",
-  "cat": "General",
-  "type": "Noun",
-  "learned": false,
-  "id": "歯|は",
-  "rn": [
-   {
-    "t": "k",
-    "s": "歯",
-    "r": [
-     "は"
     ]
    }
   ]
@@ -10619,25 +11131,6 @@
   ]
  },
  {
-  "k": "私",
-  "h": "わたし",
-  "r": "watashi",
-  "e": "I; me",
-  "cat": "General",
-  "type": "Noun",
-  "learned": false,
-  "id": "私|わたし",
-  "rn": [
-   {
-    "t": "k",
-    "s": "私",
-    "r": [
-     "わたし"
-    ]
-   }
-  ]
- },
- {
   "k": "紙",
   "h": "かみ",
   "r": "kami",
@@ -10690,25 +11183,6 @@
     "s": "練習",
     "r": [
      "れんしゅう"
-    ]
-   }
-  ]
- },
- {
-  "k": "背",
-  "h": "せい",
-  "r": "sei",
-  "e": "Height",
-  "cat": "General",
-  "type": "Noun",
-  "learned": false,
-  "id": "背|せい",
-  "rn": [
-   {
-    "t": "k",
-    "s": "背",
-    "r": [
-     "せい"
     ]
    }
   ]
@@ -11095,261 +11569,6 @@
   ]
  },
  {
-  "k": "あっち",
-  "h": "あっち",
-  "r": "atchi",
-  "e": "Over there (casual)",
-  "cat": "Grammar & Expressions",
-  "type": "Expr",
-  "learned": false,
-  "id": "あっち|あっち"
- },
- {
-  "k": "いかが",
-  "h": "いかが",
-  "r": "ikaga",
-  "e": "How (polite)",
-  "cat": "Grammar & Expressions",
-  "type": "Expr",
-  "learned": false,
-  "id": "いかが|いかが"
- },
- {
-  "k": "いつか",
-  "h": "いつか",
-  "r": "itsuka",
-  "e": "Someday",
-  "cat": "Grammar & Expressions",
-  "type": "Adverb",
-  "learned": false,
-  "id": "いつか|いつか"
- },
- {
-  "k": "ええ",
-  "h": "ええ",
-  "r": "ee",
-  "e": "Yes",
-  "cat": "Grammar & Expressions",
-  "type": "Expr",
-  "learned": false,
-  "id": "ええ|ええ"
- },
- {
-  "k": "こっち",
-  "h": "こっち",
-  "r": "kotchi",
-  "e": "This way (casual)",
-  "cat": "Grammar & Expressions",
-  "type": "Expr",
-  "learned": false,
-  "id": "こっち|こっち"
- },
- {
-  "k": "こんな",
-  "h": "こんな",
-  "r": "konna",
-  "e": "Like this; such",
-  "cat": "Grammar & Expressions",
-  "type": "Expr",
-  "learned": false,
-  "id": "こんな|こんな"
- },
- {
-  "k": "さあ",
-  "h": "さあ",
-  "r": "saa",
-  "e": "Come now; well",
-  "cat": "Grammar & Expressions",
-  "type": "Expr",
-  "learned": false,
-  "id": "さあ|さあ"
- },
- {
-  "k": "しかし",
-  "h": "しかし",
-  "r": "shikashi",
-  "e": "However",
-  "cat": "Grammar & Expressions",
-  "type": "Expr",
-  "learned": false,
-  "id": "しかし|しかし"
- },
- {
-  "k": "そっち",
-  "h": "そっち",
-  "r": "sotchi",
-  "e": "That way (casual)",
-  "cat": "Grammar & Expressions",
-  "type": "Expr",
-  "learned": false,
-  "id": "そっち|そっち"
- },
- {
-  "k": "それでは",
-  "h": "それでは",
-  "r": "soredeha",
-  "e": "In that case; well then",
-  "cat": "Grammar & Expressions",
-  "type": "Expr",
-  "learned": false,
-  "id": "それでは|それでは"
- },
- {
-  "k": "それとも",
-  "h": "それとも",
-  "r": "soretomo",
-  "e": "Or (in questions)",
-  "cat": "Grammar & Expressions",
-  "type": "Grammar",
-  "learned": false,
-  "id": "それとも|それとも"
- },
- {
-  "k": "ちょっと",
-  "h": "ちょっと",
-  "r": "chotto",
-  "e": "A little; a moment",
-  "cat": "Grammar & Expressions",
-  "type": "Adverb",
-  "learned": false,
-  "id": "ちょっと|ちょっと"
- },
- {
-  "k": "では",
-  "h": "では",
-  "r": "deha",
-  "e": "Well then",
-  "cat": "Grammar & Expressions",
-  "type": "Expr",
-  "learned": false,
-  "id": "では|では"
- },
- {
-  "k": "どっち",
-  "h": "どっち",
-  "r": "dotchi",
-  "e": "Which way (casual)",
-  "cat": "Grammar & Expressions",
-  "type": "Expr",
-  "learned": false,
-  "id": "どっち|どっち"
- },
- {
-  "k": "どなた",
-  "h": "どなた",
-  "r": "donata",
-  "e": "Who (polite)",
-  "cat": "Grammar & Expressions",
-  "type": "Expr",
-  "learned": false,
-  "id": "どなた|どなた"
- },
- {
-  "k": "なぜ",
-  "h": "なぜ",
-  "r": "naze",
-  "e": "Why",
-  "cat": "Grammar & Expressions",
-  "type": "Expr",
-  "learned": false,
-  "id": "なぜ|なぜ"
- },
- {
-  "k": "へ",
-  "h": "へ",
-  "r": "e",
-  "e": "Towards (direction)",
-  "cat": "Grammar & Expressions",
-  "type": "Particle",
-  "learned": false,
-  "id": "へ|へ"
- },
- {
-  "k": "まっすぐ",
-  "h": "まっすぐ",
-  "r": "massugu",
-  "e": "Straight ahead",
-  "cat": "Grammar & Expressions",
-  "type": "Adverb",
-  "learned": false,
-  "id": "まっすぐ|まっすぐ"
- },
- {
-  "k": "まで",
-  "h": "まで",
-  "r": "made",
-  "e": "Until / As far as",
-  "cat": "Grammar & Expressions",
-  "type": "Particle",
-  "learned": false,
-  "id": "まで|まで"
- },
- {
-  "k": "一緒に",
-  "h": "いっしょに",
-  "r": "isshoni",
-  "e": "Together",
-  "cat": "Grammar & Expressions",
-  "type": "Adverb",
-  "learned": false,
-  "id": "一緒に|いっしょに",
-  "rn": [
-   {
-    "t": "k",
-    "s": "一緒",
-    "r": [
-     "いっしょ"
-    ]
-   },
-   {
-    "t": "f",
-    "s": "に"
-   }
-  ]
- },
- {
-  "k": "少し",
-  "h": "すこし",
-  "r": "sukoshi",
-  "e": "A little",
-  "cat": "Grammar & Expressions",
-  "type": "Adverb",
-  "learned": false,
-  "id": "少し|すこし",
-  "rn": [
-   {
-    "t": "k",
-    "s": "少",
-    "r": [
-     "すこ"
-    ]
-   },
-   {
-    "t": "f",
-    "s": "し"
-   }
-  ]
- },
- {
-  "k": "時々",
-  "h": "ときどき",
-  "r": "tokidoki",
-  "e": "Sometimes",
-  "cat": "Grammar & Expressions",
-  "type": "Adverb",
-  "learned": false,
-  "id": "時々|ときどき",
-  "rn": [
-   {
-    "t": "k",
-    "s": "時々",
-    "r": [
-     "ときどき"
-    ]
-   }
-  ]
- },
- {
   "k": "お寺",
   "h": "おてら",
   "r": "otera",
@@ -11408,44 +11627,6 @@
   "type": "Noun",
   "learned": false,
   "id": "ホテル|ホテル"
- },
- {
-  "k": "上",
-  "h": "うえ",
-  "r": "ue",
-  "e": "Above; on top of",
-  "cat": "Places",
-  "type": "Noun",
-  "learned": false,
-  "id": "上|うえ",
-  "rn": [
-   {
-    "t": "k",
-    "s": "上",
-    "r": [
-     "うえ"
-    ]
-   }
-  ]
- },
- {
-  "k": "下",
-  "h": "した",
-  "r": "shita",
-  "e": "Below; under",
-  "cat": "Places",
-  "type": "Noun",
-  "learned": false,
-  "id": "下|した",
-  "rn": [
-   {
-    "t": "k",
-    "s": "下",
-    "r": [
-     "した"
-    ]
-   }
-  ]
  },
  {
   "k": "交差点",
@@ -11928,29 +12109,6 @@
   ]
  },
  {
-  "k": "近く",
-  "h": "ちかく",
-  "r": "chikaku",
-  "e": "Near; vicinity",
-  "cat": "Places",
-  "type": "Noun",
-  "learned": false,
-  "id": "近く|ちかく",
-  "rn": [
-   {
-    "t": "k",
-    "s": "近",
-    "r": [
-     "ちか"
-    ]
-   },
-   {
-    "t": "f",
-    "s": "く"
-   }
-  ]
- },
- {
   "k": "道",
   "h": "みち",
   "r": "michi",
@@ -12228,44 +12386,6 @@
   ]
  },
  {
-  "k": "今",
-  "h": "いま",
-  "r": "ima",
-  "e": "Now",
-  "cat": "Time",
-  "type": "Noun",
-  "learned": false,
-  "id": "今|いま",
-  "rn": [
-   {
-    "t": "k",
-    "s": "今",
-    "r": [
-     "いま"
-    ]
-   }
-  ]
- },
- {
-  "k": "今晩",
-  "h": "こんばん",
-  "r": "konban",
-  "e": "Tonight; this evening",
-  "cat": "Time",
-  "type": "Noun",
-  "learned": false,
-  "id": "今晩|こんばん",
-  "rn": [
-   {
-    "t": "k",
-    "s": "今晩",
-    "r": [
-     "こんばん"
-    ]
-   }
-  ]
- },
- {
   "k": "八日",
   "h": "ようか",
   "r": "youka",
@@ -12300,25 +12420,6 @@
     "s": "六日",
     "r": [
      "むいか"
-    ]
-   }
-  ]
- },
- {
-  "k": "分",
-  "h": "ふん",
-  "r": "fun",
-  "e": "Minute",
-  "cat": "Time",
-  "type": "Noun",
-  "learned": false,
-  "id": "分|ふん",
-  "rn": [
-   {
-    "t": "k",
-    "s": "分",
-    "r": [
-     "ふん"
     ]
    }
   ]
@@ -12419,25 +12520,6 @@
   ]
  },
  {
-  "k": "年",
-  "h": "とし",
-  "r": "nen",
-  "e": "Year; age",
-  "cat": "Time",
-  "type": "Noun",
-  "learned": false,
-  "id": "年|とし",
-  "rn": [
-   {
-    "t": "k",
-    "s": "年",
-    "r": [
-     "とし"
-    ]
-   }
-  ]
- },
- {
   "k": "昨夜",
   "h": "ゆうべ",
   "r": "yuube",
@@ -12477,63 +12559,6 @@
   ]
  },
  {
-  "k": "時",
-  "h": "とき",
-  "r": "toki",
-  "e": "Time; when",
-  "cat": "Time",
-  "type": "Noun",
-  "learned": false,
-  "id": "時|とき",
-  "rn": [
-   {
-    "t": "k",
-    "s": "時",
-    "r": [
-     "とき"
-    ]
-   }
-  ]
- },
- {
-  "k": "晩",
-  "h": "ばん",
-  "r": "ban",
-  "e": "Evening; night",
-  "cat": "Time",
-  "type": "Noun",
-  "learned": false,
-  "id": "晩|ばん",
-  "rn": [
-   {
-    "t": "k",
-    "s": "晩",
-    "r": [
-     "ばん"
-    ]
-   }
-  ]
- },
- {
-  "k": "朝",
-  "h": "あさ",
-  "r": "asa",
-  "e": "Morning",
-  "cat": "Time",
-  "type": "Noun",
-  "learned": false,
-  "id": "朝|あさ",
-  "rn": [
-   {
-    "t": "k",
-    "s": "朝",
-    "r": [
-     "あさ"
-    ]
-   }
-  ]
- },
- {
   "k": "週末",
   "h": "しゅうまつ",
   "r": "shuumatsu",
@@ -12559,7 +12584,7 @@
   "e": "To give",
   "cat": "Verbs",
   "type": "Verb (G2)",
-  "learned": false,
+  "learned": true,
   "id": "あげる|あげる"
  },
  {
@@ -12568,7 +12593,7 @@
   "r": "kakaru",
   "e": "To take (time/money)",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-る)",
   "learned": false,
   "id": "かかる|かかる"
  },
@@ -12578,7 +12603,7 @@
   "r": "kakeru",
   "e": "To call; to sit down",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G2)",
   "learned": false,
   "id": "かける|かける"
  },
@@ -12588,7 +12613,7 @@
   "r": "dekiru",
   "e": "To be able to",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G2)",
   "learned": false,
   "id": "できる|できる"
  },
@@ -12599,7 +12624,7 @@
   "e": "To receive",
   "cat": "Verbs",
   "type": "Verb (G1-う)",
-  "learned": false,
+  "learned": true,
   "id": "もらう|もらう"
  },
  {
@@ -12608,7 +12633,7 @@
   "r": "yaru",
   "e": "To do; give (casual)",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-る)",
   "learned": false,
   "id": "やる|やる"
  },
@@ -12618,7 +12643,7 @@
   "r": "ageru",
   "e": "To raise; to give",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G2)",
   "learned": false,
   "id": "上げる|あげる",
   "rn": [
@@ -12641,7 +12666,7 @@
   "r": "narabu",
   "e": "To line up",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-ぶ)",
   "learned": false,
   "id": "並ぶ|ならぶ",
   "rn": [
@@ -12664,7 +12689,7 @@
   "r": "naraberu",
   "e": "To arrange; line up",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G2)",
   "learned": false,
   "id": "並べる|ならべる",
   "rn": [
@@ -12687,7 +12712,7 @@
   "r": "tsukeru",
   "e": "To turn on; attach",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G2)",
   "learned": false,
   "id": "付ける|つける",
   "rn": [
@@ -12710,7 +12735,7 @@
   "r": "yasumu",
   "e": "To rest; day off",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-む)",
   "learned": false,
   "id": "休む|やすむ",
   "rn": [
@@ -12733,7 +12758,7 @@
   "r": "sumu",
   "e": "To live; reside",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-む)",
   "learned": false,
   "id": "住む|すむ",
   "rn": [
@@ -12751,59 +12776,13 @@
   ]
  },
  {
-  "k": "作る",
-  "h": "つくる",
-  "r": "tsukuru",
-  "e": "To make",
-  "cat": "Verbs",
-  "type": "Verb (G1-る)",
-  "learned": false,
-  "id": "作る|つくる",
-  "rn": [
-   {
-    "t": "k",
-    "s": "作",
-    "r": [
-     "つく"
-    ]
-   },
-   {
-    "t": "f",
-    "s": "る"
-   }
-  ]
- },
- {
-  "k": "使う",
-  "h": "つかう",
-  "r": "tsukau",
-  "e": "To use",
-  "cat": "Verbs",
-  "type": "Verb (G1-う)",
-  "learned": false,
-  "id": "使う|つかう",
-  "rn": [
-   {
-    "t": "k",
-    "s": "使",
-    "r": [
-     "つか"
-    ]
-   },
-   {
-    "t": "f",
-    "s": "う"
-   }
-  ]
- },
- {
   "k": "借りる",
   "h": "かりる",
   "r": "kariru",
   "e": "To borrow",
   "cat": "Verbs",
   "type": "Verb (G2)",
-  "learned": false,
+  "learned": true,
   "id": "借りる|かりる",
   "rn": [
    {
@@ -12848,7 +12827,7 @@
   "r": "hairu",
   "e": "To enter",
   "cat": "Verbs",
-  "type": "Verb (G1-る)",
+  "type": "Verb (G1-る, exception)",
   "learned": false,
   "id": "入る|はいる",
   "rn": [
@@ -12866,35 +12845,12 @@
   ]
  },
  {
-  "k": "入れる",
-  "h": "いれる",
-  "r": "ireru",
-  "e": "To put in; insert",
-  "cat": "Verbs",
-  "type": "Verb",
-  "learned": false,
-  "id": "入れる|いれる",
-  "rn": [
-   {
-    "t": "k",
-    "s": "入",
-    "r": [
-     "い"
-    ]
-   },
-   {
-    "t": "f",
-    "s": "れる"
-   }
-  ]
- },
- {
   "k": "出かける",
   "h": "でかける",
   "r": "dekakeru",
   "e": "To go out; depart",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G2)",
   "learned": false,
   "id": "出かける|でかける",
   "rn": [
@@ -12917,7 +12873,7 @@
   "r": "dasu",
   "e": "To take out; submit",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-す)",
   "learned": false,
   "id": "出す|だす",
   "rn": [
@@ -12958,35 +12914,12 @@
   ]
  },
  {
-  "k": "切る",
-  "h": "きる",
-  "r": "kiru",
-  "e": "To cut",
-  "cat": "Verbs",
-  "type": "Verb",
-  "learned": false,
-  "id": "切る|きる",
-  "rn": [
-   {
-    "t": "k",
-    "s": "切",
-    "r": [
-     "き"
-    ]
-   },
-   {
-    "t": "f",
-    "s": "る"
-   }
-  ]
- },
- {
   "k": "勤める",
   "h": "つとめる",
   "r": "tsutomeru",
   "e": "To work for (a company)",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G2)",
   "learned": false,
   "id": "勤める|つとめる",
   "rn": [
@@ -13000,29 +12933,6 @@
    {
     "t": "f",
     "s": "める"
-   }
-  ]
- },
- {
-  "k": "取る",
-  "h": "とる",
-  "r": "toru",
-  "e": "To take; pick up",
-  "cat": "Verbs",
-  "type": "Verb",
-  "learned": false,
-  "id": "取る|とる",
-  "rn": [
-   {
-    "t": "k",
-    "s": "取",
-    "r": [
-     "と"
-    ]
-   },
-   {
-    "t": "f",
-    "s": "る"
    }
   ]
  },
@@ -13055,7 +12965,7 @@
   "r": "fuku",
   "e": "To blow",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-く)",
   "learned": false,
   "id": "吹く|ふく",
   "rn": [
@@ -13101,7 +13011,7 @@
   "r": "saku",
   "e": "To bloom",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-く)",
   "learned": false,
   "id": "咲く|さく",
   "rn": [
@@ -13145,10 +13055,11 @@
   "k": "始まる",
   "h": "はじまる",
   "r": "hajimaru",
-  "e": "To begin/start (intransitive)",
+  "e": "To begin/start (by itself) - takes",
   "cat": "Verbs",
   "type": "Verb (G1-る)",
-  "learned": false,
+  "learned": true,
+  "n": "が",
   "id": "始まる|はじまる",
   "rn": [
    {
@@ -13170,7 +13081,7 @@
   "r": "sasu",
   "e": "To hold up (umbrella)",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-す)",
   "learned": false,
   "id": "差す|さす",
   "rn": [
@@ -13193,7 +13104,7 @@
   "r": "hiku",
   "e": "To pull; draw",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-く)",
   "learned": false,
   "id": "引く|ひく",
   "rn": [
@@ -13216,7 +13127,7 @@
   "r": "hiku",
   "e": "To play (instrument)",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-く)",
   "learned": false,
   "id": "弾く|ひく",
   "rn": [
@@ -13239,7 +13150,7 @@
   "r": "wasureru",
   "e": "To forget",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G2)",
   "learned": false,
   "id": "忘れる|わすれる",
   "rn": [
@@ -13285,7 +13196,7 @@
   "r": "osu",
   "e": "To push; press",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-す)",
   "learned": false,
   "id": "押す|おす",
   "rn": [
@@ -13331,7 +13242,7 @@
   "r": "toru",
   "e": "To take a photo",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-る)",
   "learned": false,
   "id": "撮る|とる",
   "rn": [
@@ -13349,12 +13260,35 @@
   ]
  },
  {
+  "k": "散歩する",
+  "h": "さんぽする",
+  "r": "sanposuru",
+  "e": "To take a walk",
+  "cat": "Verbs",
+  "type": "Verb (する)",
+  "learned": false,
+  "id": "散歩する|さんぽする",
+  "rn": [
+   {
+    "t": "k",
+    "s": "散歩",
+    "r": [
+     "さんぽ"
+    ]
+   },
+   {
+    "t": "f",
+    "s": "する"
+   }
+  ]
+ },
+ {
   "k": "歌う",
   "h": "うたう",
   "r": "utau",
   "e": "To sing",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-う)",
   "learned": false,
   "id": "歌う|うたう",
   "rn": [
@@ -13375,10 +13309,11 @@
   "k": "止まる",
   "h": "とまる",
   "r": "tomaru",
-  "e": "To stop; halt",
+  "e": "To stop (by itself) - takes",
   "cat": "Verbs",
-  "type": "Verb",
-  "learned": false,
+  "type": "Verb (G1-る)",
+  "learned": true,
+  "n": "が",
   "id": "止まる|とまる",
   "rn": [
    {
@@ -13401,7 +13336,8 @@
   "e": "To stay overnight",
   "cat": "Verbs",
   "type": "Verb (G1-る)",
-  "learned": false,
+  "learned": true,
+  "n": "place + に",
   "id": "泊まる|とまる",
   "rn": [
    {
@@ -13444,10 +13380,11 @@
   "k": "消える",
   "h": "きえる",
   "r": "kieru",
-  "e": "To disappear; go out",
+  "e": "To go out / disappear (by itself) - takes",
   "cat": "Verbs",
-  "type": "Verb",
-  "learned": false,
+  "type": "Verb (G2)",
+  "learned": true,
+  "n": "が",
   "id": "消える|きえる",
   "rn": [
    {
@@ -13467,10 +13404,11 @@
   "k": "消す",
   "h": "けす",
   "r": "kesu",
-  "e": "To turn off; erase",
+  "e": "To turn off / put out / erase (someone does it) - takes",
   "cat": "Verbs",
-  "type": "Verb",
-  "learned": false,
+  "type": "Verb (G1-す)",
+  "learned": true,
+  "n": "を",
   "id": "消す|けす",
   "rn": [
    {
@@ -13492,7 +13430,7 @@
   "r": "watasu",
   "e": "To hand over",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-す)",
   "learned": false,
   "id": "渡す|わたす",
   "rn": [
@@ -13515,7 +13453,7 @@
   "r": "wataru",
   "e": "To cross over",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-る)",
   "learned": false,
   "id": "渡る|わたる",
   "rn": [
@@ -13538,7 +13476,7 @@
   "r": "nakusu",
   "e": "To lose something",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-す)",
   "learned": false,
   "id": "無くす|なくす",
   "rn": [
@@ -13561,7 +13499,7 @@
   "r": "umareru",
   "e": "To be born",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G2)",
   "learned": false,
   "id": "生まれる|うまれる",
   "rn": [
@@ -13584,7 +13522,7 @@
   "r": "noboru",
   "e": "To climb",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-る)",
   "learned": false,
   "id": "登る|のぼる",
   "rn": [
@@ -13630,7 +13568,7 @@
   "r": "migaku",
   "e": "To brush; polish",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-く)",
   "learned": false,
   "id": "磨く|みがく",
   "rn": [
@@ -13674,10 +13612,11 @@
   "k": "終わる",
   "h": "おわる",
   "r": "owaru",
-  "e": "To finish/end",
+  "e": "To end / be over (by itself) - takes",
   "cat": "Verbs",
   "type": "Verb (G1-る)",
-  "learned": false,
+  "learned": true,
+  "n": "が",
   "id": "終わる|おわる",
   "rn": [
    {
@@ -13699,7 +13638,7 @@
   "r": "oku",
   "e": "To put; to place",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-く)",
   "learned": false,
   "id": "置く|おく",
   "rn": [
@@ -13745,7 +13684,7 @@
   "r": "iru",
   "e": "To need",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-る, exception)",
   "learned": false,
   "id": "要る|いる",
   "rn": [
@@ -13768,7 +13707,7 @@
   "r": "miseru",
   "e": "To show; display",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G2)",
   "learned": false,
   "id": "見せる|みせる",
   "rn": [
@@ -13814,7 +13753,7 @@
   "r": "oboeru",
   "e": "To memorize; remember",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G2)",
   "learned": false,
   "id": "覚える|おぼえる",
   "rn": [
@@ -13838,7 +13777,7 @@
   "e": "To lend",
   "cat": "Verbs",
   "type": "Verb (G1-す)",
-  "learned": false,
+  "learned": true,
   "id": "貸す|かす",
   "rn": [
    {
@@ -13860,8 +13799,8 @@
   "r": "kaesu",
   "e": "To return something",
   "cat": "Verbs",
-  "type": "Verb",
-  "learned": false,
+  "type": "Verb (G1-す)",
+  "learned": true,
   "id": "返す|かえす",
   "rn": [
    {
@@ -13929,7 +13868,7 @@
   "r": "chigau",
   "e": "To be different; wrong",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-う)",
   "learned": false,
   "id": "違う|ちがう",
   "rn": [
@@ -13950,10 +13889,11 @@
   "k": "閉まる",
   "h": "しまる",
   "r": "shimaru",
-  "e": "To close",
+  "e": "To close (by itself) - it just closes",
   "cat": "Verbs",
   "type": "Verb (G1-る)",
-  "learned": false,
+  "learned": true,
+  "n": "が",
   "id": "閉まる|しまる",
   "rn": [
    {
@@ -13973,10 +13913,11 @@
   "k": "閉める",
   "h": "しめる",
   "r": "shimeru",
-  "e": "To close; shut",
+  "e": "To close (something) - someone does it",
   "cat": "Verbs",
-  "type": "Verb",
-  "learned": false,
+  "type": "Verb (G2)",
+  "learned": true,
+  "n": "を",
   "id": "閉める|しめる",
   "rn": [
    {
@@ -13996,10 +13937,11 @@
   "k": "開く",
   "h": "あく",
   "r": "aku",
-  "e": "To open",
+  "e": "To open (by itself) - it just opens",
   "cat": "Verbs",
   "type": "Verb (G1-く)",
-  "learned": false,
+  "learned": true,
+  "n": "が",
   "id": "開く|あく",
   "rn": [
    {
@@ -14018,11 +13960,12 @@
  {
   "k": "開ける",
   "h": "あける",
-  "r": "hirakeru",
-  "e": "To open",
+  "r": "akeru",
+  "e": "To open (something) - someone does it",
   "cat": "Verbs",
-  "type": "Verb",
-  "learned": false,
+  "type": "Verb (G2)",
+  "learned": true,
+  "n": "を",
   "id": "開ける|あける",
   "rn": [
    {
@@ -14067,7 +14010,7 @@
   "r": "tanomu",
   "e": "To request; ask a favor",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-む)",
   "learned": false,
   "id": "頼む|たのむ",
   "rn": [
@@ -14113,7 +14056,7 @@
   "r": "naku",
   "e": "To make animal sound",
   "cat": "Verbs",
-  "type": "Verb",
+  "type": "Verb (G1-く)",
   "learned": false,
   "id": "鳴く|なく",
   "rn": [
@@ -14212,7 +14155,7 @@
   "r": "hareru",
   "e": "To be sunny; clear up",
   "cat": "Weather & Nature",
-  "type": "Verb",
+  "type": "Verb (G2)",
   "learned": false,
   "id": "晴れる|はれる",
   "rn": [
@@ -14235,7 +14178,7 @@
   "r": "kumoru",
   "e": "To become cloudy",
   "cat": "Weather & Nature",
-  "type": "Verb",
+  "type": "Verb (G1-る)",
   "learned": false,
   "id": "曇る|くもる",
   "rn": [
