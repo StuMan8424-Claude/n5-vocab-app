@@ -215,12 +215,12 @@
     </div>
 
     <div class="panel" id="kanji-only-panel">
-      <div class="section-title">Pure kanji only</div>
+      <div class="section-title">Kanji only</div>
       <div class="chips" id="kanji-only-chips">
         <div class="chip on" data-val="off">Off</div>
         <div class="chip" data-val="on">On</div>
       </div>
-      <div class="sub" style="margin:10px 0 0;">Multiple choice only. Uses just words written entirely in kanji (水, 上手, 大学 — no kana), and every question is kanji → reading or reading → kanji. No meaning questions. Applies on top of your Word set and Category filters.</div>
+      <div class="sub" style="margin:10px 0 0;">Multiple choice only. Every question is about the kanji itself: the kanji → its reading (食 → た, from 食べる; 大学 → だいがく), and for words written entirely in kanji (水, 上手) also reading → kanji. After you answer you see what the kanji means and its readings. No meaning questions. Words with no kanji are left out. Applies on top of your Word set and Category filters.</div>
     </div>
 
     <div class="panel" id="favor-weak-panel">
@@ -657,7 +657,7 @@ function isPureKanji(w){
 function kanjiOnlyActive(){ return settings.mode === 'mc' && settings.kanjiOnly === 'on'; }
 function filteredPool(){
   return VOCAB_DATA.filter(w=>{
-    if(kanjiOnlyActive() && !isPureKanji(w)) return false;
+    if(kanjiOnlyActive() && !w.rn) return false;
     if(!settings.categories.has(w.cat)) return false;
     if(settings.learnedFilter === 'learned' && !w.learned) return false;
     if(settings.learnedFilter === 'unlearned' && w.learned) return false;
@@ -776,7 +776,9 @@ function mcDirection(word){
   // Multiple choice: kanji words can be asked all four ways; the kanji<->reading
   // routes are built by buildK2HQuestion / buildH2KQuestion at render time and
   // fall back (k2h -> meaning, h2k -> the real-word picker) if they can't be asked safely.
-  if(kanjiOnlyActive()) return Math.random() < 0.5 ? 'k2h' : 'h2k';
+  // Kanji-only: pure-kanji words go both ways; words with kana (食べる) ask only for the kanji
+  // part (食 -> た), since reading -> kanji needs the kana to match against.
+  if(kanjiOnlyActive()) return (isPureKanji(word) && Math.random() < 0.5) ? 'h2k' : 'k2h';
   const options = word.rn ? ['jp-en', 'en-jp', 'k2h', 'h2k'] : ['jp-en', 'en-jp'];
   return options[Math.floor(Math.random() * options.length)];
 }
