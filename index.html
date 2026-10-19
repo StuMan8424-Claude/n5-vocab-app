@@ -220,7 +220,7 @@
         <div class="chip on" data-val="off">Off</div>
         <div class="chip" data-val="on">On</div>
       </div>
-      <div class="sub" style="margin:10px 0 0;">Multiple choice only. Every question is about the kanji itself: the kanji → its reading (食 → た, from 食べる; 大学 → だいがく), and for words written entirely in kanji (水, 上手) also reading → kanji. After you answer you see what the kanji means and its readings. No meaning questions. Words with no kanji are left out. Applies on top of your Word set and Category filters.</div>
+      <div class="sub" style="margin:10px 0 0;">Multiple choice only. Every question is about one kanji (or a run of kanji) from a word — 食 from 食べる — and the kanji is either the question or the answer: kanji → reading, kanji → English meaning, reading → kanji, English → kanji. All four options are always the same kind (all readings, all meanings, or all kanji). Words with no kanji are left out. Applies on top of your Word set and Category filters.</div>
     </div>
 
     <div class="panel" id="favor-weak-panel">
@@ -778,7 +778,7 @@ function mcDirection(word){
   // fall back (k2h -> meaning, h2k -> the real-word picker) if they can't be asked safely.
   // Kanji-only: pure-kanji words go both ways; words with kana (食べる) ask only for the kanji
   // part (食 -> た), since reading -> kanji needs the kana to match against.
-  if(kanjiOnlyActive()) return (isPureKanji(word) && Math.random() < 0.5) ? 'h2k' : 'k2h';
+  if(kanjiOnlyActive()) return 'k2h';   // placeholder: renderMC picks the actual kanji question type
   const options = word.rn ? ['jp-en', 'en-jp', 'k2h', 'h2k'] : ['jp-en', 'en-jp'];
   return options[Math.floor(Math.random() * options.length)];
 }
@@ -1876,17 +1876,102 @@ function buildH2KQuestion(word){
   return {kind: 'h2k', tag: 'KANA', prompt, word, options: [...options, ...fakes], feedback: kanjiFeedback(word, run)};
 }
 
+/* ----- Kanji-only question types -----
+   In "Kanji only" mode a question is about ONE continuous kanji string from a word
+   (食 from 食べる, 大学 from 大学), and the kanji is either the question or the
+   answer, with the other side English or kana. Every card's four options are in
+   one form: all readings, all English meanings, or all kanji strings of the same
+   length. Never a second valid answer: a reading option is never another reading of
+   the kanji; a kanji option never has the prompted reading; a meaning option never
+   shares a meaning word with the answer.
+------------------------------------------------------------------------ */
+const STOP_WORDS = new Set(['to','a','an','the','of','be','or','and','in','on','for','by','one','it','is']);
+function capFirst(t){ return t ? t.charAt(0).toUpperCase() + t.slice(1) : t; }
+function meaningTokens(m){ return new Set((m.toLowerCase().match(/[a-z]+/g) || []).filter(t => !STOP_WORDS.has(t))); }
+function meaningOf(run, word){
+  if(run.s.length === 1 && KANJI_INFO[run.s]) return capFirst(KANJI_INFO[run.s].m);
+  if(word.k === run.s) return capFirst(word.e);            // the whole word is this kanji string
+  return null;
+}
+let _seenRunMeanings = null;
+function seenRunMeanings(){
+  if(_seenRunMeanings) return _seenRunMeanings;
+  const m = new Map();
+  VOCAB_DATA.forEach(w => {
+    if(!w.rn || !isSeenWord(w)) return;
+    w.rn.forEach(t => { if(t.t !== 'k' || m.has(t.s)) return; const x = meaningOf(t, w); if(x) m.set(t.s, x); });
+  });
+  return (_seenRunMeanings = m);
+}
+function pickKanjiRun(word){ return shuffle(kanjiRuns(word)); }
+function buildK2EQuestion(word){            // kanji -> English meaning
+  for(const run of pickKanjiRun(word)){
+    const ans = meaningOf(run, word); if(!ans) continue;
+    const at = meaningTokens(ans); const chars = new Set(run.s);
+    const cands = [], seenLabels = new Set([ans.toLowerCase()]);
+    for(const [s, m] of seenRunMeanings()){
+      if(s.length !== run.s.length || [...s].some(c => chars.has(c))) continue;
+      if([...meaningTokens(m)].some(t => at.has(t)) || seenLabels.has(m.toLowerCase())) continue;
+      seenLabels.add(m.toLowerCase()); cands.push(m);
+    }
+    if(cands.length < 3) continue;
+    const picks = shuffle(cands).slice(0, 3);
+    return {kind:'k2e', tag:'KANJI', prompt:run.s, run, word,
+      options:[{label:ans, correct:true}, ...picks.map(m => ({label:m, correct:false}))], feedback:kanjiFeedback(word, run)};
+  }
+  return null;
+}
+function buildE2KQuestion(word){            // English meaning -> kanji
+  for(const run of pickKanjiRun(word)){
+    const ans = meaningOf(run, word); if(!ans) continue;
+    const at = meaningTokens(ans); const chars = new Set(run.s);
+    const cands = [];
+    for(const [s, m] of seenRunMeanings()){
+      if(s.length !== run.s.length || [...s].some(c => chars.has(c))) continue;
+      if([...meaningTokens(m)].some(t => at.has(t))) continue;
+      cands.push(s);
+    }
+    if(cands.length < 3) continue;
+    return {kind:'e2k', tag:'ENGLISH', prompt:ans, run, word,
+      options:[{label:run.s, correct:true}, ...shuffle(cands).slice(0, 3).map(s => ({label:s, correct:false}))], feedback:kanjiFeedback(word, run)};
+  }
+  return null;
+}
+function buildR2KQuestion(word){            // reading -> kanji
+  for(const run of pickKanjiRun(word)){
+    if(run.s.length === 1 && !KANJI_INFO[run.s]) continue;
+    const reading = run.r[Math.floor(Math.random() * run.r.length)];
+    const chars = new Set(run.s), seenS = new Set([run.s]), cands = [];
+    for(const c of seenRunPool()){
+      if(seenS.has(c.s) || c.s.length !== run.s.length || [...c.s].some(ch => chars.has(ch))) continue;
+      if(c.s.length === 1 && !KANJI_INFO[c.s]) continue;
+      if(validReadingsFor(c.s).has(reading)) continue;          // also reads that way: a second valid answer
+      seenS.add(c.s); cands.push(c.s);
+    }
+    if(cands.length < 3) continue;
+    return {kind:'r2k', tag:'KANA', prompt:reading, run, word,
+      options:[{label:run.s, correct:true}, ...shuffle(cands).slice(0, 3).map(s => ({label:s, correct:false}))], feedback:kanjiFeedback(word, run)};
+  }
+  return null;
+}
+function kanjiOnlyQuestion(word){
+  const builders = {k2h:buildK2HQuestion, k2e:buildK2EQuestion, r2k:buildR2KQuestion, e2k:buildE2KQuestion};
+  for(const k of shuffle(Object.keys(builders))){ const q = builders[k](word); if(q) return q; }
+  return null;
+}
+
 /* ----- Multiple choice mode ----- */
 function renderMC(){
   const {word} = session.current;
   let dir = session.current.dir;
   let q = null;
-  if(dir === 'k2h') q = buildK2HQuestion(word);
-  else if(dir === 'h2k') q = buildH2KQuestion(word);
-  if(!q && dir === 'k2h'){                                               // can't ask it safely
-    if(kanjiOnlyActive()){ dir = 'h2k'; q = buildH2KQuestion(word); }    // stay kanji-only: ask it the other way
-    else dir = 'jp-en';                                                  // otherwise ask the meaning instead
-    session.current.dir = dir;
+  if(kanjiOnlyActive()){
+    q = kanjiOnlyQuestion(word);                                         // picks one of the four kanji question types
+    dir = q ? q.kind : 'jp-en'; session.current.dir = dir;
+  }else{
+    if(dir === 'k2h') q = buildK2HQuestion(word);
+    else if(dir === 'h2k') q = buildH2KQuestion(word);
+    if(!q && dir === 'k2h'){ dir = 'jp-en'; session.current.dir = dir; } // can't ask it safely — ask the meaning instead
   }
   session.current.q = q;
 
@@ -1941,7 +2026,7 @@ function renderMC(){
       if(q){
         fbEl.children[0].textContent = q.feedback[0];
         fbEl.children[1].textContent = q.feedback[1];
-        if(q.kind === 'k2h'){ speakBtn.classList.remove('hidden'); speakBtn.onclick = ()=>speak(word.k||word.h); }
+        if(q.kind !== 'h2k'){ speakBtn.classList.remove('hidden'); speakBtn.onclick = ()=>speak(word.k||word.h); }
         cells.forEach((c, i)=>{
           if(!options[i].fake) return;
           const tag = document.createElement('div');

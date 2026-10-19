@@ -105,12 +105,25 @@ If a word can't be asked safely (no table entry for its kanji, or too few
 suitable wrong readings) the card quietly asks the meaning instead.
 
 **Kanji only (Settings, multiple choice).** Restricts multiple choice to words
-that contain kanji (on top of your Word set and Category filters) and asks only
-about the kanji: kanji → reading for every such word (食 → た from 食べる, 物 →
-もの from 食べ物, 大学 → だいがく), plus reading → kanji for words written
-entirely in kanji (水, 上手). Reading → kanji needs kana to match against, so
-words with kana don't get it. No meaning questions; after each answer the card
-shows what the kanji means and its readings.
+that contain kanji (on top of your Word set and Category filters). Each card is
+about one continuous kanji string from a word (食 from 食べる, 物 from 食べ物, 大学
+from 大学). The kanji is either the question or the answer, and the other side is
+English or kana — four question types, mixed at random:
+
+| Type | Prompt | Options (all one form) |
+|---|---|---|
+| kanji → reading | 食 | readings: た, … |
+| kanji → meaning | 食 | English meanings: "Eat, food", … |
+| reading → kanji | た | kanji strings, same length: 食, … |
+| meaning → kanji | "Eat, food" | kanji strings, same length |
+
+Meanings come from `kanji_info.txt` for a single kanji, or the word's own
+meaning when the kanji string is the whole word (上手 = "Good at"); kanji runs
+that are neither (勉強 inside 勉強する) skip the meaning types. Never a second
+valid answer: reading options are never another reading of the kanji; kanji
+options never also read the prompted way; meaning options never share a meaning
+word with the answer. After each answer the card shows the word and the kanji's
+meaning and readings.
 
 ### The kanji tables (`kanji_info.txt`, `lookalikes.txt`)
 
