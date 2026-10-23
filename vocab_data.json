@@ -12828,7 +12828,7 @@
   "e": "To enter",
   "cat": "Verbs",
   "type": "Verb (G1-る, exception)",
-  "learned": false,
+  "learned": true,
   "id": "入る|はいる",
   "rn": [
    {
@@ -12851,7 +12851,7 @@
   "e": "To go out; depart",
   "cat": "Verbs",
   "type": "Verb (G2)",
-  "learned": false,
+  "learned": true,
   "id": "出かける|でかける",
   "rn": [
    {
@@ -12897,7 +12897,7 @@
   "e": "To exit / leave",
   "cat": "Verbs",
   "type": "Verb (G2)",
-  "learned": false,
+  "learned": true,
   "id": "出る|でる",
   "rn": [
    {
@@ -13151,7 +13151,7 @@
   "e": "To forget",
   "cat": "Verbs",
   "type": "Verb (G2)",
-  "learned": false,
+  "learned": true,
   "id": "忘れる|わすれる",
   "rn": [
    {
@@ -13174,7 +13174,7 @@
   "e": "To think",
   "cat": "Verbs",
   "type": "Verb (G1-う)",
-  "learned": false,
+  "learned": true,
   "id": "思う|おもう",
   "rn": [
    {
@@ -13546,7 +13546,7 @@
   "e": "To arrive",
   "cat": "Verbs",
   "type": "Verb (G1-く)",
-  "learned": false,
+  "learned": true,
   "id": "着く|つく",
   "rn": [
    {
@@ -13754,7 +13754,7 @@
   "e": "To memorize; remember",
   "cat": "Verbs",
   "type": "Verb (G2)",
-  "learned": false,
+  "learned": true,
   "id": "覚える|おぼえる",
   "rn": [
    {
@@ -13869,7 +13869,7 @@
   "e": "To be different; wrong",
   "cat": "Verbs",
   "type": "Verb (G1-う)",
-  "learned": false,
+  "learned": true,
   "id": "違う|ちがう",
   "rn": [
    {
@@ -13988,7 +13988,7 @@
   "e": "To get off",
   "cat": "Verbs",
   "type": "Verb (G2)",
-  "learned": false,
+  "learned": true,
   "id": "降りる|おりる",
   "rn": [
    {
@@ -14011,7 +14011,7 @@
   "e": "To request; ask a favor",
   "cat": "Verbs",
   "type": "Verb (G1-む)",
-  "learned": false,
+  "learned": true,
   "id": "頼む|たのむ",
   "rn": [
    {
