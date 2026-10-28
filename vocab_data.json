@@ -11731,7 +11731,7 @@
   "e": "North",
   "cat": "Places",
   "type": "Noun",
-  "learned": false,
+  "learned": true,
   "id": "北|きた",
   "rn": [
    {
@@ -11750,7 +11750,7 @@
   "e": "South",
   "cat": "Places",
   "type": "Noun",
-  "learned": false,
+  "learned": true,
   "id": "南|みなみ",
   "rn": [
    {
@@ -11769,7 +11769,7 @@
   "e": "Over there; beyond",
   "cat": "Places",
   "type": "Noun",
-  "learned": false,
+  "learned": true,
   "id": "向こう|むこう",
   "rn": [
    {
@@ -11963,7 +11963,7 @@
   "e": "East",
   "cat": "Places",
   "type": "Noun",
-  "learned": false,
+  "learned": true,
   "id": "東|ひがし",
   "rn": [
    {
@@ -12058,7 +12058,7 @@
   "e": "West",
   "cat": "Places",
   "type": "Noun",
-  "learned": false,
+  "learned": true,
   "id": "西|にし",
   "rn": [
    {
@@ -12077,7 +12077,7 @@
   "e": "Corner",
   "cat": "Places",
   "type": "Noun",
-  "learned": false,
+  "learned": true,
   "id": "角|かど",
   "rn": [
    {
@@ -12096,7 +12096,7 @@
   "e": "Area; vicinity",
   "cat": "Places",
   "type": "Noun",
-  "learned": false,
+  "learned": true,
   "id": "辺|へん",
   "rn": [
    {
@@ -12115,7 +12115,7 @@
   "e": "Road; path",
   "cat": "Places",
   "type": "Noun",
-  "learned": false,
+  "learned": true,
   "id": "道|みち",
   "rn": [
    {
@@ -12134,7 +12134,7 @@
   "e": "Far away; distance",
   "cat": "Places",
   "type": "Noun",
-  "learned": false,
+  "learned": true,
   "id": "遠く|とおく",
   "rn": [
    {
@@ -12195,7 +12195,7 @@
   "e": "Next to; neighbor",
   "cat": "Places",
   "type": "Noun",
-  "learned": false,
+  "learned": true,
   "id": "隣|となり",
   "rn": [
    {
@@ -12736,7 +12736,7 @@
   "e": "To rest; day off",
   "cat": "Verbs",
   "type": "Verb (G1-む)",
-  "learned": false,
+  "learned": true,
   "id": "休む|やすむ",
   "rn": [
    {
@@ -12759,7 +12759,7 @@
   "e": "To live; reside",
   "cat": "Verbs",
   "type": "Verb (G1-む)",
-  "learned": false,
+  "learned": true,
   "id": "住む|すむ",
   "rn": [
    {
@@ -12805,7 +12805,7 @@
   "e": "To work",
   "cat": "Verbs",
   "type": "Verb (G1-く)",
-  "learned": false,
+  "learned": true,
   "id": "働く|はたらく",
   "rn": [
    {
@@ -12920,7 +12920,7 @@
   "e": "To work for (a company)",
   "cat": "Verbs",
   "type": "Verb (G2)",
-  "learned": false,
+  "learned": true,
   "id": "勤める|つとめる",
   "rn": [
    {
@@ -13846,7 +13846,7 @@
   "e": "To play",
   "cat": "Verbs",
   "type": "Verb (G1-ぶ)",
-  "learned": false,
+  "learned": true,
   "id": "遊ぶ|あそぶ",
   "rn": [
    {
@@ -13985,7 +13985,7 @@
   "k": "降りる",
   "h": "おりる",
   "r": "oriru",
-  "e": "To get off",
+  "e": "To exit a vehicle (get off a bus/train)",
   "cat": "Verbs",
   "type": "Verb (G2)",
   "learned": true,
