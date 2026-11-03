@@ -9835,7 +9835,7 @@
   "e": "Money",
   "cat": "General",
   "type": "Noun",
-  "learned": false,
+  "learned": true,
   "id": "お金|おかね",
   "rn": [
    {
@@ -12594,7 +12594,7 @@
   "e": "To take (time/money)",
   "cat": "Verbs",
   "type": "Verb (G1-る)",
-  "learned": false,
+  "learned": true,
   "id": "かかる|かかる"
  },
  {
@@ -12614,7 +12614,7 @@
   "e": "To be able to",
   "cat": "Verbs",
   "type": "Verb (G2)",
-  "learned": false,
+  "learned": true,
   "id": "できる|できる"
  },
  {
@@ -12713,7 +12713,7 @@
   "e": "To turn on; attach",
   "cat": "Verbs",
   "type": "Verb (G2)",
-  "learned": false,
+  "learned": true,
   "id": "付ける|つける",
   "rn": [
    {
@@ -12874,7 +12874,7 @@
   "e": "To take out; submit",
   "cat": "Verbs",
   "type": "Verb (G1-す)",
-  "learned": false,
+  "learned": true,
   "id": "出す|だす",
   "rn": [
    {
@@ -12989,7 +12989,7 @@
   "e": "To call",
   "cat": "Verbs",
   "type": "Verb (G1-ぶ)",
-  "learned": false,
+  "learned": true,
   "id": "呼ぶ|よぶ",
   "rn": [
    {
@@ -13197,7 +13197,7 @@
   "e": "To push; press",
   "cat": "Verbs",
   "type": "Verb (G1-す)",
-  "learned": false,
+  "learned": true,
   "id": "押す|おす",
   "rn": [
    {
@@ -13220,7 +13220,7 @@
   "e": "To hold / have",
   "cat": "Verbs",
   "type": "Verb (G1-つ)",
-  "learned": false,
+  "learned": true,
   "id": "持つ|もつ",
   "rn": [
    {
@@ -13431,7 +13431,7 @@
   "e": "To hand over",
   "cat": "Verbs",
   "type": "Verb (G1-す)",
-  "learned": false,
+  "learned": true,
   "id": "渡す|わたす",
   "rn": [
    {
@@ -13639,7 +13639,7 @@
   "e": "To put; to place",
   "cat": "Verbs",
   "type": "Verb (G1-く)",
-  "learned": false,
+  "learned": true,
   "id": "置く|おく",
   "rn": [
    {
@@ -13708,7 +13708,7 @@
   "e": "To show; display",
   "cat": "Verbs",
   "type": "Verb (G2)",
-  "learned": false,
+  "learned": true,
   "id": "見せる|みせる",
   "rn": [
    {
