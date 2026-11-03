@@ -1852,16 +1852,25 @@ function buildH2KQuestion(word){
   const fakes = [], need = 4 - options.length;
   if(need > 0){                                                               // 3. made-up forms: swap a kanji, keep the kana
     const kIdx = toks.map((t, i) => t.t === 'k' ? i : -1).filter(i => i >= 0);
+    const seenKanji = new Set();
+    seenRunPool().forEach(c => [...c.s].forEach(ch => seenKanji.add(ch)));
     const byLen = new Map();
     seenRunPool().forEach(c => { if(!byLen.has(c.s.length)) byLen.set(c.s.length, new Set()); byLen.get(c.s.length).add(c.s); });
     for(let guard = 0; fakes.length < need && guard < 80; guard++){
       const idx = kIdx[Math.floor(Math.random() * kIdx.length)], orig = toks[idx].s;
       let repl = null, hint = null;
       if(orig.length === 1 && LOOKALIKES[orig] && Math.random() < 0.8){
-        const la = LOOKALIKES[orig];
-        repl = la[Math.floor(Math.random() * la.length)];
-        if(KANJI_INFO[repl]) hint = `${repl} = ${KANJI_INFO[repl].m.split(',')[0]}`;
-      }else{
+        // Look-alikes you've already met (in a word you know or have practised) come first — those
+        // are the mistakes you're most likely to make; unseen look-alikes only fill the gaps.
+        const la = shuffle([...LOOKALIKES[orig]]);
+        const ordered = [...la.filter(c => seenKanji.has(c)), ...la.filter(c => !seenKanji.has(c))];
+        repl = ordered.find(c => {
+          const lab = toks.map((t, i) => i === idx ? c : t.s).join('');
+          return !used.has(lab) && !WRITTEN_FORMS.has(lab);
+        }) || null;
+        if(repl && KANJI_INFO[repl]) hint = `${repl} = ${KANJI_INFO[repl].m.split(',')[0]}`;
+      }
+      if(!repl){
         const cand = [...(byLen.get(orig.length) || [])].filter(s => s !== orig && ![...s].some(ch => orig.includes(ch)));
         if(cand.length) repl = cand[Math.floor(Math.random() * cand.length)];
       }

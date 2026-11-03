@@ -87,7 +87,9 @@ that keep the answer's kana beginning and ending. Order of preference:
 2. real words sharing just the ending (or beginning);
 3. only if that's not enough, a **made-up form**: one kanji swapped, the kana
    kept (食べる → 飲べる, 良べる), preferring look-alike kanji
-   (`lookalikes.txt`) then other kanji from your list. A made-up form is never
+   (`lookalikes.txt`) — **ones you've already met first** (in a word you've
+   learned or practised, the mistakes you're most likely to make), unseen
+   look-alikes only to fill gaps — then other kanji from your list. A made-up form is never
    a word in your list, and a real word that reads like the prompt (a second
    correct answer) is never offered. After you answer, made-up options are
    tagged "not a word" — with what a look-alike kanji actually means ("飲 =
@@ -138,8 +140,9 @@ The build prints `!!` lines for anything missing or inconsistent — add the
 kanji or fix the reading and rebuild. When a newly learned word brings in a new
 kanji, the build tells you to add it.
 
-`lookalikes.txt` (`kanji|look-alike,look-alike`) is optional polish: 38 kanji
-so far, covering the words whose kana frame has too few real partners. Kanji
+`lookalikes.txt` (`kanji|look-alike,look-alike`) is optional polish: about 140
+kanji so far, mixing known pairs from your own list (休/体, 午/牛, 閉/開) with
+unseen look-alikes as fallback. Kanji
 without an entry fall back to other kanji from your list; the build notes which
 learned words that affects. Both files are plain text — edit freely.
 
