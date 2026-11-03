@@ -124,7 +124,10 @@ meaning when the kanji string is the whole word (上手 = "Good at"); kanji runs
 that are neither (勉強 inside 勉強する) skip the meaning types. Never a second
 valid answer: reading options are never another reading of the kanji; kanji
 options never also read the prompted way; meaning options never share a meaning
-word with the answer. After each answer the card shows the word and the kanji's
+word with the answer. For a single kanji, the wrong kanji options in reading → kanji and
+meaning → kanji come from its look-alikes first (`lookalikes.txt`, ones you've
+met before unseen ones), then other kanji of the same length. Multi-kanji
+prompts (部屋, 病院) use other real kanji strings of the same length. After each answer the card shows the word and the kanji's
 meaning and readings.
 
 ### The kanji tables (`kanji_info.txt`, `lookalikes.txt`)

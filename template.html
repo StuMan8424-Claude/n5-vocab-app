@@ -1940,9 +1940,11 @@ function buildE2KQuestion(word){            // English meaning -> kanji
       if([...meaningTokens(m)].some(t => at.has(t))) continue;
       cands.push(s);
     }
-    if(cands.length < 3) continue;
+    const lk = lookalikePicks(run, c => ![...meaningTokens(capFirst(KANJI_INFO[c].m))].some(t => at.has(t)));
+    const picks = mergePicks(lk, cands);
+    if(picks.length < 3) continue;
     return {kind:'e2k', tag:'ENGLISH', prompt:ans, run, word,
-      options:[{label:run.s, correct:true}, ...shuffle(cands).slice(0, 3).map(s => ({label:s, correct:false}))], feedback:kanjiFeedback(word, run)};
+      options:[{label:run.s, correct:true}, ...picks.slice(0, 3).map(s => ({label:s, correct:false}))], feedback:kanjiFeedback(word, run)};
   }
   return null;
 }
@@ -1957,11 +1959,27 @@ function buildR2KQuestion(word){            // reading -> kanji
       if(validReadingsFor(c.s).has(reading)) continue;          // also reads that way: a second valid answer
       seenS.add(c.s); cands.push(c.s);
     }
-    if(cands.length < 3) continue;
+    const lk = lookalikePicks(run, c => !validReadingsFor(c).has(reading));
+    const picks = mergePicks(lk, cands);
+    if(picks.length < 3) continue;
     return {kind:'r2k', tag:'KANA', prompt:reading, run, word,
-      options:[{label:run.s, correct:true}, ...shuffle(cands).slice(0, 3).map(s => ({label:s, correct:false}))], feedback:kanjiFeedback(word, run)};
+      options:[{label:run.s, correct:true}, ...picks.slice(0, 3).map(s => ({label:s, correct:false}))], feedback:kanjiFeedback(word, run)};
   }
   return null;
+}
+// Kanji-only reading -> kanji and meaning -> kanji: wrong options for a single kanji come from its
+// look-alikes first (ones you've already met before unseen ones), then random kanji of the same length.
+// `accept` keeps out any look-alike that would also be a correct answer.
+function lookalikePicks(run, accept){
+  if(run.s.length !== 1 || !LOOKALIKES[run.s]) return [];
+  const seenK = new Set(); seenRunPool().forEach(c => [...c.s].forEach(ch => seenK.add(ch)));
+  const la = shuffle([...LOOKALIKES[run.s]]).filter(c => c !== run.s && KANJI_INFO[c] && accept(c));
+  return [...la.filter(c => seenK.has(c)), ...la.filter(c => !seenK.has(c))];
+}
+function mergePicks(lookalikes, cands){
+  const seen = new Set(), out = [];
+  [...lookalikes.slice(0, 3), ...shuffle(cands)].forEach(c => { if(!seen.has(c)){ seen.add(c); out.push(c); } });
+  return out;
 }
 function kanjiOnlyQuestion(word){
   const builders = {k2h:buildK2HQuestion, k2e:buildK2EQuestion, r2k:buildR2KQuestion, e2k:buildE2KQuestion};
